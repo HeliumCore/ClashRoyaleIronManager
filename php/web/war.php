@@ -12,6 +12,7 @@ $result = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true,
 $data = json_decode($result, true);
 
 var_dump($data);
+var_dump($data);
 ?>
 
 <!DOCTYPE html>
