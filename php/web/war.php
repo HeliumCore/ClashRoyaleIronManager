@@ -13,6 +13,7 @@ $data = json_decode($result, true);
 
 var_dump($data);
 
+var_dump($result);
 ?>
 
 <!DOCTYPE html>
