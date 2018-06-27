@@ -14,13 +14,16 @@ $data = json_decode($apiResult, true);
 
 // Récupère tous les tags
 $getAllQuery = "
-SELECT tag
+SELECT id, tag
 FROM players
 WHERE in_clan = 1
 ";
-$transaction = $db->prepare($query);
+$transaction = $db->prepare($getAllQuery);
 $transaction->execute();
-$allTags = $transaction->fetchAll();
+$resultTags = $transaction->fetchAll();
+foreach ($resultTags as $tag) {
+//    var_dump($tag);
+}
 
 $getPattern = "
 SELECT players.tag  
@@ -59,37 +62,39 @@ foreach ($data["members"] as $player) {
         // On récupère le role_id
         $roleId = getRoleId($db, $player['role']);
         // Il y a un retour, on update
-        $query = sprintf(
+        unset($query);
+        $query = utf8_decode(sprintf(
             $updatePattern, $player['name'], $player['rank'], $player['trophies'], $roleId, $player['expLevel'],
-            $player['arena']['arenaID'], $player['donations'], $player['donations_received'],
-            $player['donations_delta'], $player['donations_ratio']
-        );
-        array_diff($allTags, $player['tag']);
+            $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
+            $player['donationsDelta'], $player['donationsPercent'], $player['tag']
+        ));
+//        array_diff($allTags, $player['tag']);
     } else {
         // Il n'y a pas de retour, on insert
-        $query = sprintf(
+        unset($query);
+        $query = utf8_decode(sprintf(
             $insertPattern, $player['name'], $player['rank'], $player['trophies'], $player['role_id'],
-            $player['expLevel'], $player['donations'], $player['donations_received'], $player['donations_delta'],
-            $player['donations_ratio']
-        );
+            $player['expLevel'], $player['donations'], $player['donationsReceived'], $player['donationsDelta'],
+            $player['donationsPercent']
+        ));
     }
     $transaction = $db->prepare($query);
     $transaction->execute();
     // Supprime les gens qui ne sont plus dans le clan
-    removeFromClan($db, $allTags);
+//    removeFromClan($db, $allTags);
 }
 
 function removeFromClan($db, $allTags)
 {
     $query = "UPDATE players SET in_clan = 0 WHERE tag IN " . $allTags;
-    $transaction = $db->prepare($query);
+    $transaction = $db->prepare(utf8_decode($query));
     $transaction->execute();
 }
 
 function getRoleId($db, $machineName)
 {
     $query = "SELECT id FROM role WHERE machine_name LIKE \"%s\"";
-    $transaction = $db->prepare(sprintf($query, $machineName));
+    $transaction = $db->prepare(utf8_decode(sprintf($query, $machineName)));
     $transaction->execute();
     $result = $transaction->fetch();
     return $result['id'];
