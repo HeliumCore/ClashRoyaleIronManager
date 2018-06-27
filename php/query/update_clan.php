@@ -99,4 +99,3 @@ function getRoleId($db, $machineName)
     $result = $transaction->fetch();
     return $result['id'];
 }
-
