@@ -10,8 +10,6 @@ include("../tools/api_conf.php");
 
 $result = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true, $context);
 $data = json_decode($result, true);
-
-var_dump($data);
 ?>
 
 <!DOCTYPE html>
