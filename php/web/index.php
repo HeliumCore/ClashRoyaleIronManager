@@ -85,6 +85,7 @@ $getPlayerRequest->execute();
         </thead>
         <tbody>
         <?php
+        //
         foreach ($getPlayerRequest as $player) {
             echo "<tr>";
             echo "<th>" . $player['rank'] . "</th>";
