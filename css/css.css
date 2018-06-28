@@ -10,6 +10,30 @@ body {
     width: 100%;
 }
 
+/* CHEST */
+
+.chestDiv {
+    position: relative;
+    left: 20%;
+    top: 5%;
+    height: 60%;
+    width: 60%;
+    border: black 1px solid;
+    margin-bottom: 5%;
+}
+
+.imgChest {
+    position: relative;
+    left: 5%;
+    width : 50px;
+    height : 50px;
+    margin-bottom: 15px;
+}
+
+.labelChest {
+    position: relative;
+    left: 25px;
+}
 /* TITLE */
 
 .pageTitle {

@@ -7,6 +7,7 @@
  */
 
 include("../tools/database.php");
+include("../query/chests.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
 else header('Location: index.php');
@@ -28,8 +29,15 @@ WHERE tag = \"%s\"
 ";
 
 $getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag)));
-?>
 
+$chests = getPlayerChestsByTag($getPlayerTag);
+$upcomingChests[] = $chests["upcoming"];
+$superMagical = $chests["superMagical"];
+$magical = $chests["magical"];
+$legendary = $chests["legendary"];
+$epic = $chests["epic"];
+$giant = $chests["giant"];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +49,19 @@ $getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
+    <h1 class="pageTitle">Coffres à venir</h1><br>
+    <div class="chestDiv">
+        <?php
+        $counter = 0;
+
+        foreach ($upcomingChests[0] as $chest) {
+            echo '<img src="../../res/'.$chest.'_chest.png" alt="'.$chest.' chest" class="imgChest">';
+            $counter++;
+            echo '<label class="labelChest">'. $counter .'</label>';
+        }
+        ?>
+    </div>
+    <br>
     <h1 class="pageTitle">Détails du joueur</h1>
     <br><br>
     <div class="divInfoPlayer">
