@@ -73,16 +73,7 @@ foreach ($data as $war) {
 
     // Si la guerre n'existe pas déjà, on la crée
     // Sinon, on récupère son ID
-    if (!is_array($getWarResult)) {
-        if (!is_array($currentWarResult)) {
-            execute_query($db, sprintf($insertWarPattern, $created, 1));
-            $warId = $db->lastInsertId();
-        } else {
-            execute_query($db, sprintf($updateCurrentWarPattern, $created, $currentWarResult['id']));
-        }
-    } else {
-        $warId = $getWarResult['id'];
-    }
+    $warId = getWarID($getWarResult, $currentWarResult, $insertWarPattern, $updateCurrentWarPattern, $db, $created);
 
     foreach ($allPlayers as $player) {
         global $cardsEarned;
@@ -113,5 +104,18 @@ foreach ($data as $war) {
             ));
         }
         $playerWarResult = null;
+    }
+}
+function getWarID($getWarResult, $currentWarResult, $insertWarPattern, $updateCurrentWarPattern, $db, $created) {
+    if (!is_array($getWarResult)) {
+        if (!is_array($currentWarResult)) {
+            execute_query($db, sprintf($insertWarPattern, $created, 1));
+            return $db->lastInsertId();
+        } else {
+            execute_query($db, sprintf($updateCurrentWarPattern, $created, $currentWarResult['id']));
+            return getWarID($getWarResult, $currentWarResult, $insertWarPattern, $updateCurrentWarPattern, $db, $created);
+        }
+    } else {
+        return $getWarResult['id'];
     }
 }

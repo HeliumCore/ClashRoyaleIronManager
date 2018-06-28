@@ -9,8 +9,8 @@
 include("../tools/database.php");
 
 $getWarPlayers = "
-SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, player_war.battle_won,
-player_war.collection_played, player_war.collection_won
+SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
+player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned as cards
 FROM player_war
 INNER JOIN war ON war.id = player_war.war_id
 INNER JOIN players ON players.id = player_war.player_id
@@ -35,6 +35,17 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
                 window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
             });
         });
+        function update() {
+            $.ajax({
+                url: '../query/update_war.php',
+                beforeSend: function () {
+                    $('#loaderDiv').show();
+                },
+                success: function () {
+                    window.location.reload(true);
+                }
+            })
+        }
     </script>
 </head>
 <body>
@@ -46,13 +57,14 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
         <thead>
         <tr class="rowIndex">
             <th class="headIndex">Rang</th>
-            <th class="headIndex">Tag</th>
             <th class="headIndex">Nom</th>
             <th class="headIndex">Role</th>
-            <th class="headIndex">Trophée</th>
-            <th class="headIndex">Arène</th>
-            <th class="headIndex">Donations</th>
-            <th class="headIndex">Donations reçues</th>
+            <th class="headIndex">Trophées</th>
+            <th class="headIndex">Collections jouées</th>
+            <th class="headIndex">Collections gagnées</th>
+            <th class="headIndex">Cartes gagnées</th>
+            <th class="headIndex">Batailles jouées</th>
+            <th class="headIndex">Batailles gagnées</th>
         </tr>
         </thead>
         <tbody>
@@ -65,6 +77,7 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
             echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
             echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
             echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';
+            echo '<td class="lineIndex">' . $player['cards'] . '</td>';
             echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
             echo '<td class="lineIndex">' . $player['battle_won'] . '</td>';
             echo '</tr>';
@@ -74,13 +87,14 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
         <tfoot>
         <tr class="rowIndex">
             <th class="headIndex">Rang</th>
-            <th class="headIndex">Tag</th>
             <th class="headIndex">Nom</th>
             <th class="headIndex">Role</th>
-            <th class="headIndex">Trophée</th>
-            <th class="headIndex">Arène</th>
-            <th class="headIndex">Donations</th>
-            <th class="headIndex">Donations reçues</th>
+            <th class="headIndex">Trophées</th>
+            <th class="headIndex">Collections jouées</th>
+            <th class="headIndex">Collections gagnées</th>
+            <th class="headIndex">Cartes gagnées</th>
+            <th class="headIndex">Batailles jouées</th>
+            <th class="headIndex">Batailles gagnées</th>
         </tr>
         </tfoot>
     </table>

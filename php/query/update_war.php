@@ -23,13 +23,13 @@ VALUES ('', 0, 0)
 ";
 
 $insertPlayerWarPattern = "
-INSERT INTO player_war (collection_played, collection_won, player_id, war_id)
-VALUES (%d, %d, %d, %d)
+INSERT INTO player_war (cards_earned, collection_played, collection_won, player_id, war_id)
+VALUES (%d, %d, %d, %d, %d)
 ";
 
 $updatePlayerWarPattern = "
 UPDATE player_war
-SET collection_played = %d, collection_won = %d
+SET cards_earned = %d, collection_played = %d, collection_won = %d
 WHERE id = %d
 ";
 
@@ -71,6 +71,7 @@ if (is_array($getWarResult)) {
     execute_query($db, $setWarQuery);
     $warId = $db->lastInsertId();
 }
+var_dump($warId);
 
 foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $player['id'], $warId));
@@ -82,31 +83,41 @@ foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $wins = null;
     foreach ($data['participants'] as $participant) {
         if ($player['tag'] == $participant['tag']) {
+            if ($data['state'] == "collectionDay") {
+                $cardsEarned = $participant['cardsEarned'];
+            }
             $battlesPlayed = $participant['battlesPlayed'];
             $wins = $participant['wins'];
         }
+    }
+    if ($data['state'] == "collectionDay") {
+        $cardsEarned = $cardsEarned != null ? $cardsEarned : 0;
     }
     $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
     $wins = $wins != null ? $wins : 0;
     if (is_array($getPlayerWarResult)) {
         // Si le joueur a déjà été enregistré pour cette guerre, on update
         if ($data['state'] == "collectionDay") {
-            $pattern = $updatePlayerWarPattern;
+            execute_query($db, sprintf(
+                $updatePlayerWarPattern, $cardsEarned, $battlesPlayed, $wins, $getPlayerWarResult['id']
+            ));
         } else if ($data['state'] == "warDay") {
-            $pattern = $updateWarPattern;
+            execute_query($db, sprintf(
+                $updateWarPattern, $battlesPlayed, $wins, $getPlayerWarResult['id']
+            ));
         }
-        execute_query($db, sprintf(
-            $pattern, $battlesPlayed, $wins, $getPlayerWarResult['id']
-        ));
+
     } else {
         // Si le joueur n'est pas encore dans cette guerre, on insert
         if ($data['state'] == "collectionDay") {
-            $pattern = $insertPlayerWarPattern;
+            execute_query($db, sprintf(
+                $insertPlayerWarPattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
+            ));
         } else if ($data['state'] == "warDay") {
-            $pattern = $insertWarPattern;
+            execute_query($db, sprintf(
+                $insertWarPattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
+            ));
         }
-        execute_query($db, sprintf(
-            $pattern, $battlesPlayed, $wins, $player['id'], $warId
-        ));
+
     }
 }
