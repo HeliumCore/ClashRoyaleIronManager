@@ -75,6 +75,12 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
                 }
             })
         }
+
+        $(document).ready(function () {
+            $('#tableIndex').on('click', 'tbody td', function () {
+                window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
+            });
+        });
     </script>
 </head>
 <body>
@@ -84,7 +90,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <!--    <h4 class="pageSubtitle">Première guerre : </h4>-->
     <br>
     <br><br>
-    <table class="tableIndex">
+    <table class="tableIndex" id="tableIndex">
         <thead>
         <tr class="rowIndex">
             <th class="headIndex">Rang du joueur</th>
@@ -182,10 +188,3 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <?php include("footer.html"); ?>
 </body>
 </html>
-<script>
-    $(document).ready(function () {
-        $('#tableIndex').on('click', 'tbody td', function () {
-            window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
-        });
-    });
-</script>

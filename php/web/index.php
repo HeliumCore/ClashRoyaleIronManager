@@ -40,6 +40,12 @@ $getPlayerRequest->execute();
                 }
             })
         }
+
+        $(document).ready(function () {
+            $('#tableIndex').on('click', 'tbody td', function () {
+                window.location = $(this).closest('tr').find('td:eq(1) a').attr('href');
+            });
+        });
     </script>
 </head>
 <body>
@@ -97,10 +103,3 @@ $getPlayerRequest->execute();
 <?php include("footer.html"); ?>
 </body>
 </html>
-<script>
-    $(document).ready(function () {
-        $('#tableIndex').on('click', 'tbody td', function () {
-            window.location = $(this).closest('tr').find('td:eq(1) a').attr('href');
-        });
-    });
-</script>

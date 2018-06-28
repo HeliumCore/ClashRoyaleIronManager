@@ -9,15 +9,17 @@
 include("../tools/database.php");
 
 $getWarPlayers = "
-SELECT players.rank, players.tag, players.name, players.playerRole, players.trophies, player_war.battle_played, player_war.battle_won,
+SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, player_war.battle_won,
 player_war.collection_played, player_war.collection_won
 FROM player_war
 INNER JOIN war ON war.id = player_war.war_id
 INNER JOIN players ON players.id = player_war.player_id
-INNER JOIN player_war ON player_war.id = players.id
+INNER JOIN role ON role.id = players.role_id
 WHERE war.past_war = 0
-ORDER BY player.rank ASC
+ORDER BY players.rank ASC
 ";
+
+$warPlayers = fetch_all_query($db, $getWarPlayers);
 ?>
 
 <!DOCTYPE html>
@@ -26,9 +28,16 @@ ORDER BY player.rank ASC
     <meta charset="UTF-8">
     <title>Guerre en cours</title>
     <link rel="stylesheet" type="text/css" href="../../css/css.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tableIndex').on('click', 'tbody td', function () {
+                window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
+            });
+        });
+    </script>
 </head>
 <body>
-<?php include("header.html"); ?>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Liste des joueurs</h1>
@@ -48,11 +57,11 @@ ORDER BY player.rank ASC
         </thead>
         <tbody>
         <?php
-        foreach ($getPlayerRequest as $player) {
+        foreach ($warPlayers as $player) {
             echo '<tr>';
             echo '<th class="headIndex">' . $player['rank'] . '</th>';
-            echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['playerName']) . '</a></td>';
-            echo '<td class="lineIndex">' . utf8_encode($player['playerRole']) . '</td>';
+            echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
+            echo '<td class="lineIndex">' . utf8_encode($player['role_name']) . '</td>';
             echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
             echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
             echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';
@@ -80,13 +89,6 @@ ORDER BY player.rank ASC
 <div id="loaderDiv">
     <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
-</body>
 <?php include("footer.html"); ?>
+</body>
 </html>
-<script>
-    $(document).ready(function () {
-        $('#tableIndex').on('click', 'tbody td', function () {
-            window.location = $(this).closest('tr').find('td:eq(1) a').attr('href');
-        });
-    });
-</script>
