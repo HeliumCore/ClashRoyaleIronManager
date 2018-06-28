@@ -38,7 +38,7 @@ $getPlayerRequest->execute();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Les membres</title>
     <link rel="stylesheet" type="text/css" href="../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -89,8 +89,8 @@ $getPlayerRequest->execute();
             echo "<tr>";
             echo "<td>" . $player['rank'] . "</td>";
             echo "<td>" . $player['tag'] . "</td>";
-            echo "<td>" . utf8_decode($player['playerName']) . "</td>";
-            echo "<td>" . utf8_decode($player['playerRole']) . "</td>";
+            echo "<td>" . utf8_encode($player['playerName']) . "</td>";
+            echo "<td>" . utf8_encode($player['playerRole']) . "</td>";
             echo "<td>" . $player['exp_level'] . "</td>";
             echo "<td>" . $player['trophies'] . "</td>";
             echo "<td>" . $player['arena'] . "</td>";
@@ -108,4 +108,3 @@ $getPlayerRequest->execute();
 </div>
 </body>
 </html>
-

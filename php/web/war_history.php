@@ -81,7 +81,7 @@ $warHistory = $transaction->fetchAll();
             || ($player['missed_collection'] + $player['missed_battle'] >= 7);
 
             echo "<tr>";
-            echo "<td>" . utf8_decode($player['name']) . "</td>";
+            echo "<td>" . utf8_encode($player['name']) . "</td>";
             echo "<td>" . $player['missed_collection'] . "</td>";
             echo "<td>" . $player['missed_battle'] . "</td>";
             echo "<td>" . $player['collection_played'] . "</td>";

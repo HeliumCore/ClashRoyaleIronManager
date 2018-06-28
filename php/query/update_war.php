@@ -17,8 +17,39 @@ FROM war
 WHERE war.timestamp = %d
 ";
 
+$setWarPattern = "
+INSERT INTO war
+VALUES ('', %d)
+";
+
+$insertPlayerWar = "
+INSERT INTO player_war
+VALUES ('', %d, %d, %d, %d, %d)
+";
+
+$updatePlayerWar = "
+UPDATE player_war
+SET (cards_earned, collection_played, collection_won)
+WHERE player_id = %d
+";
 
 if ($data['state'] == "collectionDay") {
+    $getWarQuery = sprintf($getWarPattern, $data['collectionEndTime']);
+    $transaction = $db->prepare($getWarQuery);
+    $transaction->execute();
+    $getWarResult = $transaction->fetch();
+
+    // On récupère l'ID de la guerre en cours
+    if (is_array($getWarResult)) {
+        $warId = $getWarResult['id'];
+    } else {
+        $setWarQuery = sprintf($setWarPattern, $data['collectionEndTime']);
+        $transaction = $db->prepare($setWarQuery);
+        $transaction->execute();
+        $warId = $db->lastInsertId();
+    }
+
+    //
     foreach ($data['participants'] as $player) {
         $player['battlesPlayed'];
         $player['wins'];
