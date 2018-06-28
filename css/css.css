@@ -1,5 +1,9 @@
 /* BODY */
 
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 .bodyIndex {
     position: absolute;
     top: 5%;
@@ -94,7 +98,7 @@
 /* HEADER */
 
 .ulHeadBand {
-    position: absolute;
+    position: fixed;
     list-style-type: none;
     display: block;
     margin: 0;
@@ -103,6 +107,7 @@
     background-color: royalblue;
     left: 0;
     top: 0;
+    z-index: 100;
     width: 100%;
     height: 5%;
 }
@@ -140,4 +145,22 @@
 
 .liHeadBandMaj a:hover {
     background-color: darkblue;
+}
+
+/* FOOTER */
+.footerDiv {
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:5%;   /* Height of the footer */
+    background:royalblue;
+}
+
+.footerSpan {
+    position: relative;
+    float: left;
+    left: 43%;
+    top: 25%;
+    color: white;
 }

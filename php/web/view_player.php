@@ -170,5 +170,6 @@ $getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag
 <div id="loaderDiv">
     <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
+<?php include("footer.html"); ?>
 </body>
 </html>

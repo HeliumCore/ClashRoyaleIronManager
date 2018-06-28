@@ -179,5 +179,6 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <div id="loaderDiv">
     <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
+<?php include("footer.html"); ?>
 </body>
 </html>

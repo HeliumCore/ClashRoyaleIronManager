@@ -94,6 +94,7 @@ $getPlayerRequest->execute();
 <div id="loaderDiv">
     <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
+<?php include("footer.html"); ?>
 </body>
 </html>
 <script>
