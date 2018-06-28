@@ -14,6 +14,12 @@
     top: 5%;
 }
 
+.pageSecondTitle {
+    position: relative;
+    left: 50%;
+    top: 5%;
+}
+
 /* ARRAY */
 
 .tableIndex {
@@ -23,7 +29,7 @@
     border: 1px solid #ccc;
     text-align: center;
     left: 15%;
-    rigth: 15%;
+    right: 15%;
     width: 70%;
 }
 
@@ -55,6 +61,12 @@
 .linkToPlayer {
     color: black;
     text-decoration: none;
+}
+
+.divInfoPlayer {
+    position: relative;
+    top: 5%;
+    margin-bottom: 10%;
 }
 
 /* LOADER */
