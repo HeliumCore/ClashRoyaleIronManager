@@ -49,16 +49,16 @@ $getPlayerRequest->execute();
         <tbody>
         <?php
         foreach ($getPlayerRequest as $player) {
-            echo "<tr>";
-            echo "<th class=\"headIndex\">" . $player['rank'] . "</th>";
-            echo "<td class=\"lineIndex\">" . $player['tag'] . "</td>";
-            echo "<td class=\"lineIndex\"><a class=\"linkToPlayer\" href=\"view_player.php?tag=" . $player['tag'] . "\">" . utf8_encode($player['playerName']) . "</a></td>";
-            echo "<td class=\"lineIndex\">" . utf8_encode($player['playerRole']) . "</td>";
-            echo "<td class=\"lineIndex\">" . $player['trophies'] . "</td>";
-            echo "<td class=\"lineIndex\">" . $player['arena'] . "</td>";
-            echo "<td class=\"lineIndex\">" . $player['donations'] . "</td>";
-            echo "<td class=\"lineIndex\">" . $player['donations_received'] . "</td>";
-            echo "</tr>";
+            echo '<tr>';
+            echo '<th class="headIndex">' . $player['rank'] . '</th>';
+            echo '<td class="lineIndex">' . $player['tag'] . '</td>';
+            echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['playerName']) . '</a></td>';
+            echo '<td class="lineIndex">' . utf8_encode($player['playerRole']) . '</td>';
+            echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
+            echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+            echo '<td class="lineIndex">' . $player['donations'] . '</td>';
+            echo '<td class="lineIndex">' . $player['donations_received'] . '</td>';
+            echo '</tr>';
         }
         ?>
         </tbody>
