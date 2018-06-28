@@ -134,7 +134,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             if ($totalCollectionPlayed != 0) echo '<td class="lineIndex">' . round((($totalCollectionWon / $totalCollectionPlayed) * 100)) . '</td>';
             else echo '<td class="lineIndex">0</td>';
             echo '<td class="lineIndex">' . $missedCollection . '</td>';
-            if ($totalCollectionPlayed != null) echo '<td class="lineIndex">' . round(($totalCollection / $totalCollectionPlayed) * 100) . '</td>';
+            if ($totalCollectionPlayed != 0) echo '<td class="lineIndex">' . round(($totalCollection / $totalCollectionPlayed) * 100) . '</td>';
             else echo '<td class="lineIndex">0</td>';
             echo '<td class="lineIndex">' . $totalCardsEarned . '</td>';
             // War
@@ -178,6 +178,5 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <div id="loaderDiv">
     <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
-<?php include("footer.html"); ?>
 </body>
 </html>
