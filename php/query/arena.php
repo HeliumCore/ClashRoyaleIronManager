@@ -19,7 +19,7 @@ VALUES('', %d, \"%s\", \"%s\", %d)
 
 foreach ($data['arenas'] as $arena) {
     $insertQuery = utf8_decode(sprintf(
-        $insertPattern, $arena['arena_id'], $arena['subtitle'], $arena['title'], $arena['trophy_limit']
+        $insertPattern, $arena['arena'], $arena['subtitle'], $arena['title'], $arena['trophy_limit']
     ));
     execute_query($db, $insertQuery);
 }

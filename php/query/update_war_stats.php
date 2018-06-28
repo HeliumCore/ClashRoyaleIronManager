@@ -11,10 +11,6 @@ include("update_clan.php");
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $context);
 $data = json_decode($apiResult, true);
 
-unset($query);
-unset($updatePattern);
-unset($getPattern);
-
 $updatePattern = "
 UPDATE player_war
 SET cards_earned = %d, battle_played = %d, battle_won = %d
@@ -70,6 +66,7 @@ foreach ($data as $war) {
         $playerId = $playerIdResult['id'];
 
         $playerWarResult = fetch_query($db, utf8_decode(sprintf($getPattern, $playerId, $warId)));
+
 
         if (is_array($playerWarResult)) {
             execute_query($db, sprintf(
