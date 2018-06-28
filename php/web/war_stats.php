@@ -50,10 +50,10 @@ $getFirstWarDateQuery = "
 SELECT created
 FROM war
 WHERE past_war > 0
+AND created != 1530050844
 LIMIT 1
 ";
 $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
-// TODO convertir et afficher la date de la premiere guerre
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +87,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <?php include("header.html"); ?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Statistiques des guerres</h1>
-<!--    <h4 class="pageSubtitle">Première guerre : </h4>-->
+    <span class="pageSubtitle">Première guerre : <b><?php echo ''.date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
     <table class="tableIndex" id="tableIndex">

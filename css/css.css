@@ -164,3 +164,9 @@ body {
     top: 25%;
     color: white;
 }
+
+.pageSubtitle {
+    position: relative;
+    left: 48%;
+    top: 5%;
+}
