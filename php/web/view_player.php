@@ -40,7 +40,7 @@
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="../../res/loader.gif" />
+    <img id="loaderImg" src="../../res/loader.gif"/>
 </div>
 </body>
 </html>

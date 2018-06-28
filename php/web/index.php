@@ -83,8 +83,8 @@ $getPlayerRequest->execute();
 </body>
 </html>
 <script>
-    $(document).ready(function (){
-        $('#tableIndex').on('click', 'tbody td', function(){
+    $(document).ready(function () {
+        $('#tableIndex').on('click', 'tbody td', function () {
             window.location = $(this).closest('tr').find('td:eq(1) a').attr('href');
         });
     });

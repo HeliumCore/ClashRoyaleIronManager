@@ -11,50 +11,86 @@ include("update_clan.php");
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true, $context);
 $data = json_decode($apiResult, true);
 
-$getWarPattern = "
+$getWarQuery = "
 SELECT id
 FROM war
-WHERE war.timestamp = %d
+WHERE past_war = 0
 ";
 
-$setWarPattern = "
+$setWarQuery = "
 INSERT INTO war
-VALUES ('', %d)
+VALUES ('', null, 0)
 ";
 
-$insertPlayerWar = "
-INSERT INTO player_war
-VALUES ('', %d, %d, %d, %d, %d)
+$insertPlayerWarPattern = "
+INSERT INTO player_war (collection_played, collection_won, player_id, war_id)
+VALUES (%d, %d, %d, %d)
 ";
 
-$updatePlayerWar = "
+$updatePlayerWarPattern = "
 UPDATE player_war
-SET (cards_earned, collection_played, collection_won)
-WHERE player_id = %d
+SET collection_played = %d, collection_won = %d
+WHERE id = %d
 ";
 
-if ($data['state'] == "collectionDay") {
-    $getWarQuery = sprintf($getWarPattern, $data['collectionEndTime']);
-    $transaction = $db->prepare($getWarQuery);
-    $transaction->execute();
-    $getWarResult = $transaction->fetch();
+$insertWarPattern = "
+INSERT INTO player_war (battle_played, battle_won, player_id, war_id)
+VALUES (%d, %d, %d, %d)
+";
 
-    // On récupère l'ID de la guerre en cours
-    if (is_array($getWarResult)) {
-        $warId = $getWarResult['id'];
+$updateWarPattern = "
+UPDATE player_war
+SET battle_played = %d, battle_won = %d
+WHERE id = %d
+";
+
+$getPlayerWarPattern = "
+SELECT id
+FROM player_war
+WHERE player_id = %d
+AND war_id = %d
+";
+
+$getIdPattern = "
+SELECT players.id
+FROM players
+WHERE players.tag = \"%s\"
+";
+
+// On récupère l'ID de la guerre en cours
+$getWarResult = fetch_query($db, sprintf($getWarQuery));
+if (is_array($getWarResult)) {
+    $warId = $getWarResult['id'];
+} else {
+    execute_query($db, $setWarQuery);
+    $warId = $db->lastInsertId();
+}
+
+foreach ($data['participants'] as $player) {
+    $getIdResult = fetch_query($db, utf8_decode(sprintf($getIdPattern, $player['tag'])));
+    $playerId = $getIdResult ['id'];
+
+    $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $playerId, $warId));
+
+    if (is_array($getPlayerWarResult)) {
+        // Si le joueur a déjà été enregistré pour cette guerre, on update
+        if ($data['state'] == "collectionDay") {
+            $pattern = $updatePlayerWarPattern;
+        } else if ($data['state'] == "warDay") {
+            $pattern = $updateWarPattern;
+        }
+        execute_query($db, sprintf(
+            $pattern, $player['battlesPlayed'], $player['wins'], $getPlayerWarResult['id']
+        ));
     } else {
-        $setWarQuery = sprintf($setWarPattern, $data['collectionEndTime']);
-        $transaction = $db->prepare($setWarQuery);
-        $transaction->execute();
-        $warId = $db->lastInsertId();
+        // Si le joueur n'est pas encore dans cette guerre, on insert
+        if ($data['state'] == "collectionDay") {
+            $pattern = $insertPlayerWarPattern;
+        } else if ($data['state'] == "warDay") {
+            $pattern = $insertWarPattern;
+        }
+        execute_query($db, sprintf(
+            $pattern, $player['battlesPlayed'], $player['wins'], $playerId, $warId
+        ));
     }
-
-    //
-    foreach ($data['participants'] as $player) {
-        $player['battlesPlayed'];
-        $player['wins'];
-        $player['cardsEarned'];
-    }
-} else if ($data['state'] == "warDay") {
-    // meme pas sur d'en avoir besoin
 }

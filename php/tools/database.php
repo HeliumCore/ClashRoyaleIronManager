@@ -16,3 +16,20 @@ try {
 } catch (PDOException $e) {
     echo $e->getMessage();
 }
+
+function fetch_query($db, $query)
+{
+    return execute_query($db, $query)->fetch();
+}
+
+function fetch_all_query($db, $query)
+{
+    return execute_query($db, $query)->fetchAll();
+}
+
+function execute_query($db, $query)
+{
+    $transaction = $db->prepare($query);
+    $transaction->execute();
+    return $transaction;
+}

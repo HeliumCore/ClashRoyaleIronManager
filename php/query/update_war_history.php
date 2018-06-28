@@ -11,23 +11,20 @@ include("update_clan.php");
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $context);
 $data = json_decode($apiResult, true);
 
-
-// database :
-//missed_collection
-//missed_battle
-//collection_played
-//collection_won
-//battle_played
-//battle_won
 unset($query);
 unset($updatePattern);
 unset($getPattern);
 
 $updatePattern = "
-UPDATE war_history
-SET battle_played = %d,
-battle_won = %d
+UPDATE player_war
+SET cards_earned = %d, battle_played = %d, battle_won = %d
 WHERE player_id = %d
+AND war_id = %d
+";
+
+$insertPattern = "
+INSERT INTO player_war (cards_earned, battle_played, battle_won, player_id, war_id)
+VALUE (%d, %d, %d, %d, %d)
 ";
 
 $getIdPattern = "
@@ -36,50 +33,52 @@ FROM players
 WHERE players.tag = \"%s\"
 ";
 
-$insertPattern = "
-INSERT INTO war_history (player_id, battle_played, battle_won)
-VALUE (%d, %d, %d)
+$getPattern = "
+SELECT cards_earned, collection_played, collection_won, battle_played, battle_won
+FROM player_war
+WHERE player_id = %d
+AND war_id = %d
 ";
 
-$getPattern = "
-SELECT missed_battle, battle_played, battle_won
-FROM war_history
-WHERE player_id = %d
+$insertWarPattern = "
+INSERT INTO war
+VALUES ('', %d, %d)
 ";
-// TODO manage collection
+
+$getWarPattern = "
+SELECT id
+FROM war
+WHERE created = %d
+";
+
 foreach ($data as $war) {
-    //createdDate
-    //battlesPlayed
-    //participants?
+    // On crée ou update la guerre (table: war)
     $created = $war['createdDate'];
+    $getWarResult = fetch_query($db, sprintf($getWarPattern, $created));
+
+    // Si la guerre n'existe pas déjà, on la crée
+    // Sinon, on récupère son ID
+    if (!is_array($getWarResult)) {
+        execute_query($db, sprintf($insertWarPattern, $created, 1));
+        $warId = $db->lastInsertId();
+    } else {
+        $warId = $getWarResult['id'];
+    }
 
     foreach ($war['participants'] as $player) {
-        $getIdQuery = utf8_decode(sprintf($getIdPattern, $player['tag']));
-        $transaction = $db->prepare($getIdQuery);
-        $transaction->execute();
-        $idResult = $transaction->fetch();
+        $playerIdResult = fetch_query($db, utf8_decode(sprintf($getIdPattern, $player['tag'])));
+        $playerId = $playerIdResult['id'];
 
-        $getQuery = utf8_decode(sprintf($getPattern, $idResult['id']));
-        $transaction = $db->prepare($getQuery);
-        $transaction->execute();
-        $result = $transaction->fetch();
+        $playerWarResult = fetch_query($db, utf8_decode(sprintf($getPattern, $playerId, $warId)));
 
-        if (is_array($result)) {
-            $missedBattle = $result['missed_battle'];
-            $battlePlayed = $result['battle_played'];
-            $battleWon = $result['battle_won'];
-
-            $battleWon += $player['wins'];
-            $battlePlayed += $player['battlesPlayed'];
-
-            $query = utf8_decode(sprintf($updatePattern, $battleWon, $battlePlayed, $idResult['id']));
-            $transaction = $db->prepare($query);
+        if (is_array($playerWarResult)) {
+            execute_query($db, sprintf(
+                $updatePattern, $player['cardsEarned'], $player['battlesPlayed'], $player['wins'], $playerId, $warId
+            ));
         } else {
-            $insertQuery = utf8_decode(
-                sprintf($insertPattern, $idResult['id'], $player['battlesPlayed'], $player['wins'])
-            );
-            $transaction = $db->prepare($insertQuery);
+            execute_query($db, sprintf(
+                $insertPattern, $player['cardsEarned'], $player['battlesPlayed'], $player['wins'], $playerId, $warId
+            ));
         }
-        $transaction->execute();
     }
 }

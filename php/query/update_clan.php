@@ -18,15 +18,10 @@ SELECT id, tag
 FROM players
 WHERE in_clan = 1
 ";
-$transaction = $db->prepare($getAllQuery);
-$transaction->execute();
-$resultTags = $transaction->fetchAll();
-foreach ($resultTags as $tag) {
-//    var_dump($tag);
-}
+$resultTags = fetch_all_query($db, $getAllQuery);
 
 $getPattern = "
-SELECT players.tag  
+SELECT players.tag
 FROM players
 WHERE players.in_clan = 1
 AND players.tag = \"%s\"
@@ -53,10 +48,7 @@ VALUES (\"%s\", %d, %d, %d, %d, 1, %d, %d, %d, %d, %f)
 ";
 
 foreach ($data["members"] as $player) {
-    $query = sprintf($getPattern, $player['tag']);
-    $transaction = $db->prepare($query);
-    $transaction->execute();
-    $result = $transaction->fetch();
+    $result = fetch_query($db, sprintf($getPattern, $player['tag']));
 
     if (is_array($result)) {
         // On récupère le role_id
@@ -68,7 +60,6 @@ foreach ($data["members"] as $player) {
             $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
             $player['donationsDelta'], $player['donationsPercent'], $player['tag']
         ));
-//        array_diff($allTags, $player['tag']);
     } else {
         // Il n'y a pas de retour, on insert
         unset($query);
@@ -78,24 +69,18 @@ foreach ($data["members"] as $player) {
             $player['donationsPercent']
         ));
     }
-    $transaction = $db->prepare($query);
-    $transaction->execute();
-    // Supprime les gens qui ne sont plus dans le clan
-//    removeFromClan($db, $allTags);
+    execute_query($db, $query);
 }
 
 function removeFromClan($db, $allTags)
 {
-    $query = "UPDATE players SET in_clan = 0 WHERE tag IN " . $allTags;
-    $transaction = $db->prepare(utf8_decode($query));
-    $transaction->execute();
+    $query = utf8_decode("UPDATE players SET in_clan = 0 WHERE tag IN " . $allTags);
+    execute_query($db, $query);
 }
 
 function getRoleId($db, $machineName)
 {
     $query = "SELECT id FROM role WHERE machine_name LIKE \"%s\"";
-    $transaction = $db->prepare(utf8_decode(sprintf($query, $machineName)));
-    $transaction->execute();
-    $result = $transaction->fetch();
+    $result = fetch_query($db, utf8_decode(sprintf($query, $machineName)));
     return $result['id'];
 }

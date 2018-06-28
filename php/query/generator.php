@@ -17,20 +17,16 @@ $rolePattern = "SELECT id FROM role WHERE machine_name LIKE \"%s\"";
 $truncateQuery = "TRUNCATE players";
 
 // Truncate la table players (remise à zéro)
-$transaction = $db->prepare($truncateQuery);
-$transaction->execute();
+execute_query($db, $truncateQuery);
 
 foreach ($data["members"] as $player) {
     // Récupère l'id du role en fonction de son machine_name
     $roleQuery = sprintf($rolePattern, $player['role']);
-    $transaction = $db->prepare($roleQuery);
-    $transaction->execute();
-    $roleResult = $transaction->fetch();
+    $roleResult = fetch_query($db, $roleQuery);
     // Insert les joueurs dans la BDD
     $query = utf8_decode(sprintf($pattern, $player['tag'], $player['name'], $player['rank'], $player['trophies'],
         $roleResult['id'], $player['expLevel'], 1, $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
         $player['donationsDelta'], $player['donationsPercent']));
 
-    $transaction = $db->prepare($query);
-    $transaction->execute();
+    execute_query($db, $query);
 }
