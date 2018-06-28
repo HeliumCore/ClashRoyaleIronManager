@@ -38,7 +38,7 @@ WHERE player_id = %d
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
-    <h1 class="pageTitle">Historique des guerres</h1>
+    <h1 class="pageTitle">Statistiques des guerres</h1>
     <br>
     <br><br>
     <table class="tableIndex">
@@ -50,9 +50,11 @@ WHERE player_id = %d
             <th class="headIndex">Batailles ratées</th>
             <th class="headIndex">Collections jouées</th>
             <th class="headIndex">Collections gagnées</th>
+            <th class="headIndex">Pourcentage victoire collection</th>
+            <th class="headIndex">Cartes récoltées</th>
             <th class="headIndex">Batailles jouées</th>
             <th class="headIndex">Batailles gagnées</th>
-            <th class="headIndex">Cartes récoltées</th>
+            <th class="headIndex">Pourcentage victoire guerre</th>
             <th class="headIndex">Statut</th>
         </tr>
         </thead>
@@ -81,9 +83,13 @@ WHERE player_id = %d
             echo "<td class=\"lineIndex\"> pas encore fait </td>";
             echo "<td class=\"lineIndex\">" . $totalCollectionPlayed . "</td>";
             echo "<td class=\"lineIndex\">" . $totalCollectionWon . "</td>";
+            if ($totalCollectionPlayed != 0) echo "<td class=\"lineIndex\">" . round((($totalCollectionWon / $totalCollectionPlayed) * 100)) . "</td>";
+            else echo "<td class=\"lineIndex\">0</td>";
+            echo "<td class=\"lineIndex\">" . $totalCardsEarned . "</td>";
             echo "<td class=\"lineIndex\">" . $totalBattlesPlayed . "</td>";
             echo "<td class=\"lineIndex\">" . $totalBattlesWon . "</td>";
-            echo "<td class=\"lineIndex\">" . $totalCardsEarned . "</td>";
+            if ($totalBattlesPlayed != 0) echo "<td class=\"lineIndex\">" . round((($totalBattlesWon / $totalBattlesPlayed) * 100)) . "</td>";
+            else echo "<td class=\"lineIndex\">0</td>";
 
 //            if ($ban) {
 //                echo "<td bgcolor='#D42F2F'>Exlure</td>";
@@ -98,6 +104,22 @@ WHERE player_id = %d
         }
         ?>
         </tbody>
+        <thead>
+        <tr class="rowIndex">
+            <th class="headIndex">Rang du joueur</th>
+            <th class="headIndex">Nom du joueur</th>
+            <th class="headIndex">Collections ratées</th>
+            <th class="headIndex">Batailles ratées</th>
+            <th class="headIndex">Collections jouées</th>
+            <th class="headIndex">Collections gagnées</th>
+            <th class="headIndex">Pourcentage victoire collection</th>
+            <th class="headIndex">Cartes récoltées</th>
+            <th class="headIndex">Batailles jouées</th>
+            <th class="headIndex">Batailles gagnées</th>
+            <th class="headIndex">Pourcentage victoire guerre</th>
+            <th class="headIndex">Statut</th>
+        </tr>
+        </thead>
     </table>
     <br>
 </div>

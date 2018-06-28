@@ -6,6 +6,21 @@
  * Time: 16:08
  */
 
+include("../tools/database.php");
+
+if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
+else header('Location: index.php');
+
+$getPlayerByTag = "
+SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
+arena.arena as arena, players.donations, players.donations_received  
+FROM players
+INNER JOIN arena ON arena.arena_id = players.arena
+INNER JOIN role ON role.id = players.role_id
+WHERE tag = \"%s\"
+";
+
+$getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag)));
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +50,18 @@
         </tr>
         </thead>
         <tbody>
+        <?php
+        echo '<tr>';
+        echo '<th class="headIndex">' . $getPlayer['rank'] . '</th>';
+        echo '<td class="lineIndex">' . $getPlayer['tag'] . '</td>';
+        echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerName']) . '</td>';
+        echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerRole']) . '</td>';
+        echo '<td class="lineIndex">' . $getPlayer['trophies'] . '</td>';
+        echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
+        echo '<td class="lineIndex">' . $getPlayer['donations'] . '</td>';
+        echo '<td class="lineIndex">' . $getPlayer['donations_received'] . '</td>';
+        echo '</tr>';
+        ?>
         </tbody>
     </table>
     <br>

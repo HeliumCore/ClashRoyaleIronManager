@@ -10,9 +10,10 @@ include("../tools/database.php");
 
 $query = "
 SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
-players.arena, players.donations, players.donations_received  
+arena.arena as arena, players.donations, players.donations_received  
 FROM players
 INNER JOIN role ON role.id = players.role_id
+INNER JOIN arena ON arena.arena_id = players.arena
 WHERE players.in_clan = 1
 ORDER BY players.rank ASC
 ";
