@@ -9,7 +9,7 @@
 include("../tools/database.php");
 
 $getAllPlayersQuery = "
-SELECT players.id, players.name, players.rank
+SELECT players.id, players.name, players.rank, players.tag
 FROM players
 WHERE in_clan > 0
 ";
@@ -128,7 +128,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 
             echo '<tr>';
             echo '<th class="headIndex">' . utf8_encode($player['rank']) . '</th>';
-            echo '<td class="lineIndex">' . utf8_encode($player['name']) . '</td>';
+            echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
             // Collections
             echo '<td class="lineIndex">' . $totalCollectionPlayed . '</td>';
             echo '<td class="lineIndex">' . $totalCollectionWon . '</td>';
@@ -182,3 +182,10 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <?php include("footer.html"); ?>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        $('#tableIndex').on('click', 'tbody td', function () {
+            window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
+        });
+    });
+</script>
