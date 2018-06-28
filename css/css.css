@@ -52,6 +52,11 @@
     background-color: royalblue;
 }
 
+.linkToPlayer {
+    color: black;
+    text-decoration: none;
+}
+
 /* LOADER */
 
 #loaderDiv {
@@ -110,6 +115,7 @@
 .liHeadBandMaj {
     float: right;
     text-align: center;
+    cursor: pointer;
 }
 
 .liHeadBandMaj a {
