@@ -18,7 +18,6 @@ INNER JOIN role ON role.id = players.role_id
 WHERE war.past_war = 0
 ORDER BY players.rank ASC
 ";
-
 $warPlayers = fetch_all_query($db, $getWarPlayers);
 ?>
 
@@ -50,8 +49,19 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
 </head>
 <body>
 <?php include("header.html"); ?>
+<?php
+include("../query/war.php");
+$state = getWarState();
+if ($state == "collectionDay") {
+    $stateName = "Jour de collection";
+} else {
+    $stateName = "Jour de guerre";
+}
+
+?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Liste des joueurs</h1>
+    <span class="pageSubtitle"><?php echo $stateName?></span>
     <br><br>
     <table id="tableIndex" class="tableIndex">
         <thead>
