@@ -22,7 +22,7 @@ include("../tools/database.php");
 -> donationsPercent
 */
 
-$getPlayer = "
+$query = "
 SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, players.exp_level, 
 players.arena, players.donations, players.donations_received, players.donations_delta, players.donations_ratio
 FROM players
@@ -31,11 +31,10 @@ WHERE players.in_clan = 1
 ORDER BY players.rank ASC
 ";
 
-$query = sprintf($getPlayer);
 $getPlayerRequest = $db->prepare($query);
 $getPlayerRequest->execute();
 ?>
-
+<!--TODO gerer le donation delta et ratio-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,8 +59,8 @@ $getPlayerRequest->execute();
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
-    <h1>Liste des joueurs</h1><br>
-
+    <h1>Liste des joueurs</h1>
+    <br>
     <button
         id="updateClanBtn"
         class="btn"
