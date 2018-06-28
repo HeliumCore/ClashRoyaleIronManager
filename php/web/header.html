@@ -2,5 +2,19 @@
     <li class="liHeadBand"><a href="index.php">Accueil</a></li>
     <li class="liHeadBand"><a href="war.php">Guerre en cours</a></li>
     <li class="liHeadBand"><a href="war_history.php">Historique guerre</a></li>
+    <li class="liHeadBandMaj"><a onclick="update()">Actualiser informations</a></li>
 </ul>
-<br>
+
+<script>
+    function update() {
+        $.ajax({
+            url: '../query/update_clan.php',
+            beforeSend: function () {
+                $('#loaderDiv').show();
+            },
+            success: function () {
+                window.location.reload(true);
+            }
+        })
+    }
+</script>
