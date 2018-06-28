@@ -42,6 +42,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.collection_played = 0
 AND war.past_war > 0
+AND war.created = 1530050844
 AND player_war.player_id = %d
 ";
 

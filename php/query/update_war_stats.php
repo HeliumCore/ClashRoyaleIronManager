@@ -47,7 +47,7 @@ FROM players
 WHERE in_clan > 0
 ";
 $allPlayers = fetch_all_query($db, $getAllPlayersQuery);
-
+//TODO update created for new past_war
 foreach ($data as $war) {
     if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530050844) {
         continue;
