@@ -9,7 +9,7 @@
 include("../tools/database.php");
 
 $getAllPlayersQuery = "
-SELECT players.id, players.name
+SELECT players.id, players.name, players.rank
 FROM players
 WHERE in_clan > 0
 ";
@@ -34,45 +34,26 @@ WHERE player_id = %d
     <title>Historique des guerres</title>
     <link rel="stylesheet" type="text/css" href="../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        function updateWarHistory() {
-            $.ajax({
-                url: '../query/update_war_history.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                },
-                success: function () {
-                    window.location = 'war_history.php';
-                }
-            })
-        }
-    </script>
 </head>
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
-    <h1>Historique des guerres</h1>
+    <h1 class="pageTitle">Historique des guerres</h1>
     <br>
-    <button
-            id="updateWarHistoryBtn"
-            class="btn"
-            onclick="updateWarHistory()"
-    >
-        Mettre à jour
-    </button>
     <br><br>
-    <table>
+    <table class="tableIndex">
         <thead>
-        <tr>
-            <td>Nom du joueur</td>
-            <td>Collections ratées</td>
-            <td>Batailles ratées</td>
-            <td>Collections jouées</td>
-            <td>Collections gagnées</td>
-            <td>Batailles jouées</td>
-            <td>Batailles gagnées</td>
-            <td>Cartes récoltées</td>
-            <td>Statut</td>
+        <tr class="rowIndex">
+            <th class="headIndex">Rang du joueur</th>
+            <th class="headIndex">Nom du joueur</th>
+            <th class="headIndex">Collections ratées</th>
+            <th class="headIndex">Batailles ratées</th>
+            <th class="headIndex">Collections jouées</th>
+            <th class="headIndex">Collections gagnées</th>
+            <th class="headIndex">Batailles jouées</th>
+            <th class="headIndex">Batailles gagnées</th>
+            <th class="headIndex">Cartes récoltées</th>
+            <th class="headIndex">Statut</th>
         </tr>
         </thead>
         <tbody>
@@ -94,14 +75,15 @@ WHERE player_id = %d
 //                || ($player['missed_collection'] + $player['missed_battle'] >= 7);
 
             echo "<tr>";
-            echo "<td>" . utf8_encode($player['name']) . "</td>";
-            echo "<td> pas encore fait </td>";
-            echo "<td> pas encore fait </td>";
-            echo "<td>" . $totalCollectionPlayed . "</td>";
-            echo "<td>" . $totalCollectionWon . "</td>";
-            echo "<td>" . $totalBattlesPlayed . "</td>";
-            echo "<td>" . $totalBattlesWon . "</td>";
-            echo "<td>" . $totalCardsEarned . "</td>";
+            echo "<th class=\"headIndex\">" . utf8_encode($player['rank']) . "</th>";
+            echo "<td class=\"lineIndex\">" . utf8_encode($player['name']) . "</td>";
+            echo "<td class=\"lineIndex\"> pas encore fait </td>";
+            echo "<td class=\"lineIndex\"> pas encore fait </td>";
+            echo "<td class=\"lineIndex\">" . $totalCollectionPlayed . "</td>";
+            echo "<td class=\"lineIndex\">" . $totalCollectionWon . "</td>";
+            echo "<td class=\"lineIndex\">" . $totalBattlesPlayed . "</td>";
+            echo "<td class=\"lineIndex\">" . $totalBattlesWon . "</td>";
+            echo "<td class=\"lineIndex\">" . $totalCardsEarned . "</td>";
 
 //            if ($ban) {
 //                echo "<td bgcolor='#D42F2F'>Exlure</td>";
