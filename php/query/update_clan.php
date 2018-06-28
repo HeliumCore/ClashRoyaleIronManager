@@ -16,7 +16,7 @@ $data = json_decode($apiResult, true);
 $getAllQuery = "
 SELECT id, tag
 FROM players
-WHERE in_clan = 1
+WHERE in_clan > 0
 ";
 $resultTags = fetch_all_query($db, $getAllQuery);
 

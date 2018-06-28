@@ -23,12 +23,6 @@ INSERT INTO player_war (cards_earned, battle_played, battle_won, player_id, war_
 VALUE (%d, %d, %d, %d, %d)
 ";
 
-$getIdPattern = "
-SELECT players.id
-FROM players
-WHERE players.tag = \"%s\"
-";
-
 $getPattern = "
 SELECT cards_earned, collection_played, collection_won, battle_played, battle_won
 FROM player_war
@@ -47,7 +41,17 @@ FROM war
 WHERE created = %d
 ";
 
+$getAllPlayersQuery = "
+SELECT players.id, players.tag
+FROM players
+WHERE in_clan > 0
+";
+$allPlayers = fetch_all_query($db, $getAllPlayersQuery);
+
 foreach ($data as $war) {
+    if ($war['seasonNumber'] <= 5) {
+        continue;
+    }
     // On crée ou update la guerre (table: war)
     $created = $war['createdDate'];
     $getWarResult = fetch_query($db, sprintf($getWarPattern, $created));
@@ -61,21 +65,34 @@ foreach ($data as $war) {
         $warId = $getWarResult['id'];
     }
 
-    foreach ($war['participants'] as $player) {
-        $playerIdResult = fetch_query($db, utf8_decode(sprintf($getIdPattern, $player['tag'])));
-        $playerId = $playerIdResult['id'];
-
-        $playerWarResult = fetch_query($db, utf8_decode(sprintf($getPattern, $playerId, $warId)));
-
+    foreach ($allPlayers as $player) {
+        global $cardsEarned;
+        global $battlesPlayed;
+        global $wins;
+        $cardsEarned = null;
+        $battlesPlayed = null;
+        $wins = null;
+        foreach ($war['participants'] as $participant) {
+            if ($player['tag'] == $participant['tag']) {
+                $cardsEarned = $participant['cardsEarned'];
+                $battlesPlayed = $participant['battlesPlayed'];
+                $wins = $participant['wins'];
+            }
+        }
+        $cardsEarned = $cardsEarned != null ? $cardsEarned : 0;
+        $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
+        $wins = $wins != null ? $wins : 0;
+        $playerWarResult = fetch_query($db, utf8_decode(sprintf($getPattern, $player['id'], $warId)));
 
         if (is_array($playerWarResult)) {
             execute_query($db, sprintf(
-                $updatePattern, $player['cardsEarned'], $player['battlesPlayed'], $player['wins'], $playerId, $warId
+                $updatePattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
             ));
         } else {
             execute_query($db, sprintf(
-                $insertPattern, $player['cardsEarned'], $player['battlesPlayed'], $player['wins'], $playerId, $warId
+                $insertPattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
             ));
         }
+        $playerWarResult = null;
     }
 }

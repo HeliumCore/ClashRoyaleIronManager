@@ -62,6 +62,7 @@ WHERE player_id = %d
         <?php
         foreach ($allPlayers as $player) {
             $getResult = fetch_query($db, sprintf($getPattern, $player['id']));
+
             $totalCollectionPlayed = $getResult['total_collection_played'] != null ? $getResult['total_collection_played'] : 0;
             $totalCollectionWon = $getResult['total_collection_won'] != null ? $getResult['total_collection_won'] : 0;
             $totalCardsEarned = $getResult['total_cards_earned'] != null ? $getResult['total_cards_earned'] : 0;

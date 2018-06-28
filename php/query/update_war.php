@@ -57,6 +57,12 @@ FROM players
 WHERE players.tag = \"%s\"
 ";
 
+$getAllPlayersQuery = "
+SELECT players.id, players.tag
+FROM players
+WHERE in_clan > 0
+";
+
 // On récupère l'ID de la guerre en cours
 $getWarResult = fetch_query($db, sprintf($getWarQuery));
 if (is_array($getWarResult)) {
@@ -65,13 +71,22 @@ if (is_array($getWarResult)) {
     execute_query($db, $setWarQuery);
     $warId = $db->lastInsertId();
 }
+foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
+    $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $player['id'], $warId));
 
-foreach ($data['participants'] as $player) {
-    $getIdResult = fetch_query($db, utf8_decode(sprintf($getIdPattern, $player['tag'])));
-    $playerId = $getIdResult ['id'];
-
-    $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $playerId, $warId));
-
+    global $battlesPlayed;
+    global $wins;
+    $cardsEarned = null;
+    $battlesPlayed = null;
+    $wins = null;
+    foreach ($data['participants'] as $participant) {
+        if ($player['tag'] == $participant['tag']) {
+            $battlesPlayed = $participant['battlesPlayed'];
+            $wins = $participant['wins'];
+        }
+    }
+    $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
+    $wins = $wins != null ? $wins : 0;
     if (is_array($getPlayerWarResult)) {
         // Si le joueur a déjà été enregistré pour cette guerre, on update
         if ($data['state'] == "collectionDay") {
@@ -80,7 +95,7 @@ foreach ($data['participants'] as $player) {
             $pattern = $updateWarPattern;
         }
         execute_query($db, sprintf(
-            $pattern, $player['battlesPlayed'], $player['wins'], $getPlayerWarResult['id']
+            $pattern, $battlesPlayed, $wins, $getPlayerWarResult['id']
         ));
     } else {
         // Si le joueur n'est pas encore dans cette guerre, on insert
@@ -90,7 +105,8 @@ foreach ($data['participants'] as $player) {
             $pattern = $insertWarPattern;
         }
         execute_query($db, sprintf(
-            $pattern, $player['battlesPlayed'], $player['wins'], $playerId, $warId
+            $pattern, $battlesPlayed, $wins, $player['id'], $warId
         ));
+
     }
 }
