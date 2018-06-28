@@ -7,6 +7,7 @@
  */
 
 include("update_clan.php");
+include ("update_war.php");
 
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $context);
 $data = json_decode($apiResult, true);
