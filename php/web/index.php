@@ -62,9 +62,9 @@ $getPlayerRequest->execute();
     <h1>Liste des joueurs</h1>
     <br>
     <button
-        id="updateClanBtn"
-        class="btn"
-        onclick="updateClan()"
+            id="updateClanBtn"
+            class="btn"
+            onclick="updateClan()"
     >
         Mettre à jour
     </button>
@@ -72,22 +72,22 @@ $getPlayerRequest->execute();
     <table>
         <thead>
         <tr>
-            <td>Rang</td>
-            <td>Tag</td>
-            <td>Nom</td>
-            <td>Role</td>
-            <td>Niveau du roi</td>
-            <td>Trophée</td>
-            <td>Arène</td>
-            <td>Donations</td>
-            <td>Donations reçues</td>
+            <th>Rang</th>
+            <th>Tag</th>
+            <th>Nom</th>
+            <th>Role</th>
+            <th>Niveau du roi</th>
+            <th>Trophée</th>
+            <th>Arène</th>
+            <th>Donations</th>
+            <th>Donations reçues</th>
         </tr>
         </thead>
         <tbody>
         <?php
         foreach ($getPlayerRequest as $player) {
             echo "<tr>";
-            echo "<td>" . $player['rank'] . "</td>";
+            echo "<th>" . $player['rank'] . "</th>";
             echo "<td>" . $player['tag'] . "</td>";
             echo "<td>" . utf8_encode($player['playerName']) . "</td>";
             echo "<td>" . utf8_encode($player['playerRole']) . "</td>";
