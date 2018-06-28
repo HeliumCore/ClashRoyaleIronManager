@@ -10,7 +10,7 @@ include("../tools/database.php");
 
 $getQuery = "
 SELECT war_history.missed_collection, war_history.missed_battle, war_history.collection_played,
- war_history.collection_won, war_history.battle_played, war_history.battle_won, players.name
+ war_history.collection_won, war_history.battle_played, war_history.battle_won, war_history.cards_earned, players.name
 FROM war_history
 JOIN players ON war_history.player_id = players.id
 AND players.in_clan > 0
@@ -65,6 +65,7 @@ $warHistory = $transaction->fetchAll();
             <td>Collections gagnées</td>
             <td>Batailles jouées</td>
             <td>Batailles gagnées</td>
+            <td>Cartes récoltées</td>
             <td>Statut</td>
         </tr>
         </thead>
@@ -87,10 +88,11 @@ $warHistory = $transaction->fetchAll();
             echo "<td>" . $player['collection_won'] . "</td>";
             echo "<td>" . $player['battle_played'] . "</td>";
             echo "<td>" . $player['battle_won'] . "</td>";
+            echo "<td>" . $player['cards_earned'] . "</td>";
 
             if ($ban) {
                 echo "<td bgcolor='#D42F2F'>Exlure</td>";
-            } elseif ($warning) {
+            } else if ($warning) {
                 echo "<td bgcolor='#FFB732'>A surveiller</td>";
             } else {
                 echo "<td bgcolor='#66B266'>Good</td>";
