@@ -41,17 +41,32 @@ FROM war
 WHERE created = %d
 ";
 
+$updateCurrentWarPattern = "
+UPDATE war
+SET created = %d,
+past_war = 1
+WHERE id = %d
+";
+
+$getCurrentWarQuery = "
+SELECT id
+FROM war
+WHERE past_war = 0
+LIMIT 1
+";
+$currentWarResult = fetch_query($db, $getCurrentWarQuery);
+
 $getAllPlayersQuery = "
 SELECT players.id, players.tag
 FROM players
 WHERE in_clan > 0
 ";
 $allPlayers = fetch_all_query($db, $getAllPlayersQuery);
-//TODO update created for new past_war
 foreach ($data as $war) {
     if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530050844) {
         continue;
     }
+
     // On crée ou update la guerre (table: war)
     $created = $war['createdDate'];
     $getWarResult = fetch_query($db, sprintf($getWarPattern, $created));
@@ -59,8 +74,12 @@ foreach ($data as $war) {
     // Si la guerre n'existe pas déjà, on la crée
     // Sinon, on récupère son ID
     if (!is_array($getWarResult)) {
-        execute_query($db, sprintf($insertWarPattern, $created, 1));
-        $warId = $db->lastInsertId();
+        if (!is_array($currentWarResult)) {
+            execute_query($db, sprintf($insertWarPattern, $created, 1));
+            $warId = $db->lastInsertId();
+        } else {
+            execute_query($db, sprintf($updateCurrentWarPattern, $created, $currentWarResult['id']));
+        }
     } else {
         $warId = $getWarResult['id'];
     }
