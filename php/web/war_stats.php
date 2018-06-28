@@ -23,7 +23,9 @@ SUM(collection_won) as total_collection_won,
 SUM(battle_played) as total_battle_played,
 SUM(battle_won) as total_battle_won
 FROM player_war
+JOIN war ON player_war.war_id = war.id
 WHERE player_id = %d
+AND war.past_war > 0
 ";
 ?>
 
@@ -34,6 +36,19 @@ WHERE player_id = %d
     <title>Historique des guerres</title>
     <link rel="stylesheet" type="text/css" href="../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function update() {
+            $.ajax({
+                url: '../query/update_war_stats.php',
+                beforeSend: function () {
+                    $('#loaderDiv').show();
+                },
+                success: function () {
+                    window.location.reload(true);
+                }
+            })
+        }
+    </script>
 </head>
 <body>
 <?php include("header.html"); ?>

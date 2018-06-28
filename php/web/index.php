@@ -28,6 +28,19 @@ $getPlayerRequest->execute();
     <title>Les membres</title>
     <link rel="stylesheet" type="text/css" href="../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function update() {
+            $.ajax({
+                url: '../query/update_clan.php',
+                beforeSend: function () {
+                    $('#loaderDiv').show();
+                },
+                success: function () {
+                    window.location.reload(true);
+                }
+            })
+        }
+    </script>
 </head>
 <body>
 <?php include("header.html"); ?>

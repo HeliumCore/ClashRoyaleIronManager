@@ -19,7 +19,7 @@ WHERE past_war = 0
 
 $setWarQuery = "
 INSERT INTO war
-VALUES ('', null, 0)
+VALUES ('', 0, 0)
 ";
 
 $insertPlayerWarPattern = "
@@ -71,6 +71,7 @@ if (is_array($getWarResult)) {
     execute_query($db, $setWarQuery);
     $warId = $db->lastInsertId();
 }
+
 foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $player['id'], $warId));
 
@@ -107,6 +108,5 @@ foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
         execute_query($db, sprintf(
             $pattern, $battlesPlayed, $wins, $player['id'], $warId
         ));
-
     }
 }
