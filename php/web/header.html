@@ -4,3 +4,15 @@
     <li class="liHeadBand"><a href="war_stats.php">Statistiques guerre</a></li>
     <li class="liHeadBandMaj"><a onclick="update()">Actualiser informations</a></li>
 </ul>
+
+<script>
+    $(window).on("scroll", function() {
+        const scrollHeight = $(document).height();
+        const scrollPosition = $(window).height() + $(window).scrollTop();
+        if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+            $('.footerDiv').hide();
+        } else {
+            $('.footerDiv').show();
+        }
+    });
+</script>
