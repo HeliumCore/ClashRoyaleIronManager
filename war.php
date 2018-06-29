@@ -85,6 +85,7 @@ if ($state == "collectionDay") {
         global $totalCardsEarned;
         global $totalBattlesPlayed;
         global $totalBattlesWon;
+        global $minusParticipant;
 
         $totalTrophies = 0;
         $totalCollectionPlayed = 0;
@@ -92,6 +93,7 @@ if ($state == "collectionDay") {
         $totalCardsEarned = 0;
         $totalBattlesPlayed = 0;
         $totalBattlesWon = 0;
+        $minusParticipant = 0;
 
         foreach ($warPlayers as $player) {
             $playerTrophies = $player['trophies'];
@@ -107,6 +109,10 @@ if ($state == "collectionDay") {
             $totalCardsEarned += $playerCardsEarned;
             $totalBattlesPlayed += $playerBattlesPlayed;
             $totalBattlesWon += $playerBattlesWon;
+
+            if ($playerCollectionPlayed == 0) {
+                $minusParticipant++;
+            }
 
             echo '<tr>';
             echo '<th class="headIndex">' . $player['rank'] . '</th>';
@@ -124,10 +130,12 @@ if ($state == "collectionDay") {
         <br>
         <tr>
             <th class="headTotalIndex"><?php echo sizeof($warPlayers) ;?></th>
-            <td class="lineTotalIndex">--------</td>
-            <td class="lineTotalIndex">--------</td>
+            <td class="lineTotalIndex"><?php
+            $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
+            echo $numberOfParticipant ; ?></td>
+            <td class="lineTotalIndex"><?php echo $minusParticipant ;?></td>
             <td class="lineTotalIndex"><?php echo $totalTrophies ;?></td>
-            <td class="lineTotalIndex"><?php echo $totalCollectionPlayed ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalCollectionPlayed;?></td>
             <td class="lineTotalIndex"><?php echo $totalCollectionWon ;?></td>
             <td class="lineTotalIndex"><?php echo $totalCardsEarned ;?></td>
             <td class="lineTotalIndex"><?php echo $totalBattlesPlayed ;?></td>
@@ -136,9 +144,9 @@ if ($state == "collectionDay") {
         </tbody>
         <tfoot>
         <tr class="rowIndex">
-            <th class="headTotalIndex">Total de joueur</th>
-            <th class="headTotalIndex">--------</th>
-            <th class="headTotalIndex">--------</th>
+            <th class="headTotalIndex">Nombre de joueur éligible à la guerre</th>
+            <th class="headTotalIndex">Nombre de participant</th>
+            <th class="headTotalIndex">Nombre d'absent</th>
             <th class="headTotalIndex">Total des trophées</th>
             <th class="headTotalIndex">Total des collections jouées</th>
             <th class="headTotalIndex">Total des collections gagnées</th>
