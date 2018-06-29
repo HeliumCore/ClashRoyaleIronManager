@@ -63,6 +63,31 @@ FROM players
 WHERE in_clan > 0
 ";
 
+$getAllExistingQuery = "
+SELECT COUNT(player_war.id) as numberOfCurrentPlayers
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE war.past_war = 0
+";
+
+$getNotEligibleQuery = "
+SELECT DISTINCT players.id 
+FROM players 
+WHERE players.id NOT IN
+(
+  SELECT DISTINCT pw.player_id 
+  FROM player_war pw 
+  JOIN war ON pw.war_id = war.id 
+  WHERE war.past_war = 0
+)
+";
+
+$numberOfCurrentPlayers = intval(fetch_query($db, $getAllExistingQuery)['numberOfCurrentPlayers']);
+$allPlayersSize = sizeof(fetch_all_query($db, $getAllPlayersQuery));
+if ($allPlayersSize > $numberOfCurrentPlayers) {
+    $notEligible = fetch_all_query($db, $getNotEligibleQuery);
+}
+if (fetch_query($db, $getAllExistingQuery))
 // On récupère l'ID de la guerre en cours
 $getWarResult = fetch_query($db, sprintf($getWarQuery));
 if (is_array($getWarResult)) {
@@ -73,6 +98,11 @@ if (is_array($getWarResult)) {
 }
 
 foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
+    foreach ($notEligible as $notEligiblePlayer) {
+        if ($player['id'] == $notEligiblePlayer['id']) {
+            continue 2;
+        }
+    }
     $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $player['id'], $warId));
 
     global $battlesPlayed;
