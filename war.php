@@ -6,7 +6,7 @@
  * Time: 16:41
  */
 
-include("../tools/database.php");
+include("tools/database.php");
 
 $getWarPlayers = "
 SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
@@ -50,7 +50,7 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
 <body>
 <?php include("header.html"); ?>
 <?php
-include("../query/war.php");
+include("query/war.php");
 $state = getWarState();
 if ($state == "collectionDay") {
     $stateName = "Jour de collection";
