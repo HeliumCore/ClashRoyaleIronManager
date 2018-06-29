@@ -43,8 +43,8 @@ WHERE players.tag = \"%s\"
 ";
 
 $insertPattern = "
-INSERT INTO players (name, rank, trophies, role_id, exp_level, in_clan, arena, donations, donations_received, donations_delta, donations_ratio)
-VALUES (\"%s\", %d, %d, %d, %d, 1, %d, %d, %d, %d, %f)
+INSERT INTO players (players.name, tag, rank, trophies, role_id, exp_level, in_clan, arena, donations, donations_received, donations_delta, donations_ratio)
+VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %f)
 ";
 
 foreach ($data["members"] as $player) {
@@ -59,11 +59,13 @@ foreach ($data["members"] as $player) {
             $player['donationsDelta'], $player['donationsPercent'], $player['tag']
         ));
     } else {
+        // On récupère le role_id
+        $roleId = getRoleId($db, $player['role']);
         // Il n'y a pas de retour, on insert
         $query = utf8_decode(sprintf(
-            $insertPattern, $player['name'], $player['rank'], $player['trophies'], $player['role_id'],
-            $player['expLevel'], $player['donations'], $player['donationsReceived'], $player['donationsDelta'],
-            $player['donationsPercent']
+            $insertPattern, $player['name'], $player['tag'], $player['rank'], $player['trophies'], $roleId,
+            $player['expLevel'], 1, $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
+            $player['donationsDelta'], $player['donationsPercent']
         ));
     }
     execute_query($db, $query);
