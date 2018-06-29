@@ -50,7 +50,7 @@ ksort($fatChests);
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
-    <h1 class="pageTitle">Coffres à venir</h1><br>
+    <h1 class="pageTitle">Détails du joueur</h1><br>
     <div class="chestDiv">
         <?php
         $counter = 1;
@@ -62,14 +62,14 @@ ksort($fatChests);
         }
 
         foreach ($fatChests as $key => $chest) {
-            echo '<img src="res/' . $chest . '_chest.png" alt="' . $chest . ' chest" class="imgChest">';
-            echo '<label class="labelChest">+' . $key . '</label>';
+            if ($key > 10) {
+                echo '<img src="res/' . $chest . '_chest.png" alt="' . $chest . ' chest" class="imgChest">';
+                echo '<label class="labelChest">+' . $key . '</label>';
+            }
         }
         ?>
     </div>
-    <br>
-    <h1 class="pageTitle">Détails du joueur</h1>
-    <br><br>
+    <br>    <br><br>
     <div class="divInfoPlayer">
         <table class="tableIndex">
             <thead>
