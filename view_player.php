@@ -36,11 +36,8 @@ $apiResult = file_get_contents($url, true, $context);
 $chests = json_decode($apiResult, true);
 
 $upcomingChests[] = $chests["upcoming"];
-$superMagical = $chests["superMagical"];
-$magical = $chests["magical"];
-$legendary = $chests["legendary"];
-$epic = $chests["epic"];
-$giant = $chests["giant"];
+$fatChests = array($chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary", $chests["epic"] => "epic", $chests["giant"] => "giant");
+ksort($fatChests);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,12 +53,17 @@ $giant = $chests["giant"];
     <h1 class="pageTitle">Coffres à venir</h1><br>
     <div class="chestDiv">
         <?php
-        $counter = 0;
+        $counter = 1;
 
-        foreach ($upcomingChests[0] as $chest) {
-            echo '<img src="res/'.$chest.'_chest.png" alt="'.$chest.' chest" class="imgChest">';
+        foreach ($upcomingChests[0] as $nextChest) {
+            echo '<img src="res/' . $nextChest . '_chest.png" alt="' . $nextChest . ' chest" class="imgChest">';
+            echo '<label class="labelChest">' . $counter . '</label>';
             $counter++;
-            echo '<label class="labelChest">'. $counter .'</label>';
+        }
+
+        foreach ($fatChests as $key => $chest) {
+            echo '<img src="res/' . $chest . '_chest.png" alt="' . $chest . ' chest" class="imgChest">';
+            echo '<label class="labelChest">+' . $key . '</label>';
         }
         ?>
     </div>
