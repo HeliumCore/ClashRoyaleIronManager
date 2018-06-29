@@ -61,7 +61,7 @@ if ($state == "collectionDay") {
 <body>
 <?php include("header.html"); ?>
 <div class="bodyIndex">
-    <h1 class="pageTitle">Liste des joueurs</h1>
+    <h1 class="pageTitle">Guerre en cours</h1>
     <span class="pageSubtitle"><?php echo $stateName ?></span>
     <br><br>
     <table id="tableIndex" class="tableIndex">
