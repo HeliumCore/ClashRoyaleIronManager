@@ -46,6 +46,11 @@ ksort($fatChests);
     <title>Les membres</title>
     <link rel="stylesheet" type="text/css" href="css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function update() {
+            window.location.reload(true);
+        }
+    </script>
 </head>
 <body>
 <?php include("header.html"); ?>

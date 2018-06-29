@@ -53,6 +53,7 @@ $getPlayerRequest->execute();
 <?php include("header.html"); ?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Liste des joueurs</h1>
+    <span class="pageIndexSubtitle">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</b></span>
     <br><br>
     <table id="tableIndex" class="tableIndex">
         <thead>
