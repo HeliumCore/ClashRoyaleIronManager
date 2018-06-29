@@ -71,7 +71,6 @@ if (is_array($getWarResult)) {
     execute_query($db, $setWarQuery);
     $warId = $db->lastInsertId();
 }
-var_dump($warId);
 
 foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $getPlayerWarResult = fetch_query($db, sprintf($getPlayerWarPattern, $player['id'], $warId));

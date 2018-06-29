@@ -23,7 +23,6 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
 
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true, $context);
 $state = json_decode($apiResult, true)['state'];
-var_dump($state);
 if ($state == "collectionDay") {
     $stateName = "Jour de collection";
 } else {

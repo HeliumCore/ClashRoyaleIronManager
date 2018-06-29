@@ -48,7 +48,15 @@ ksort($fatChests);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         function update() {
-            window.location.reload(true);
+            $.ajax({
+                url: '../query/update_clan.php',
+                beforeSend: function () {
+                    $('#loaderDiv').show();
+                },
+                success: function () {
+                    window.location.reload(true);
+                }
+            })
         }
     </script>
 </head>

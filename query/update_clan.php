@@ -33,7 +33,7 @@ SET players.name = \"%s\",
 players.rank = %d,
 players.trophies = %d,
 players.role_id = %d,
-players.expLevel = %d,
+players.exp_level = %d,
 players.arena = %d,
 players.donations = %d,
 players.donations_received = %d,
@@ -49,12 +49,10 @@ VALUES (\"%s\", %d, %d, %d, %d, 1, %d, %d, %d, %d, %f)
 
 foreach ($data["members"] as $player) {
     $result = fetch_query($db, sprintf($getPattern, $player['tag']));
-
     if (is_array($result)) {
         // On récupère le role_id
         $roleId = getRoleId($db, $player['role']);
         // Il y a un retour, on update
-        unset($query);
         $query = utf8_decode(sprintf(
             $updatePattern, $player['name'], $player['rank'], $player['trophies'], $roleId, $player['expLevel'],
             $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
@@ -62,7 +60,6 @@ foreach ($data["members"] as $player) {
         ));
     } else {
         // Il n'y a pas de retour, on insert
-        unset($query);
         $query = utf8_decode(sprintf(
             $insertPattern, $player['name'], $player['rank'], $player['trophies'], $player['role_id'],
             $player['expLevel'], $player['donations'], $player['donationsReceived'], $player['donationsDelta'],
