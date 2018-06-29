@@ -6,13 +6,11 @@
  * Time: 14:53
  */
 
-$hostname = 'sql7.freemysqlhosting.net:3306';
-$username = 'sql7244954';
-$password = 'KX8acGLpt8';
-$dbname = 'sql7244954';
+$DBowner = "ironmanauedata";
+$DBpw = "Whlilenhe1610";
 
 try {
-    $db = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
+    $db = new PDO("mysql:dbname=ironmanauedata;host=ironmanauedata.mysql.db", $DBowner, $DBpw);
 } catch (PDOException $e) {
     echo $e->getMessage();
 }
