@@ -6,7 +6,7 @@
  * Time: 14:56
  */
 
-include("../tools/database.php");
+include("tools/database.php");
 
 $query = "
 SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 

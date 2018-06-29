@@ -6,8 +6,8 @@
  * Time: 16:08
  */
 
-include("../tools/database.php");
-include("../query/chests.php");
+include("tools/database.php");
+include("query/chests.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
 else header('Location: index.php');
