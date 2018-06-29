@@ -24,7 +24,7 @@ SUM(player_war.battle_won) as total_battle_won
 FROM players
 INNER JOIN arena ON arena.arena_id = players.arena
 INNER JOIN role ON role.id = players.role_id
-INNER JOIN player_war ON player_war.id = players.id
+INNER JOIN player_war ON player_war.player_id = players.id
 WHERE tag = \"%s\"
 ";
 
