@@ -7,6 +7,7 @@
  */
 
 include("tools/database.php");
+include("tools/api_conf.php");
 
 $getWarPlayers = "
 SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
@@ -19,6 +20,15 @@ WHERE war.past_war = 0
 ORDER BY players.rank ASC
 ";
 $warPlayers = fetch_all_query($db, $getWarPlayers);
+
+$apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true, $context);
+$state = json_decode($apiResult, true)['state'];
+var_dump($state);
+if ($state == "collectionDay") {
+    $stateName = "Jour de collection";
+} else {
+    $stateName = "Jour de guerre";
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +44,7 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
                 window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
             });
         });
+
         function update() {
             $.ajax({
                 url: '../query/update_war.php',
@@ -49,19 +60,9 @@ $warPlayers = fetch_all_query($db, $getWarPlayers);
 </head>
 <body>
 <?php include("header.html"); ?>
-<?php
-include("query/war.php");
-$state = getWarState();
-if ($state == "collectionDay") {
-    $stateName = "Jour de collection";
-} else {
-    $stateName = "Jour de guerre";
-}
-
-?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Liste des joueurs</h1>
-    <span class="pageSubtitle"><?php echo $stateName?></span>
+    <span class="pageSubtitle"><?php echo $stateName ?></span>
     <br><br>
     <table id="tableIndex" class="tableIndex">
         <thead>
@@ -111,7 +112,7 @@ if ($state == "collectionDay") {
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="../../res/loader.gif"/>
+    <img id="loaderImg" src="res/loader.gif"/>
 </div>
 <?php include("footer.html"); ?>
 </body>

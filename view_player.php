@@ -7,7 +7,8 @@
  */
 
 include("tools/database.php");
-include("query/chests.php");
+include("tools/api_conf.php");
+
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
 else header('Location: index.php');
@@ -30,7 +31,10 @@ WHERE tag = \"%s\"
 
 $getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag)));
 
-$chests = getPlayerChestsByTag($getPlayerTag);
+$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $getPlayerTag));
+$apiResult = file_get_contents($url, true, $context);
+$chests = json_decode($apiResult, true);
+
 $upcomingChests[] = $chests["upcoming"];
 $superMagical = $chests["superMagical"];
 $magical = $chests["magical"];
@@ -189,7 +193,7 @@ $giant = $chests["giant"];
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="../../res/loader.gif"/>
+    <img id="loaderImg" src="res/loader.gif"/>
 </div>
 <?php include("footer.html"); ?>
 </body>
