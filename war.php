@@ -79,7 +79,35 @@ if ($state == "collectionDay") {
         </thead>
         <tbody>
         <?php
+        global $totalTrophies;
+        global $totalCollectionPlayed;
+        global $totalCollectionWon;
+        global $totalCardsEarned;
+        global $totalBattlesPlayed;
+        global $totalBattlesWon;
+
+        $totalTrophies = 0;
+        $totalCollectionPlayed = 0;
+        $totalCollectionWon = 0;
+        $totalCardsEarned = 0;
+        $totalBattlesPlayed = 0;
+        $totalBattlesWon = 0;
+
         foreach ($warPlayers as $player) {
+            $playerTrophies = $player['trophies'];
+            $playerCollectionPlayed = $player['collection_played'];
+            $playerCollectionWon = $player['collection_won'];
+            $playerCardsEarned = $player['cards'];
+            $playerBattlesPlayed = $player['battle_played'];
+            $playerBattlesWon = $player['battle_won'];
+
+            $totalTrophies += $playerTrophies;
+            $totalCollectionPlayed += $playerCollectionPlayed;
+            $totalCollectionWon += $playerCollectionWon;
+            $totalCardsEarned += $playerCardsEarned;
+            $totalBattlesPlayed += $playerBattlesPlayed;
+            $totalBattlesWon += $playerBattlesWon;
+
             echo '<tr>';
             echo '<th class="headIndex">' . $player['rank'] . '</th>';
             echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
@@ -93,18 +121,30 @@ if ($state == "collectionDay") {
             echo '</tr>';
         }
         ?>
+        <br>
+        <tr>
+            <th class="headTotalIndex"><?php echo sizeof($warPlayers) ;?></th>
+            <td class="lineTotalIndex">--------</td>
+            <td class="lineTotalIndex">--------</td>
+            <td class="lineTotalIndex"><?php echo $totalTrophies ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalCollectionPlayed ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalCollectionWon ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalCardsEarned ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalBattlesPlayed ;?></td>
+            <td class="lineTotalIndex"><?php echo $totalBattlesWon ;?></td>
+        </tr>
         </tbody>
         <tfoot>
         <tr class="rowIndex">
-            <th class="headIndex">Rang</th>
-            <th class="headIndex">Nom</th>
-            <th class="headIndex">Role</th>
-            <th class="headIndex">Trophées</th>
-            <th class="headIndex">Collections jouées</th>
-            <th class="headIndex">Collections gagnées</th>
-            <th class="headIndex">Cartes gagnées</th>
-            <th class="headIndex">Batailles jouées</th>
-            <th class="headIndex">Batailles gagnées</th>
+            <th class="headTotalIndex">Total de joueur</th>
+            <th class="headTotalIndex">--------</th>
+            <th class="headTotalIndex">--------</th>
+            <th class="headTotalIndex">Total des trophées</th>
+            <th class="headTotalIndex">Total des collections jouées</th>
+            <th class="headTotalIndex">Total des collections gagnées</th>
+            <th class="headTotalIndex">Total des cartes gagnées</th>
+            <th class="headTotalIndex">Total des batailles jouées</th>
+            <th class="headTotalIndex">Total des batailles gagnées</th>
         </tr>
         </tfoot>
     </table>
