@@ -25,7 +25,7 @@ $getPlayerRequest->execute();
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Les membres</title>
+    <title>Home</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
