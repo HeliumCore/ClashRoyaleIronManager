@@ -43,7 +43,7 @@ $giant = $chests["giant"];
 <head>
     <meta charset="utf-8">
     <title>Les membres</title>
-    <link rel="stylesheet" type="text/css" href="../../css/css.css">
+    <link rel="stylesheet" type="text/css" href="css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
@@ -55,7 +55,7 @@ $giant = $chests["giant"];
         $counter = 0;
 
         foreach ($upcomingChests[0] as $chest) {
-            echo '<img src="../../res/'.$chest.'_chest.png" alt="'.$chest.' chest" class="imgChest">';
+            echo '<img src="res/'.$chest.'_chest.png" alt="'.$chest.' chest" class="imgChest">';
             $counter++;
             echo '<label class="labelChest">'. $counter .'</label>';
         }
