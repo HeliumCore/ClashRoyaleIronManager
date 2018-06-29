@@ -9,9 +9,17 @@
 include("tools/database.php");
 
 $getAllPlayersQuery = "
-SELECT players.id, players.name, players.rank, players.tag
-FROM players
-WHERE in_clan > 0
+SELECT DISTINCT players.id, players.name, players.rank, players.tag
+FROM players 
+WHERE players.id IN
+(
+  SELECT DISTINCT pw.player_id 
+  FROM player_war pw 
+  JOIN war ON pw.war_id = war.id 
+  WHERE war.past_war = 0
+)
+AND in_clan > 0
+ORDER BY players.rank ASC;
 ";
 
 $allPlayers = fetch_all_query($db, $getAllPlayersQuery);
@@ -87,7 +95,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
 <?php include("header.html"); ?>
 <div class="bodyIndex">
     <h1 class="pageTitle">Statistiques des guerres</h1>
-    <span class="pageSubtitle">Première guerre : <b><?php echo ''.date('d/m/Y', $firstWarDate['created']) ?></b></span>
+    <span class="pageSubtitle">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
     <table class="tableIndex" id="tableIndex">
@@ -111,8 +119,29 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
         </thead>
         <tbody>
         <?php
+        global $allCollections;
+        global $allCollectionsPlayed;
+        global $allCollectionsWon;
+        global $allCardsEarned;
+        global $allWars;
+        global $allBattlePlayed;
+        global $allBattleWon;
+        global $allMissedCollections;
+        global $allMissedWar;
         global $missedConsecutiveCollection;
         global $missedConsecutiveWar;
+        global $allBadStatus;
+
+        $allCollections = 0;
+        $allCollectionsPlayed = 0;
+        $allCollectionsWon = 0;
+        $allCardsEarned = 0;
+        $allWars = 0;
+        $allBattlePlayed = 0;
+        $allBattleWon = 0;
+        $allMissedCollections = 0;
+        $allMissedWar = 0;
+        $allBadStatus = 0;
         foreach ($allPlayers as $player) {
             $getResult = fetch_query($db, sprintf($getPattern, $player['id']));
 
@@ -124,10 +153,20 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             $missedCollection = fetch_query($db, sprintf($countMissedCollectionPattern, $player['id']))['missed_collection'];
             $missedCollection = $missedCollection == null ? 0 : $missedCollection;
             $missedWar = fetch_query($db, sprintf($countMissedWarPattern, $player['id']))['missed_war'];
-            $missedWar= $missedWar == null ? 0 : $missedWar;
+            $missedWar = $missedWar == null ? 0 : $missedWar;
 
             $totalCollection = $totalCollectionPlayed + $missedCollection;
             $totalWar = $totalBattlesPlayed + $missedWar;
+
+            $allCollections += $totalCollection;
+            $allCollectionsPlayed += $totalCollectionPlayed;
+            $allCollectionsWon += $totalCollectionWon;
+            $allMissedCollections += $missedCollection;
+            $allCardsEarned += $totalCardsEarned;
+            $allWars += $totalWar;
+            $allBattlePlayed += $totalBattlesPlayed;
+            $allBattleWon += $totalBattlesWon;
+            $allMissedWar += $missedWar;
 
             $warning = ($missedCollection + $missedWar) >= 2;
             $ban = ($missedCollection + $missedWar) >= 3;
@@ -153,30 +192,55 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             if ($totalBattlesPlayed != 0) echo '<td class="lineIndex">' . round(($totalWar / $totalBattlesPlayed) * 100) . '</td>';
             else echo '<td class="lineIndex">0</td>';
             // Status
-            if ($ban) echo '<td bgcolor="#D42F2F">Exlure</td>';
-            else if ($warning) echo '<td bgcolor="#FFB732">A surveiller</td>';
-            else echo '<td bgcolor="#66B266">Good</td>';
-
+            if ($ban) {
+                echo '<td bgcolor="#D42F2F">Exlure</td>';
+                $allBadStatus++;
+            } else if ($warning) {
+                echo '<td bgcolor="#FFB732">A surveiller</td>';
+                $allBadStatus++;
+            } else {
+                echo '<td bgcolor="#66B266">RAS</td>';
+            }
             echo '</tr>';
         }
         ?>
+        <tr>
+            <th class="headTotalIndex"><?php echo sizeof($allPlayers); ?></th>
+            <td class="lineTotalIndex"><?php echo 'X'; ?></td>
+            <td class="lineTotalIndex"><?php echo $allCollectionsPlayed; ?></td>
+            <td class="lineTotalIndex"><?php echo $allCollectionsWon; ?></td>
+            <?php if ($allCollectionsPlayed != 0) echo '<td class="lineTotalIndex">' . round((($allCollectionsWon / $allCollectionsPlayed) * 100)) . '</td>';
+            else echo '<td class="lineTotalIndex">0</td>'; ?>
+            <td class="lineTotalIndex"><?php echo $allMissedCollections; ?></td>
+            <?php if ($allCollectionsPlayed != 0) echo '<td class="lineIndex">' . round(($allCollections / $allCollectionsPlayed) * 100) . '</td>';
+            else echo '<td class="lineTotalIndex">0</td>';?>
+            <td class="lineTotalIndex"><?php echo $allCardsEarned; ?></td>
+            <td class="lineTotalIndex"><?php echo $allBattlePlayed; ?></td>
+            <td class="lineTotalIndex"><?php echo $allBattleWon; ?></td>
+            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
+            else echo '<td class="lineTotalIndex">0</td>';?>
+            <td class="lineTotalIndex"><?php echo $allMissedWar; ?></td>
+            <?php if ($allBattlePlayed != 0) echo '<td class="lineIndex">' . round(($allWars / $allBattlePlayed) * 100) . '</td>';
+            else echo '<td class="lineTotalIndex">0</td>';?>
+            <td class="lineTotalIndex"><?php echo $allBadStatus; ?></td>
+        </tr>
         </tbody>
         <thead>
         <tr class="rowIndex">
-            <th class="headIndex">Rang du joueur</th>
-            <th class="headIndex">Nom du joueur</th>
-            <th class="headIndex">Collections jouées</th>
-            <th class="headIndex">Collections gagnées</th>
-            <th class="headIndex">Pourcentage victoire collection</th>
-            <th class="headIndex">Absence collections</th>
-            <th class="headIndex">Pourcentage de présence absence</th>
-            <th class="headIndex">Cartes récoltées</th>
-            <th class="headIndex">Batailles jouées</th>
-            <th class="headIndex">Batailles gagnées</th>
-            <th class="headIndex">Pourcentage victoire guerre</th>
-            <th class="headIndex">Absence batailles</th>
-            <th class="headIndex">Pourcentage de présence guerre</th>
-            <th class="headIndex">Statut</th>
+            <th class="headTotalIndex">Nombre de joueur éligible à la guerre</th>
+            <th class="headTotalIndex">X</th>
+            <th class="headTotalIndex">Total des collections jouées</th>
+            <th class="headTotalIndex">Total des collections gagnées</th>
+            <th class="headTotalIndex">Pourcentage victoire collections</th>
+            <th class="headTotalIndex">Total des absence collections</th>
+            <th class="headTotalIndex">Pourcentage de présences absences</th>
+            <th class="headTotalIndex">Total des cartes récoltées</th>
+            <th class="headTotalIndex">Total des batailles jouées</th>
+            <th class="headTotalIndex">Total des batailles gagnées</th>
+            <th class="headTotalIndex">Pourcentage victoire guerres</th>
+            <th class="headTotalIndex">Total des absence batailles</th>
+            <th class="headTotalIndex">Pourcentage de présence guerres</th>
+            <th class="headTotalIndex">Nombre de status pas RAS</th>
         </tr>
         </thead>
     </table>
