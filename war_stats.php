@@ -213,7 +213,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
             else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td class="lineTotalIndex"><?php echo $allMissedWar; ?></td>
-            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round(($allWars / $allBattlePlayed) * 100) . '</td>';
+            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round(($allWars / sizeof($allPlayers)) * 100) . '</td>';
             else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td bgcolor="#66B266"><?php echo $allBadStatus; ?></td>
         </tr>
