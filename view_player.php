@@ -9,12 +9,11 @@
 include("tools/database.php");
 include("tools/api_conf.php");
 
-
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
 else header('Location: index.php');
 
 $getPlayerByTag = "
-SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, players.exp_level as level,
+SELECT players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
 players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
 arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
 SUM(player_war.cards_earned) as total_cards_earned,
@@ -54,7 +53,12 @@ ksort($fatChests);
                     $('#loaderDiv').show();
                 },
                 success: function () {
-                    window.location.reload(true);
+                    $.ajax({
+                        url: '../query/update_player.php?tag=' + $('#playerTag').html(),
+                        success: function () {
+                            window.location.reload(true);
+                        }
+                    });
                 }
             })
         }
@@ -93,6 +97,7 @@ ksort($fatChests);
                 <th class="headIndex">Role</th>
                 <th class="headIndex">Niveau joueur</th>
                 <th class="headIndex">Trophée</th>
+                <th class="headIndex">Trophée Max</th>
                 <th class="headIndex">Arène</th>
                 <th class="headIndex">Donations</th>
                 <th class="headIndex">Donations reçues</th>
@@ -106,11 +111,12 @@ ksort($fatChests);
                 <?php
                 echo '<tr>';
                 echo '<th class="headIndex">' . $getPlayer['rank'] . '</th>';
-                echo '<td class="lineIndex">' . $getPlayer['tag'] . '</td>';
+                echo '<td id="playerTag" class="lineIndex">' . $getPlayer['tag'] . '</td>';
                 echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerName']) . '</td>';
                 echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerRole']) . '</td>';
                 echo '<td class="lineIndex">' . $getPlayer['level'] . '</td>';
                 echo '<td class="lineIndex">' . $getPlayer['trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $getPlayer['max_trophies'] . '</td>';
                 echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
                 echo '<td class="lineIndex">' . $getPlayer['donations'] . '</td>';
                 echo '<td class="lineIndex">' . $getPlayer['received'] . '</td>';
