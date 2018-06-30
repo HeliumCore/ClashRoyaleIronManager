@@ -108,7 +108,7 @@ SET participants = %d,
 battles_played = %d, 
 battles_won = %d, 
 crowns = %d, 
-war_trophies
+war_trophies = %d
 WHERE id = %d
 ";
 
@@ -128,6 +128,8 @@ if ($warState == 'warDay') {
         $getStanding = fetch_query($db, utf8_decode(sprintf($getStandingPattern, $clan['tag'], $warId)));
 
         if (is_array($getStanding)) {
+            var_dump(utf8_decode(sprintf($updateStandingPattern, $clan['participants'], $clan['battlesPlayed'],
+                $clan['wins'], $clan['crowns'], $clan['warTrophies'], $getStanding['id'])));
             execute_query($db, utf8_decode(sprintf($updateStandingPattern, $clan['participants'], $clan['battlesPlayed'],
                 $clan['wins'], $clan['crowns'], $clan['warTrophies'], $getStanding['id'])));
         } else {

@@ -88,7 +88,12 @@ if ($state == "collectionDay") {
             <?php
             if (isset($standings)) {
                 $pos = 1;
+                $lastBattlesWon = 0;
+                $lastCrowns = 0;
                 foreach ($standings as $clan) {
+                    if ($lastCrowns == $clan['crowns'] && $lastBattlesWon == $clan['battles_won']) {
+                        $pos--;
+                    }
                     echo '<tr>';
                     echo '<th class="headIndex">' . $pos . '</th>';
                     echo '<td class="lineIndex">' . utf8_encode($clan['name']) . '</td>';
@@ -99,6 +104,8 @@ if ($state == "collectionDay") {
                     echo '<td class="lineIndex">' . $clan['war_trophies'] . '</td>';
                     echo '</tr>';
                     $pos++;
+                    $lastBattlesWon = $clan['battles_won'];
+                    $lastCrowns = $clan['crowns'];
                 }
             }
             ?>
