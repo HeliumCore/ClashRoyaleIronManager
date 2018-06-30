@@ -89,12 +89,58 @@ if ($allPlayersSize > $numberOfCurrentPlayers) {
 }
 if (fetch_query($db, $getAllExistingQuery))
 // On récupère l'ID de la guerre en cours
-$getWarResult = fetch_query($db, sprintf($getWarQuery));
+    $getWarResult = fetch_query($db, sprintf($getWarQuery));
 if (is_array($getWarResult)) {
     $warId = $getWarResult['id'];
 } else {
     execute_query($db, $setWarQuery);
     $warId = $db->lastInsertId();
+}
+
+$insertStandingPattern = "
+INSERT INTO standings (tag, standings.name, participants, battles_played, battles_won, crowns, war_trophies, war_id)
+VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
+";
+
+$updateStandingPattern = "
+UPDATE standings
+SET participants = %d, 
+battles_played = %d, 
+battles_won = %d, 
+crowns = %d, 
+war_trophies
+WHERE id = %d
+";
+
+$getStandingPattern = "
+SELECT id
+FROM standings
+WHERE tag = \"%s\"
+AND war_id = %d
+";
+
+global $warState;
+$warState = $data['state'];
+
+// Standings
+if ($warState == 'warDay') {
+    foreach ($data['standings'] as $clan) {
+        $getStanding = fetch_query($db, utf8_decode(sprintf($getStandingPattern, $clan['tag'], $warId)));
+
+        if (is_array($getStanding)) {
+            execute_query($db, utf8_decode(sprintf($updateStandingPattern, $clan['participants'], $clan['battlesPlayed'],
+                $clan['wins'], $clan['crowns'], $clan['warTrophies'], $getStanding['id'])));
+        } else {
+            $clanName = utf8_decode($clan['name']);
+            if (strpos(trim($clanName), '???') !== false) {
+                $clanName = "Nom Arabe ou chinois";
+            }
+            execute_query($db, utf8_decode(sprintf(
+                $insertStandingPattern, $clan['tag'], $clanName, $clan['participants'], $clan['battlesPlayed'],
+                $clan['wins'], $clan['crowns'], $clan['warTrophies'], $warId
+            )));
+        }
+    }
 }
 
 foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
@@ -112,25 +158,25 @@ foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $wins = null;
     foreach ($data['participants'] as $participant) {
         if ($player['tag'] == $participant['tag']) {
-            if ($data['state'] == "collectionDay") {
+            if ($warState == "collectionDay") {
                 $cardsEarned = $participant['cardsEarned'];
             }
             $battlesPlayed = $participant['battlesPlayed'];
             $wins = $participant['wins'];
         }
     }
-    if ($data['state'] == "collectionDay") {
+    if ($warState == "collectionDay") {
         $cardsEarned = $cardsEarned != null ? $cardsEarned : 0;
     }
     $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
     $wins = $wins != null ? $wins : 0;
     if (is_array($getPlayerWarResult)) {
         // Si le joueur a déjà été enregistré pour cette guerre, on update
-        if ($data['state'] == "collectionDay") {
+        if ($warState == "collectionDay") {
             execute_query($db, sprintf(
                 $updatePlayerWarPattern, $cardsEarned, $battlesPlayed, $wins, $getPlayerWarResult['id']
             ));
-        } else if ($data['state'] == "warDay") {
+        } else if ($warState == "warDay") {
             execute_query($db, sprintf(
                 $updateWarPattern, $battlesPlayed, $wins, $getPlayerWarResult['id']
             ));
@@ -138,11 +184,11 @@ foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
 
     } else {
         // Si le joueur n'est pas encore dans cette guerre, on insert
-        if ($data['state'] == "collectionDay") {
+        if ($warState == "collectionDay") {
             execute_query($db, sprintf(
                 $insertPlayerWarPattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
             ));
-        } else if ($data['state'] == "warDay") {
+        } else if ($warState == "warDay") {
             execute_query($db, sprintf(
                 $insertWarPattern, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId
             ));
