@@ -106,7 +106,8 @@ foreach ($data as $war) {
         $playerWarResult = null;
     }
 }
-function getWarID($getWarResult, $currentWarResult, $insertWarPattern, $updateCurrentWarPattern, $db, $created) {
+function getWarID($getWarResult, $currentWarResult, $insertWarPattern, $updateCurrentWarPattern, $db, $created)
+{
     if (!is_array($getWarResult)) {
         if (!is_array($currentWarResult)) {
             execute_query($db, sprintf($insertWarPattern, $created, 1));

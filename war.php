@@ -68,53 +68,53 @@ if ($state == "collectionDay") {
 <div class="bodyIndex">
     <h1 class="pageTitle">Guerre en cours</h1>
     <span class="pageSubtitle"><?php echo $stateName ?></span>
-    <br><br>
     <?php
-    if ($stateName == "Jour de guerre") {?>
-    <div class="divStandings">
-        <table class="tableIndex">
-            <thead>
-            <tr class="rowIndex">
-                <th class="headIndex">Position</th>
-                <th class="headIndex">Nom du clan</th>
-                <th class="headIndex">Nombre de participants</th>
-                <th class="headIndex">Batailles jouéees</th>
-                <th class="headIndex">Batailles gagnées</th>
-                <th class="headIndex">Nombre de couronnes</th>
-                <th class="headIndex">Trophées de guerre</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            if (isset($standings)) {
-                $pos = 1;
-                $lastBattlesWon = 0;
-                $lastCrowns = 0;
-                foreach ($standings as $clan) {
-                    if ($lastCrowns == $clan['crowns'] && $lastBattlesWon == $clan['battles_won']) {
-                        $pos--;
+    if ($stateName == "Jour de guerre") { ?>
+        <br><br>
+        <div class="divStandings">
+            <table class="tableIndex">
+                <thead>
+                <tr class="rowIndex">
+                    <th class="headIndex">Position</th>
+                    <th class="headIndex">Nom du clan</th>
+                    <th class="headIndex">Nombre de participants</th>
+                    <th class="headIndex">Batailles jouéees</th>
+                    <th class="headIndex">Batailles gagnées</th>
+                    <th class="headIndex">Nombre de couronnes</th>
+                    <th class="headIndex">Trophées de guerre</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if (isset($standings)) {
+                    $pos = 1;
+                    $lastBattlesWon = 0;
+                    $lastCrowns = 0;
+                    foreach ($standings as $clan) {
+                        if ($lastCrowns == $clan['crowns'] && $lastBattlesWon == $clan['battles_won']) {
+                            $pos--;
+                        }
+                        echo '<tr>';
+                        echo '<th class="headIndex">' . $pos . '</th>';
+                        echo '<td class="lineIndex">' . utf8_encode($clan['name']) . '</td>';
+                        echo '<td class="lineIndex">' . $clan['participants'] . '</td>';
+                        echo '<td class="lineIndex">' . $clan['battles_played'] . '</td>';
+                        echo '<td class="lineIndex">' . $clan['battles_won'] . '</td>';
+                        echo '<td class="lineIndex">' . $clan['crowns'] . '</td>';
+                        echo '<td class="lineIndex">' . $clan['war_trophies'] . '</td>';
+                        echo '</tr>';
+                        $pos++;
+                        $lastBattlesWon = $clan['battles_won'];
+                        $lastCrowns = $clan['crowns'];
                     }
-                    echo '<tr>';
-                    echo '<th class="headIndex">' . $pos . '</th>';
-                    echo '<td class="lineIndex">' . utf8_encode($clan['name']) . '</td>';
-                    echo '<td class="lineIndex">' . $clan['participants'] . '</td>';
-                    echo '<td class="lineIndex">' . $clan['battles_played'] . '</td>';
-                    echo '<td class="lineIndex">' . $clan['battles_won'] . '</td>';
-                    echo '<td class="lineIndex">' . $clan['crowns'] . '</td>';
-                    echo '<td class="lineIndex">' . $clan['war_trophies'] . '</td>';
-                    echo '</tr>';
-                    $pos++;
-                    $lastBattlesWon = $clan['battles_won'];
-                    $lastCrowns = $clan['crowns'];
                 }
-            }
-            ?>
-            </tbody>
-        </table>
-    </div>
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <br><br>
+        <span class="pageSubtitle">Résultats par joueurs</span>
     <?php } ?>
-    <br><br>
-    <span class="pageSubtitle">Résultats par joueurs</span>
     <br><br>
     <div class="divCurrentWar">
         <table id="tableIndex" class="tableIndex">

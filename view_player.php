@@ -82,7 +82,7 @@ ksort($fatChests);
         }
         ?>
     </div>
-    <br>    <br><br>
+    <br> <br><br>
     <div class="divInfoPlayer">
         <table class="tableIndex">
             <thead>

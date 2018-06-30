@@ -9,17 +9,10 @@
 include("tools/database.php");
 
 $getAllPlayersQuery = "
-SELECT DISTINCT players.id, players.name, players.rank, players.tag
-FROM players 
-WHERE players.id IN
-(
-  SELECT DISTINCT pw.player_id 
-  FROM player_war pw 
-  JOIN war ON pw.war_id = war.id 
-  WHERE war.past_war = 0
-)
-AND in_clan > 0
-ORDER BY players.rank ASC;
+SELECT players.id, players.name, players.rank, players.tag
+FROM players
+WHERE in_clan > 0
+ORDER BY rank ASC
 ";
 
 $allPlayers = fetch_all_query($db, $getAllPlayersQuery);
@@ -45,12 +38,12 @@ AND war.past_war > 0
 ";
 
 $countMissedCollectionPattern = "
-SELECT COUNT(id) as missed_collection
+SELECT player_war.collection_played as missed_collection
 FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.collection_played = 0
 AND war.past_war > 0
-AND war.created = 1530050844
+AND war.created != 1530050844
 AND player_war.player_id = %d
 ";
 
@@ -213,15 +206,15 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td class="lineTotalIndex"><?php echo $allMissedCollections; ?></td>
             <?php if ($allCollectionsPlayed != 0) echo '<td class="lineIndex">' . round(($allCollections / $allCollectionsPlayed) * 100) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>';?>
+            else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td class="lineTotalIndex"><?php echo $allCardsEarned; ?></td>
             <td class="lineTotalIndex"><?php echo $allBattlePlayed; ?></td>
             <td class="lineTotalIndex"><?php echo $allBattleWon; ?></td>
             <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>';?>
+            else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td class="lineTotalIndex"><?php echo $allMissedWar; ?></td>
-            <?php if ($allBattlePlayed != 0) echo '<td class="lineIndex">' . round(($allWars / $allBattlePlayed) * 100) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>';?>
+            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round(($allWars / $allBattlePlayed) * 100) . '</td>';
+            else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td bgcolor="#66B266"><?php echo $allBadStatus; ?></td>
         </tr>
         </tbody>

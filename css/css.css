@@ -4,6 +4,7 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
 .bodyIndex {
     position: absolute;
     top: 5%;
@@ -23,8 +24,8 @@ body {
 .imgChest {
     position: relative;
     left: 5%;
-    width : 50px;
-    height : 50px;
+    width: 50px;
+    height: 50px;
     margin-bottom: 15px;
 }
 
@@ -32,6 +33,7 @@ body {
     position: relative;
     left: 25px;
 }
+
 /* TITLE */
 
 .pageTitle {
@@ -187,12 +189,12 @@ body {
 
 /* FOOTER */
 .footerDiv {
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:5%;   /* Height of the footer */
-    background:royalblue;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5%; /* Height of the footer */
+    background: royalblue;
 }
 
 .footerSpan {

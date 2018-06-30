@@ -84,7 +84,7 @@ WHERE players.id NOT IN
 
 $numberOfCurrentPlayers = intval(fetch_query($db, $getAllExistingQuery)['numberOfCurrentPlayers']);
 $allPlayersSize = sizeof(fetch_all_query($db, $getAllPlayersQuery));
-if ($allPlayersSize > $numberOfCurrentPlayers) {
+if ($allPlayersSize > $numberOfCurrentPlayers && $numberOfCurrentPlayers != 0) {
     $notEligible = fetch_all_query($db, $getNotEligibleQuery);
 }
 if (fetch_query($db, $getAllExistingQuery))
