@@ -13,4 +13,27 @@ $opts = [
     ]
 ];
 
-$context = stream_context_create($opts);
+$api = stream_context_create($opts);
+
+function getClanFromApi($api)
+{
+    $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC", true, $api);
+    return json_decode($query, true);
+}
+
+function getWarFromApi($api)
+{
+    $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/war", true, $api);
+    return json_decode($query, true);
+}
+
+function getWarLogFromApi($api)
+{
+    $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $api);
+    return json_decode($query, true);
+}
+
+function getPlayerChestsFromApi($api, $tag)
+{
+
+}

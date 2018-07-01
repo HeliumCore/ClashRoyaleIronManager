@@ -52,12 +52,17 @@ if ($state == "collectionDay") {
 
         function update() {
             $.ajax({
-                url: '../query/update_war.php',
+                url: '../query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
                 success: function () {
-                    window.location.reload(true);
+                    $.ajax({
+                        url: '../query/update_war.php',
+                        success: function () {
+                            window.location.reload(true);
+                        }
+                    });
                 }
             })
         }

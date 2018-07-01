@@ -7,11 +7,12 @@
  */
 require_once('conf.php');
 try {
-    $db = new PDO('mysql:host='.DBHOST.';dbname='.DBNAME, DBUSER, DBPASS);
+    $db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
 } catch (PDOException $e) {
     echo $e->getMessage();
 }
 
+// ----------------- SQL -----------------
 function fetch_query($db, $query)
 {
     return execute_query($db, $query)->fetch();
@@ -29,41 +30,42 @@ function execute_query($db, $query)
     return $transaction;
 }
 
+// ----------------- PLAYER WAR -----------------
 function updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
 {
-    $updatePattern = "
+    $pattern = "
 UPDATE player_war 
 SET cards_earned = %d, battle_played = %d, battle_won = %d 
 WHERE player_id = %d 
 AND war_id = %d
 ";
 
-    execute_query($db, sprintf($updatePattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
+    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
 }
 
 function insertPlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
 {
-    $insertPattern = "
+    $pattern = "
 INSERT INTO player_war (cards_earned, battle_played, battle_won, player_id, war_id)
 VALUE (%d, %d, %d, %d, %d)
 ";
 
-    execute_query($db, sprintf($insertPattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
+    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
 }
-
 
 function getPlayerWar($db, $playerId, $warId)
 {
-    $getPattern = "
+    $pattern = "
 SELECT cards_earned, collection_played, collection_won, battle_played, battle_won
 FROM player_war
 WHERE player_id = %d
 AND war_id = %d
 ";
 
-    return fetch_query($db, utf8_decode(sprintf($getPattern, $playerId, $warId)));
+    return fetch_query($db, utf8_decode(sprintf($pattern, $playerId, $warId)));
 }
 
+// ----------------- WAR -----------------
 function getWarId($db, $war, $currentWar, $created)
 {
     $insertWarPattern = "
@@ -93,52 +95,169 @@ WHERE id = %d
 
 function getWar($db, $created)
 {
-    $getWarPattern = "
+    $pattern = "
 SELECT id
 FROM war
 WHERE created = %d
 ";
-    return fetch_query($db, sprintf($getWarPattern, $created));
+    return fetch_query($db, sprintf($pattern, $created));
 }
 
 function getCurrentWar($db)
 {
-    $getCurrentWarQuery = "
+    $query = "
 SELECT id
 FROM war
 WHERE past_war = 0
 LIMIT 1
 ";
-    return fetch_query($db, $getCurrentWarQuery);
+    return fetch_query($db, $query);
 }
 
+function insertNewWar($db)
+{
+    $query = "
+INSERT INTO war
+VALUES ('', 0, 0)
+";
+    execute_query($db, $query);
+}
+
+function getCurrentWarId($db)
+{
+    $currentWar = 0;
+    if (!isWarStarted($db))
+        $currentWar = getCurrentWar($db);
+
+    if (is_array($currentWar)) {
+        return $currentWar['id'];
+    } else {
+        insertNewWar($db);
+        return $db->lastInsertId();
+    }
+}
+
+function getNumberOfCurrentPlayersInWar($db)
+{
+    $query = "
+SELECT COUNT(player_war.id) as numberOfCurrentPlayers
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE war.past_war = 0
+";
+
+    return intval(fetch_query($db, $query)['numberOfCurrentPlayers']);
+}
+
+function isWarStarted($db)
+{
+    $query = "
+SELECT COUNT(player_war.id) as numberOfCurrentPlayers
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE war.past_war = 0
+";
+    return fetch_query($db, $query);
+}
+
+function insertCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
+{
+    $pattern = "
+INSERT INTO player_war (cards_earned, collection_played, collection_won, player_id, war_id)
+VALUES (%d, %d, %d, %d, %d)
+";
+    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
+
+}
+
+function updateWarDay($db, $battlesPlayed, $wins, $id)
+{
+    $pattern = "
+UPDATE player_war
+SET battle_played = %d, battle_won = %d
+WHERE id = %d
+";
+    execute_query($db, sprintf($pattern, $battlesPlayed, $wins, $id));
+}
+
+function updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $id)
+{
+    $pattern = "
+UPDATE player_war
+SET cards_earned = %d, collection_played = %d, collection_won = %d
+WHERE id = %d
+";
+    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $id));
+}
+
+function getStandings($db, $tag, $warId)
+{
+    $pattern = "
+SELECT id
+FROM standings
+WHERE tag = \"%s\"
+AND war_id = %d
+";
+    return fetch_query($db, utf8_decode(sprintf($pattern, $tag, $warId)));
+}
+
+function updateStanding($db, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $id)
+{
+    $pattern = "
+UPDATE standings
+SET participants = %d, 
+battles_played = %d, 
+battles_won = %d, 
+crowns = %d, 
+war_trophies = %d
+WHERE id = %d
+";
+
+    execute_query($db, utf8_decode(sprintf($pattern, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $id)));
+}
+
+function insertStanding($db, $tag, $name, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $warId)
+{
+    $pattern = "
+INSERT INTO standings (tag, standings.name, participants, battles_played, battles_won, crowns, war_trophies, war_id)
+VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
+";
+    $clanName = utf8_decode($name);
+    if (strpos(trim($clanName), '???') !== false) {
+        $clanName = "Nom Arabe ou chinois";
+    }
+    execute_query($db, utf8_decode(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns,
+        $warTrophies, $warId)));
+}
+
+// ----------------- PLAYERS -----------------
 function getAllPlayersInClan($db)
 {
-    $getAllPlayersQuery = "
+    $query = "
 SELECT players.id, players.tag
 FROM players
 WHERE in_clan > 0
 ";
 
-    return fetch_all_query($db, $getAllPlayersQuery);
+    return fetch_all_query($db, $query);
 }
 
 function getPlayerByTag($db, $tag)
 {
-    $getPattern = "
+    $pattern = "
 SELECT players.tag
 FROM players
 WHERE players.in_clan = 1
 AND players.tag = \"%s\"
 ";
 
-    return fetch_query($db, sprintf($getPattern, utf8_decode($tag)));
+    return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
 }
 
 function updatePlayer($db, $name, $rank, $trophies, $role, $expLevel, $arenaId, $donations, $donationsReceived,
                       $donationsDelta, $donationsPercent, $tag)
 {
-    $updatePattern = "
+    $pattern = "
 UPDATE players
 SET players.name = \"%s\",
 players.rank = %d,
@@ -152,7 +271,7 @@ players.donations_delta = %d,
 players.donations_ratio= %f
 WHERE players.tag = \"%s\"
 ";
-    $query = utf8_decode(sprintf($updatePattern, $name, $rank, $trophies, getRoleIdByMachineName($db, $role), $expLevel,
+    $query = utf8_decode(sprintf($pattern, $name, $rank, $trophies, getRoleIdByMachineName($db, $role), $expLevel,
         $arenaId, $donations, $donationsReceived, $donationsDelta, $donationsPercent, $tag));
     execute_query($db, $query);
 }
@@ -160,12 +279,12 @@ WHERE players.tag = \"%s\"
 function insertPlayer($db, $name, $tag, $rank, $trophies, $role, $expLevel, $arenaId, $donations, $donationsReceived,
                       $donationsDelta, $donationsPercent)
 {
-    $insertPattern = "
+    $pattern = "
 INSERT INTO players (players.name, tag, rank, trophies, role_id, exp_level, in_clan, arena, donations, 
 donations_received, donations_delta, donations_ratio)
 VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %f)
 ";
-    $query = utf8_decode(sprintf($insertPattern, $name, $tag, $rank, $trophies, getRoleIdByMachineName($db, $role),
+    $query = utf8_decode(sprintf($pattern, $name, $tag, $rank, $trophies, getRoleIdByMachineName($db, $role),
         $expLevel, 1, $arenaId, $donations, $donationsReceived, $donationsDelta, $donationsPercent));
     execute_query($db, $query);
 }
@@ -185,14 +304,36 @@ LIKE \"%s\"
 function updateMaxTrophies($db, $maxTrophies, $tag)
 {
 // MAX TROPHIES
-    $updatePattern = "
+    $pattern = "
 UPDATE players
 SET players.max_trophies = %d
 WHERE players.tag = \"%s\" 
 ";
-    execute_query($db, utf8_decode(sprintf($updatePattern, $maxTrophies, $tag)));
+    execute_query($db, utf8_decode(sprintf($pattern, $maxTrophies, $tag)));
 }
 
+function getNumberOfPlayersInClan($db)
+{
+    return sizeof(getAllPlayersInClan($db));
+}
+
+function getNotEligiblePlayers($db)
+{
+    $query = "
+SELECT DISTINCT players.id 
+FROM players 
+WHERE players.id NOT IN
+(
+  SELECT DISTINCT pw.player_id 
+  FROM player_war pw 
+  JOIN war ON pw.war_id = war.id 
+  WHERE war.past_war = 0
+)
+";
+    return fetch_all_query($db, $query);
+}
+
+// ----------------- DECKS -----------------
 function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
 {
     $pattern = "
@@ -224,20 +365,21 @@ WHERE decks.id = %d
 
 function getCurrentDeck($db, $deck)
 {
-    $getCardIdPattern = "
+    $pattern = "
 SELECT cards.id
 FROM cards
 WHERE cr_id = %d
 ";
     $currentDeck = [];
     foreach ($deck as $card) {
-        $cardId = fetch_query($db, sprintf($getCardIdPattern, $card['id']))['id'];
+        $cardId = fetch_query($db, sprintf($pattern, $card['id']))['id'];
         array_push($currentDeck, $cardId);
     }
     return $currentDeck;
 }
 
-function getExistingDeck($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $playerId) {
+function getExistingDeck($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $playerId)
+{
     $pattern = "
 SELECT decks.id
 FROM decks

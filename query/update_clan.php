@@ -6,15 +6,10 @@
  * Time: 20:01
  */
 
-printf("test2");
-
 include("../tools/api_conf.php");
 include("../tools/database.php");
 
-$apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC", true, $context);
-$data = json_decode($apiResult, true);
-
-foreach ($data["members"] as $player) {
+foreach (getClanFromApi($api) as $player) {
     $result = getPlayerByTag($db, $player['tag']);
     if (is_array($result)) {
         updatePlayer($db, $player['name'], $player['rank'], $player['trophies'], $player['role'], $player['expLevel'],
