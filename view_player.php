@@ -207,6 +207,7 @@ ksort($fatChests);
             <div>
                 <h2 class="pageSecondTitle">Clan</h2>
                 <?php
+                // TODO changer le nom du tableau CLAN pour afficher les bonnes informations (collection, etc)
                 echo '<tr>';
                 echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
                 echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';

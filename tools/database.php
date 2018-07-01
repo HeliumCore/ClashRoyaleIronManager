@@ -249,7 +249,9 @@ function getAllStandings($db)
 {
     $query = "
 SELECT standings.name, participants, battles_played, battles_won, crowns, war_trophies
-FROM standings 
+FROM standings
+JOIN war ON standings.war_id = war.id
+AND war.past_war = 0
 ORDER BY battles_won DESC, crowns DESC 
 ";
     return fetch_all_query($db, $query);
