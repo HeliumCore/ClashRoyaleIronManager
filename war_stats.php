@@ -30,11 +30,12 @@ AND war.past_war > 0
 ";
 
 $countMissedWarPattern = "
-SELECT COUNT(id) as missed_war
+SELECT COUNT(player_war.id) as missed_war
 FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.battle_played = 0
 AND war.past_war > 0
+AND player_war.player_id = %d
 ";
 
 $countMissedCollectionPattern = "
@@ -213,7 +214,7 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
             <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
             else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td class="lineTotalIndex"><?php echo $allMissedWar; ?></td>
-            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round(($allWars / sizeof($allPlayers)) * 100) . '</td>';
+            <?php if ($allWars != 0) echo '<td class="lineTotalIndex">' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
             else echo '<td class="lineTotalIndex">0</td>'; ?>
             <td bgcolor="#66B266"><?php echo $allBadStatus; ?></td>
         </tr>
