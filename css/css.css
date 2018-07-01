@@ -223,3 +223,12 @@ body {
     width: 60%;
     left: 20%;
 }
+
+.cardClass {
+    width: 4%;
+    height: 4%;
+}
+
+div.center {
+    margin: 0 auto;
+}

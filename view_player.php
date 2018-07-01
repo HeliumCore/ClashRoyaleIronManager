@@ -13,7 +13,7 @@ if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
 else header('Location: index.php');
 
 $getPlayerByTag = "
-SELECT players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
+SELECT players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
 players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
 arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
 SUM(player_war.cards_earned) as total_cards_earned,
@@ -27,9 +27,42 @@ INNER JOIN role ON role.id = players.role_id
 INNER JOIN player_war ON player_war.player_id = players.id
 WHERE tag = \"%s\"
 ";
-
 $getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag)));
 
+// DECK
+$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $getPlayerTag));
+$apiDeckResult = file_get_contents($url, true, $context);
+$apiDeck = json_decode($apiDeckResult, true)['currentDeck'];
+
+$getCurrentDeckPattern = "
+SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+FROM decks
+WHERE decks.player_id = %d
+AND decks.current > 0
+";
+$getCrPattern = "
+SELECT cr_id
+FROM cards
+WHERE cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+";
+
+$currentDeck = fetch_query($db, sprintf($getCurrentDeckPattern, $getPlayer['playerId']));
+$getCrResult = fetch_all_query($db, sprintf($getCrPattern, $currentDeck['card_1'], $currentDeck['card_2'],
+    $currentDeck['card_3'], $currentDeck['card_4'], $currentDeck['card_5'], $currentDeck['card_6'],
+    $currentDeck['card_7'], $currentDeck['card_8']));
+$deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
+$deckLink = sprintf($deckLinkPattern, $getCrResult[0]['cr_id'], $getCrResult[1]['cr_id'], $getCrResult[2]['cr_id'],
+    $getCrResult[3]['cr_id'], $getCrResult[4]['cr_id'], $getCrResult[5]['cr_id'], $getCrResult[6]['cr_id'],
+    $getCrResult[7]['cr_id'], $getCrResult[8]['cr_id']);
+
+// CHESTS
 $url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $getPlayerTag));
 $apiResult = file_get_contents($url, true, $context);
 $chests = json_decode($apiResult, true);
@@ -84,6 +117,17 @@ ksort($fatChests);
                 echo '<label class="labelChest">+' . $key . '</label>';
             }
         }
+        ?>
+    </div>
+    <h2 class="pageSecondTitle">Deck du moment</h2>
+    <br>
+    <div class="divInfoPlayer">
+        <?php
+        foreach ($apiDeck as $card) {
+            echo '<img src="'. $card['icon'] .'" alt="failed to load img" class="cardClass"/>';
+        }
+        echo '<br>';
+        echo '<a href="' . $deckLink . '" class="deckLink">Copier le deck</a>';
         ?>
     </div>
     <br> <br><br>
