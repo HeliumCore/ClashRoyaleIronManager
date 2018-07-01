@@ -32,13 +32,14 @@ if ($warState == 'warDay') {
         }
     }
 }
-
-foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
+$counter = 0;
+foreach (getAllPlayersInClan($db) as $player) {
     foreach ($notEligible as $notEligiblePlayer) {
         if ($player['id'] == $notEligiblePlayer['id']) {
             continue 2;
         }
     }
+    $counter++;
     $getPlayerWarResult = getPlayerWar($db, $player['id'], $warId);
 
     global $battlesPlayed;
@@ -62,13 +63,15 @@ foreach (fetch_all_query($db, $getAllPlayersQuery) as $player) {
     $wins = $wins != null ? $wins : 0;
     if (is_array($getPlayerWarResult)) {
         // Si le joueur a déjà été enregistré pour cette guerre, on update
-        if ($warState == "collectionDay")
+        if ($warState == "collectionDay") {
             updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $getPlayerWarResult['id']);
-        else if ($warState == "warDay")
+        } else if ($warState == "warDay") {
             updateWarDay($db, $battlesPlayed, $wins, $getPlayerWarResult['id']);
+        }
     } else {
         // Si le joueur n'est pas encore dans cette guerre, on insert
-        if ($warState == "collectionDay")
+        if ($warState == "collectionDay") {
             insertCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId);
+        }
     }
 }

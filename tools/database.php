@@ -56,7 +56,7 @@ VALUE (%d, %d, %d, %d, %d)
 function getPlayerWar($db, $playerId, $warId)
 {
     $pattern = "
-SELECT cards_earned, collection_played, collection_won, battle_played, battle_won
+SELECT player_war.id, cards_earned, collection_played, collection_won, battle_played, battle_won
 FROM player_war
 WHERE player_id = %d
 AND war_id = %d
@@ -126,7 +126,7 @@ VALUES ('', 0, 0)
 function getCurrentWarId($db)
 {
     $currentWar = 0;
-    if (!isWarStarted($db))
+    if (isWarStarted($db))
         $currentWar = getCurrentWar($db);
 
     if (is_array($currentWar)) {
