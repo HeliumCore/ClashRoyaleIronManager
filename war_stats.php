@@ -68,12 +68,17 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
     <script>
         function update() {
             $.ajax({
-                url: '../query/update_war_stats.php',
+                url: '../query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
                 success: function () {
-                    window.location.reload(true);
+                    $.ajax({
+                        url: '../query/update_war_stats.php',
+                        success: function () {
+                            window.location.reload(true);
+                        }
+                    });
                 }
             })
         }

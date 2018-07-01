@@ -6,9 +6,10 @@
  * Time: 20:01
  */
 
+printf("test2");
+
 include("../tools/api_conf.php");
 include("../tools/database.php");
-include('../tools/sql.php');
 
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC", true, $context);
 $data = json_decode($apiResult, true);

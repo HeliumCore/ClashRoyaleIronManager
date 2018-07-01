@@ -6,8 +6,7 @@
  * Time: 23:07
  */
 
-include("update_clan.php");
-include("../tools/sql.php");
+include("../tools/database.php");
 
 $apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $context);
 $data = json_decode($apiResult, true);
