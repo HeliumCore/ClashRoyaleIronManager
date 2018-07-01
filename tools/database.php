@@ -5,12 +5,9 @@
  * Date: 11/06/2018
  * Time: 14:53
  */
-
-$DBowner = "ironmanauedata";
-$DBpw = "Whlilenhe1610";
-
+require_once('conf.php');
 try {
-    $db = new PDO("mysql:dbname=ironmanauedata;host=ironmanauedata.mysql.db", $DBowner, $DBpw);
+    $db = new PDO('mysql:host='.DBHOST.';dbname='.DBNAME, DBUSER, DBPASS);
 } catch (PDOException $e) {
     echo $e->getMessage();
 }
