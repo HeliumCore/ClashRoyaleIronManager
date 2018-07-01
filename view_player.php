@@ -9,66 +9,35 @@
 include("tools/database.php");
 include("tools/api_conf.php");
 
-if (isset($_GET['tag']) && !empty($_GET['tag'])) $getPlayerTag = $_GET['tag'];
+if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else header('Location: index.php');
 
-$getPlayerByTag = "
-SELECT players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
-arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
-SUM(player_war.cards_earned) as total_cards_earned,
-SUM(player_war.collection_played) as total_collection_played, 
-SUM(player_war.collection_won) as total_collection_won,
-SUM(player_war.battle_played) as total_battle_played,
-SUM(player_war.battle_won) as total_battle_won
-FROM players
-INNER JOIN arena ON arena.arena_id = players.arena
-INNER JOIN role ON role.id = players.role_id
-INNER JOIN player_war ON player_war.player_id = players.id
-WHERE tag = \"%s\"
-";
-$getPlayer = fetch_query($db, utf8_decode(sprintf($getPlayerByTag, $getPlayerTag)));
+$player = getPlayersInfoByTag($db, $playerTag);
 
 // DECK
-$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $getPlayerTag));
+$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $playerTag));
 $apiDeckResult = file_get_contents($url, true, $context);
 $apiDeck = json_decode($apiDeckResult, true)['currentDeck'];
 
-$getCurrentDeckPattern = "
-SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
-FROM decks
-WHERE decks.player_id = %d
-AND decks.current > 0
-";
-$getCrPattern = "
-SELECT cr_id
-FROM cards
-WHERE cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-OR cards.id = %d
-";
-
-$currentDeck = fetch_query($db, sprintf($getCurrentDeckPattern, $getPlayer['playerId']));
-$getCrResult = fetch_all_query($db, sprintf($getCrPattern, $currentDeck['card_1'], $currentDeck['card_2'],
-    $currentDeck['card_3'], $currentDeck['card_4'], $currentDeck['card_5'], $currentDeck['card_6'],
-    $currentDeck['card_7'], $currentDeck['card_8']));
+$currentDeck = getCardsInCurrentDeck($db, $player['playerId']);
+$getCrResult = getCrIdsByCards($db, $currentDeck['card_1'], $currentDeck['card_2'], $currentDeck['card_3'],
+    $currentDeck['card_4'], $currentDeck['card_5'], $currentDeck['card_6'], $currentDeck['card_7'],
+    $currentDeck['card_8']);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
 $deckLink = sprintf($deckLinkPattern, $getCrResult[0]['cr_id'], $getCrResult[1]['cr_id'], $getCrResult[2]['cr_id'],
     $getCrResult[3]['cr_id'], $getCrResult[4]['cr_id'], $getCrResult[5]['cr_id'], $getCrResult[6]['cr_id'],
     $getCrResult[7]['cr_id'], $getCrResult[8]['cr_id']);
 
 // CHESTS
-$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $getPlayerTag));
+$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $playerTag));
 $apiResult = file_get_contents($url, true, $context);
 $chests = json_decode($apiResult, true);
 
 $upcomingChests[] = $chests["upcoming"];
-$fatChests = array($chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary", $chests["epic"] => "epic", $chests["giant"] => "giant");
+$fatChests = array(
+    $chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary",
+    $chests["epic"] => "epic", $chests["giant"] => "giant"
+);
 ksort($fatChests);
 ?>
 <!DOCTYPE html>
@@ -124,7 +93,7 @@ ksort($fatChests);
     <div class="divInfoPlayer">
         <?php
         foreach ($apiDeck as $card) {
-            echo '<img src="'. $card['icon'] .'" alt="failed to load img" class="cardClass"/>';
+            echo '<img src="' . $card['icon'] . '" alt="failed to load img" class="cardClass"/>';
         }
         echo '<br>';
         echo '<a href="' . $deckLink . '" class="deckLink">Copier le deck</a>';
@@ -155,17 +124,17 @@ ksort($fatChests);
                 <h2 class="pageSecondTitle">Joueur</h2>
                 <?php
                 echo '<tr>';
-                echo '<th class="headIndex">' . $getPlayer['rank'] . '</th>';
-                echo '<td id="playerTag" class="lineIndex">' . $getPlayer['tag'] . '</td>';
-                echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerName']) . '</td>';
-                echo '<td class="lineIndex">' . utf8_encode($getPlayer['playerRole']) . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['level'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['max_trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['donations'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['received'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['delta'] . '</td>';
+                echo '<th class="headIndex">' . $player['rank'] . '</th>';
+                echo '<td id="playerTag" class="lineIndex">' . $player['tag'] . '</td>';
+                echo '<td class="lineIndex">' . utf8_encode($player['playerName']) . '</td>';
+                echo '<td class="lineIndex">' . utf8_encode($player['playerRole']) . '</td>';
+                echo '<td class="lineIndex">' . $player['level'] . '</td>';
+                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $player['max_trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+                echo '<td class="lineIndex">' . $player['donations'] . '</td>';
+                echo '<td class="lineIndex">' . $player['received'] . '</td>';
+                echo '<td class="lineIndex">' . $player['delta'] . '</td>';
                 echo "<td bgcolor='#66B266'>Good</td>";
                 echo '</tr>';
                 ?>
@@ -187,10 +156,10 @@ ksort($fatChests);
                 <h2 class="pageSecondTitle">Arène</h2>
                 <?php
                 echo '<tr>';
-                echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['trophy_limit'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['arena_id'] . '</td>';
+                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $player['trophy_limit'] . '</td>';
+                echo '<td class="lineIndex">' . $player['arena_id'] . '</td>';
                 echo '</tr>';
                 ?>
             </tbody>
@@ -213,13 +182,13 @@ ksort($fatChests);
                 <h2 class="pageSecondTitle">Guerre</h2>
                 <?php
                 echo '<tr>';
-                echo '<td class="lineIndex">' . $getPlayer['battle_played'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['battle_won'] . '</td>';
-                if ($getPlayer['battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($getPlayer['battle_won'] / $getPlayer['battle_played']) * 100)) . "</td>";
+                echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
+                echo '<td class="lineIndex">' . $player['battle_won'] . '</td>';
+                if ($player['battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['battle_won'] / $player['battle_played']) * 100)) . "</td>";
                 else echo "<td class=\"lineIndex\">0</td>";
-                echo '<td class="lineIndex">' . $getPlayer['total_battle_played'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['total_battle_won'] . '</td>';
-                if ($getPlayer['total_battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($getPlayer['total_battle_won'] / $getPlayer['total_battle_played']) * 100)) . "</td>";
+                echo '<td class="lineIndex">' . $player['total_battle_played'] . '</td>';
+                echo '<td class="lineIndex">' . $player['total_battle_won'] . '</td>';
+                if ($player['total_battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['total_battle_won'] / $player['total_battle_played']) * 100)) . "</td>";
                 else echo "<td class=\"lineIndex\">0</td>";
                 echo '</tr>';
                 ?>
@@ -243,13 +212,13 @@ ksort($fatChests);
                 <h2 class="pageSecondTitle">Clan</h2>
                 <?php
                 echo '<tr>';
-                echo '<td class="lineIndex">' . $getPlayer['collection_played'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['collection_won'] . '</td>';
-                if ($getPlayer['collection_won'] != 0) echo "<td class=\"lineIndex\">" . round((($getPlayer['collection_played'] / $getPlayer['collection_won']) * 100)) . "</td>";
+                echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
+                echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';
+                if ($player['collection_won'] != 0) echo "<td class=\"lineIndex\">" . round((($player['collection_played'] / $player['collection_won']) * 100)) . "</td>";
                 else echo "<td class=\"lineIndex\">0</td>";
-                echo '<td class="lineIndex">' . $getPlayer['total_collection_played'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['total_collection_won'] . '</td>';
-                if ($getPlayer['total_collection_played'] != 0) echo "<td class=\"lineIndex\">" . round((($getPlayer['total_collection_won'] / $getPlayer['total_collection_played']) * 100)) . "</td>";
+                echo '<td class="lineIndex">' . $player['total_collection_played'] . '</td>';
+                echo '<td class="lineIndex">' . $player['total_collection_won'] . '</td>';
+                if ($player['total_collection_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['total_collection_won'] / $player['total_collection_played']) * 100)) . "</td>";
                 else echo "<td class=\"lineIndex\">0</td>";
                 echo '</tr>';
                 ?>

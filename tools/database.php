@@ -333,6 +333,18 @@ WHERE players.id NOT IN
     return fetch_all_query($db, $query);
 }
 
+function getAllPlayersByRank($db)
+{
+    $query = "
+SELECT players.id, players.name, players.rank, players.tag
+FROM players
+WHERE in_clan > 0
+ORDER BY rank ASC
+";
+
+    return fetch_all_query($db, $query);
+}
+
 // ----------------- DECKS -----------------
 function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
 {
@@ -396,4 +408,148 @@ AND player_id =
 
     $query = sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8);
     return fetch_query($db, $query . $playerId);
+}
+
+// ----------------- CARDS -----------------
+function insertCard($db, $key, $name, $elixir, $type, $rarity, $arena, $crId)
+{
+    $pattern = "
+INSERT INTO cards (card_key, cards.name, elixir, cards.type, rarity, arena, cr_id)
+VALUES(\"%s\", \"%s\", %d, \"%s\", \"%s\", %d, %d)
+";
+
+    execute_query($db, utf8_decode(sprintf($pattern, $key, $name, $elixir, $type, $rarity, $arena, $crId)));
+}
+
+function updateCard($db, $key, $name, $elixir, $type, $rarity, $arena, $crId)
+{
+    $pattern = "
+UPDATE cards
+SET cards.name = \"%s\",
+elixir = %d,
+cards.type = \"%s\",
+rarity = \"%s\",
+arena = %d,
+cr_id = %d
+WHERE cards.card_key = \"%s\" 
+";
+    execute_query($db, utf8_decode(sprintf($pattern, $name, $elixir, $type, $rarity, $arena, $crId, $key)));
+}
+
+function getCardByKey($db, $key)
+{
+    $pattern = "
+SELECT id
+FROM cards
+WHERE cards.card_key = \"%s\"
+";
+    return fetch_query($db, utf8_decode(sprintf($pattern, $key)));
+}
+
+function getPlayersInfoByTag($db, $tag)
+{
+    $pattern = "
+SELECT players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
+players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
+arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
+SUM(player_war.cards_earned) as total_cards_earned,
+SUM(player_war.collection_played) as total_collection_played, 
+SUM(player_war.collection_won) as total_collection_won,
+SUM(player_war.battle_played) as total_battle_played,
+SUM(player_war.battle_won) as total_battle_won
+FROM players
+INNER JOIN arena ON arena.arena_id = players.arena
+INNER JOIN role ON role.id = players.role_id
+INNER JOIN player_war ON player_war.player_id = players.id
+WHERE tag = \"%s\"
+";
+
+    return fetch_query($db, utf8_decode(sprintf($tag)));
+}
+
+function getCardsInCurrentDeck($db, $playerId)
+{
+    $pattern = "
+SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+FROM decks
+WHERE decks.player_id = %d
+AND decks.current > 0
+";
+
+    return fetch_query($db, sprintf($pattern, $playerId));
+}
+
+function getCrIdsByCards($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
+{
+    $pattern = "
+SELECT cr_id
+FROM cards
+WHERE cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+OR cards.id = %d
+";
+
+    return fetch_all_query($db, sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+}
+
+// ----------------- WAR STATS -----------------
+function getWarStatsByPlayerId($db, $playerId)
+{
+    $pattern = "
+SELECT SUM(cards_earned) as total_cards_earned, 
+SUM(collection_played) as total_collection_played, 
+SUM(collection_won) as total_collection_won,
+SUM(battle_played) as total_battle_played,
+SUM(battle_won) as total_battle_won
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE player_id = %d
+AND war.past_war > 0
+";
+
+    return fetch_query($db, sprintf($pattern, $playerId));
+}
+
+function countMissedWar($db, $playerId)
+{
+    $pattern = "
+SELECT COUNT(player_war.id) as missed_war
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE player_war.battle_played = 0
+AND war.past_war > 0
+AND player_war.player_id = %d
+";
+    return fetch_query($db, sprintf($pattern, $playerId));
+}
+
+function countMissedCollection($db, $playerId)
+{
+    $pattern = "
+SELECT player_war.collection_played as missed_collection
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+WHERE player_war.collection_played = 0
+AND war.past_war > 0
+AND war.created != 1530050844
+AND player_war.player_id = %d
+";
+    return fetch_query($db, sprintf($pattern, $playerId));
+}
+
+function getFirstWarDate($db)
+{
+    $query = "
+SELECT created
+FROM war
+WHERE past_war > 0
+AND created != 1530050844
+LIMIT 1
+";
+    return fetch_query($db, $query);
 }

@@ -8,54 +8,8 @@
 
 include("tools/database.php");
 
-$getAllPlayersQuery = "
-SELECT players.id, players.name, players.rank, players.tag
-FROM players
-WHERE in_clan > 0
-ORDER BY rank ASC
-";
-
-$allPlayers = fetch_all_query($db, $getAllPlayersQuery);
-
-$getPattern = "
-SELECT SUM(cards_earned) as total_cards_earned, 
-SUM(collection_played) as total_collection_played, 
-SUM(collection_won) as total_collection_won,
-SUM(battle_played) as total_battle_played,
-SUM(battle_won) as total_battle_won
-FROM player_war
-JOIN war ON player_war.war_id = war.id
-WHERE player_id = %d
-AND war.past_war > 0
-";
-
-$countMissedWarPattern = "
-SELECT COUNT(player_war.id) as missed_war
-FROM player_war
-JOIN war ON player_war.war_id = war.id
-WHERE player_war.battle_played = 0
-AND war.past_war > 0
-AND player_war.player_id = %d
-";
-
-$countMissedCollectionPattern = "
-SELECT player_war.collection_played as missed_collection
-FROM player_war
-JOIN war ON player_war.war_id = war.id
-WHERE player_war.collection_played = 0
-AND war.past_war > 0
-AND war.created != 1530050844
-AND player_war.player_id = %d
-";
-
-$getFirstWarDateQuery = "
-SELECT created
-FROM war
-WHERE past_war > 0
-AND created != 1530050844
-LIMIT 1
-";
-$firstWarDate = fetch_query($db, $getFirstWarDateQuery);
+$allPlayers = getAllPlayersByRank($db);
+$firstWarDate = getFirstWarDate($db);
 ?>
 
 <!DOCTYPE html>
@@ -142,16 +96,16 @@ $firstWarDate = fetch_query($db, $getFirstWarDateQuery);
         $allMissedWar = 0;
         $allBadStatus = 0;
         foreach ($allPlayers as $player) {
-            $getResult = fetch_query($db, sprintf($getPattern, $player['id']));
+            $warStats = getWarStatsByPlayerId($db, $player['id']);
 
-            $totalCollectionPlayed = $getResult['total_collection_played'] != null ? $getResult['total_collection_played'] : 0;
-            $totalCollectionWon = $getResult['total_collection_won'] != null ? $getResult['total_collection_won'] : 0;
-            $totalCardsEarned = $getResult['total_cards_earned'] != null ? $getResult['total_cards_earned'] : 0;
-            $totalBattlesPlayed = $getResult['total_battle_played'] != null ? $getResult['total_battle_played'] : 0;
-            $totalBattlesWon = $getResult['total_battle_won'] != null ? $getResult['total_battle_won'] : 0;
-            $missedCollection = fetch_query($db, sprintf($countMissedCollectionPattern, $player['id']))['missed_collection'];
+            $totalCollectionPlayed = $warStats['total_collection_played'] != null ? $warStats['total_collection_played'] : 0;
+            $totalCollectionWon = $warStats['total_collection_won'] != null ? $warStats['total_collection_won'] : 0;
+            $totalCardsEarned = $warStats['total_cards_earned'] != null ? $warStats['total_cards_earned'] : 0;
+            $totalBattlesPlayed = $warStats['total_battle_played'] != null ? $warStats['total_battle_played'] : 0;
+            $totalBattlesWon = $warStats['total_battle_won'] != null ? $warStats['total_battle_won'] : 0;
+            $missedCollection = countMissedCollection($db, $player['id'])['missed_collection'];
             $missedCollection = $missedCollection == null ? 0 : $missedCollection;
-            $missedWar = fetch_query($db, sprintf($countMissedWarPattern, $player['id']))['missed_war'];
+            $missedWar = countMissedWar($db, $player['id'])['missed_war'];
             $missedWar = $missedWar == null ? 0 : $missedWar;
 
             $totalCollection = $totalCollectionPlayed + $missedCollection;
