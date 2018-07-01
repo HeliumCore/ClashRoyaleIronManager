@@ -128,6 +128,7 @@ ksort($fatChests);
         }
         echo '<br>';
         echo '<a href="' . $deckLink . '" class="deckLink">Copier le deck</a>';
+        echo 'Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations';
         ?>
     </div>
     <br> <br><br>
