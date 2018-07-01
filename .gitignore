@@ -1,3 +1,4 @@
 .idea/
 *.iml
 .idea/encodings.xml
+conf.php
