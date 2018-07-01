@@ -33,7 +33,32 @@ function getWarLogFromApi($api)
     return json_decode($query, true);
 }
 
+function getPlayerFromApi($api, $tag)
+{
+    $url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $tag));
+    $result = file_get_contents($url, true, $api);
+    return json_decode($result, true);
+}
+
 function getPlayerChestsFromApi($api, $tag)
 {
+    $url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $tag));
+    $result = file_get_contents($url, true, $api);
+    return json_decode($result, true);
+}
 
+function getPlayerCurrentDeckFromApi($api, $tag)
+{
+    return getPlayerFromApi($api, $tag)['currentDeck'];
+}
+
+function getWarStateFromApi($api)
+{
+    return getWarFromApi($api)['state'];
+}
+
+function getConstants($api)
+{
+    $apiResult = file_get_contents("https://api.royaleapi.com/constants", true, $api);
+    return json_decode($apiResult, true);
 }

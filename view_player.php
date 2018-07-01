@@ -15,9 +15,7 @@ else header('Location: index.php');
 $player = getPlayersInfoByTag($db, $playerTag);
 
 // DECK
-$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $playerTag));
-$apiDeckResult = file_get_contents($url, true, $context);
-$apiDeck = json_decode($apiDeckResult, true)['currentDeck'];
+$apiDeck = getPlayerCurrentDeckFromApi($api, $playerTag);
 
 $currentDeck = getCardsInCurrentDeck($db, $player['playerId']);
 $getCrResult = getCrIdsByCards($db, $currentDeck['card_1'], $currentDeck['card_2'], $currentDeck['card_3'],
@@ -29,9 +27,7 @@ $deckLink = sprintf($deckLinkPattern, $getCrResult[0]['cr_id'], $getCrResult[1][
     $getCrResult[7]['cr_id'], $getCrResult[8]['cr_id']);
 
 // CHESTS
-$url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $playerTag));
-$apiResult = file_get_contents($url, true, $context);
-$chests = json_decode($apiResult, true);
+$chests = getPlayerChestsFromApi($api, $playerTag);
 
 $upcomingChests[] = $chests["upcoming"];
 $fatChests = array(

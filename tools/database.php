@@ -230,6 +230,31 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
         $warTrophies, $warId)));
 }
 
+function getWarPlayers($db)
+{
+    $query = "
+SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
+player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned as cards
+FROM player_war
+INNER JOIN war ON war.id = player_war.war_id
+INNER JOIN players ON players.id = player_war.player_id
+INNER JOIN role ON role.id = players.role_id
+WHERE war.past_war = 0
+ORDER BY players.rank ASC
+";
+    return fetch_all_query($db, $query);
+}
+
+function getAllStandings($db)
+{
+    $query = "
+SELECT standings.name, participants, battles_played, battles_won, crowns, war_trophies
+FROM standings 
+ORDER BY battles_won DESC, crowns DESC 
+";
+    return fetch_all_query($db, $query);
+}
+
 // ----------------- PLAYERS -----------------
 function getAllPlayersInClan($db)
 {
@@ -252,6 +277,19 @@ AND players.tag = \"%s\"
 ";
 
     return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
+}
+
+function getAllPlayersForIndex($db) {
+    $query = "
+SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
+arena.arena as arena, players.donations, players.donations_received  
+FROM players
+INNER JOIN role ON role.id = players.role_id
+INNER JOIN arena ON arena.arena_id = players.arena
+WHERE players.in_clan = 1
+ORDER BY players.rank ASC
+";
+    return fetch_all_query($db, $query);
 }
 
 function updatePlayer($db, $name, $rank, $trophies, $role, $expLevel, $arenaId, $donations, $donationsReceived,

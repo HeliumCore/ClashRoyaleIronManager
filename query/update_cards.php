@@ -9,10 +9,9 @@
 include("../tools/api_conf.php");
 include("../tools/database.php");
 
-$apiResult = file_get_contents("https://api.royaleapi.com/constants", true, $context);
-$data = json_decode($apiResult, true);
+$constants = getConstants($api);
 
-foreach ($data['cards'] as $card) {
+foreach ($constants['cards'] as $card) {
     if (is_array(getCardByKey($db, $card['key']))) {
         updateCard($db, $card['key'], $card['name'], $card['elixir'], $card['type'], $card['rarity'], $card['arena'],
             $card['id']);

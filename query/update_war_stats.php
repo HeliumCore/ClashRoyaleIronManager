@@ -7,12 +7,11 @@
  */
 
 include("../tools/database.php");
+include("../tools/api_conf.php");
 
-$apiResult = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/warlog", true, $context);
-$data = json_decode($apiResult, true);
-
+$wars = getWarLogFromApi($api);
 $allPlayers = getAllPlayersInClan($db);
-foreach ($data as $war) {
+foreach ($wars as $war) {
     if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530223645) {
         continue;
     }

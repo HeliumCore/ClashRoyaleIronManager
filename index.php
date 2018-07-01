@@ -7,19 +7,6 @@
  */
 
 include("tools/database.php");
-
-$query = "
-SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
-arena.arena as arena, players.donations, players.donations_received  
-FROM players
-INNER JOIN role ON role.id = players.role_id
-INNER JOIN arena ON arena.arena_id = players.arena
-WHERE players.in_clan = 1
-ORDER BY players.rank ASC
-";
-
-$getPlayerRequest = $db->prepare($query);
-$getPlayerRequest->execute();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +57,7 @@ $getPlayerRequest->execute();
         </thead>
         <tbody>
         <?php
-        foreach ($getPlayerRequest as $player) {
+        foreach (getAllPlayersForIndex($db) as $player) {
             echo '<tr>';
             echo '<th class="headIndex">' . $player['rank'] . '</th>';
             echo '<td class="lineIndex">' . $player['tag'] . '</td>';

@@ -11,11 +11,10 @@ else return;
 
 include("../tools/api_conf.php");
 include("../tools/database.php");
-$apiQuery = "https://api.royaleapi.com/player/" . $playerTag;
-$playerApiResult = json_decode(file_get_contents($apiQuery, true, $context), true);
+$player = getPlayerFromApi($api, $playerTag);
 
-updateMaxTrophies($db, $playerApiResult['stats']['maxTrophies'], $playerTag);
-$deck = $playerApiResult['currentDeck'];
+updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
+$deck = $player['currentDeck'];
 $currentDeck = getCurrentDeck($db, $deck);
 $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
 $getExistingDeck = getExistingDeck($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3],
