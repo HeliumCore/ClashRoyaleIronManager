@@ -270,7 +270,7 @@ WHERE in_clan > 0
 function getPlayerByTag($db, $tag)
 {
     $pattern = "
-SELECT players.tag
+SELECT players.id, players.tag
 FROM players
 WHERE players.in_clan = 1
 AND players.tag = \"%s\"
@@ -501,8 +501,7 @@ INNER JOIN role ON role.id = players.role_id
 INNER JOIN player_war ON player_war.player_id = players.id
 WHERE tag = \"%s\"
 ";
-
-    return fetch_query($db, utf8_decode(sprintf($tag)));
+    return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
 }
 
 function getCardsInCurrentDeck($db, $playerId)

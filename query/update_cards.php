@@ -19,5 +19,4 @@ foreach ($constants['cards'] as $card) {
         insertCard($db, $card['key'], $card['name'], $card['elixir'], $card['type'], $card['rarity'], $card['arena'],
             $card['id']);
     }
-    execute_query($db, $query);
 }

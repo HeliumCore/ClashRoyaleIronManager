@@ -35,14 +35,14 @@ function getWarLogFromApi($api)
 
 function getPlayerFromApi($api, $tag)
 {
-    $url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s", $tag));
+    $url = "https://api.royaleapi.com/player/".$tag;
     $result = file_get_contents($url, true, $api);
     return json_decode($result, true);
 }
 
 function getPlayerChestsFromApi($api, $tag)
 {
-    $url = utf8_decode(sprintf("https://api.royaleapi.com/player/%s/chests", $tag));
+    $url = "https://api.royaleapi.com/player/".$tag."/chests";
     $result = file_get_contents($url, true, $api);
     return json_decode($result, true);
 }

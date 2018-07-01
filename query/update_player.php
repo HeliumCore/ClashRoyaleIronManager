@@ -7,12 +7,12 @@
  */
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-else return;
-
+//else return;
+else $playerTag = "LJV8928C";
 include("../tools/api_conf.php");
 include("../tools/database.php");
-$player = getPlayerFromApi($api, $playerTag);
 
+$player = getPlayerFromApi($api, $playerTag);
 updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
 $deck = $player['currentDeck'];
 $currentDeck = getCurrentDeck($db, $deck);
