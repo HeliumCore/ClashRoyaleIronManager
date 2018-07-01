@@ -9,7 +9,7 @@
 include("../tools/api_conf.php");
 include("../tools/database.php");
 
-foreach (getClanFromApi($api) as $player) {
+foreach (getClanFromApi($api)['members'] as $player) {
     $result = getPlayerByTag($db, $player['tag']);
     if (is_array($result)) {
         updatePlayer($db, $player['name'], $player['rank'], $player['trophies'], $player['role'], $player['expLevel'],
