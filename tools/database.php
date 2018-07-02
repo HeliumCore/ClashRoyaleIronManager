@@ -283,7 +283,7 @@ AND players.tag = \"%s\"
 function getAllPlayersForIndex($db) {
     $query = "
 SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
-arena.arena as arena, players.donations, players.donations_received  
+arena.arena as arena, arena.arena_id as arena_id, players.donations, players.donations_received  
 FROM players
 INNER JOIN role ON role.id = players.role_id
 INNER JOIN arena ON arena.arena_id = players.arena

@@ -63,17 +63,17 @@ include("tools/database.php");
                     <br>
                     <span class="small">
                         <?php print utf8_encode($player['playerRole']) ?>
-                    </small>
+                    </span>
                 </td>
                 <td class=" whiteShadow"> <?php print $player['tag']; ?></td>
                 <td class=" whiteShadow">
                     <?php print $player['trophies'] ?> <img src="res/trophy.png" height="20px">
                 </td>
                 <td class="">
-                    <?php if($player['arena']): ?>
-                    <img src="rest/arena/arena-<?php print $player['arena_id'] ?>.png" title="<?php print $player['arena'] ?>">
+                    <?php if($player['arena_id'] > 12): ?>
+                    <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png" title="<?php print $player['arena'] ?>">
                     <?php else : ?>
-                    <img src="rest/arena/arena-.png" title="<?php print $player['arena'] ?>">
+                    <img src="res/arena/arena-.png" title="">
                     <?php endif; ?>
                 </td>
                 <td class=" text-center">
