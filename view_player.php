@@ -62,27 +62,10 @@ ksort($fatChests);
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.html");
+$counter = 1?>
 <div class="container">
     <h1 class="whiteShadow">Détails du joueur</h1><br>
-    <div class="chestDiv">
-        <?php
-        $counter = 1;
-
-        foreach ($upcomingChests[0] as $nextChest) {
-            echo '<img src="res/' . $nextChest . '_chest.png" alt="' . $nextChest . ' chest" class="imgChest">';
-            echo '<label class="labelChest">' . $counter . '</label>';
-            $counter++;
-        }
-
-        foreach ($fatChests as $key => $chest) {
-            if ($key > 10) {
-                echo '<img src="res/' . $chest . '_chest.png" alt="' . $chest . ' chest" class="imgChest">';
-                echo '<label class="labelChest">+' . $key . '</label>';
-            }
-        }
-        ?>
-    </div>
     <h2 class="whiteShadow">Deck du moment</h2>
     <br>
     <div class="row">
@@ -93,13 +76,45 @@ ksort($fatChests);
                         <div class="img-responsive">
                             <img src="<?php print $card['icon']; ?>" alt="failed to load img" class="img-responsive"/>
                         </div>
-                    </div>   
+                    </div>
                 <?php endforeach; ?>
-<!--                <a href="--><?php //print $deckLink ?><!--" class="deckLink "><img src="" alt="Copier le lien"</a>-->
+                <!--                <a href="-->
+                <?php //print $deckLink ?><!--" class="deckLink "><img src="" alt="Copier le lien"</a>-->
                 <span class="whiteShadow">Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations</span>
             </div>
         </div>
-        <div class="col-md-6"></div>
+<!--        TODO ajouter margin left sur la div de droite, elle est trop collée au deck-->
+<!--        TODO mettre les bonnes images pour les decks, et trouver un moyen d'afficher les positions (ex: +54)-->
+        <div class="col-md-6">
+            <div class="row">
+                <?php
+                foreach ($upcomingChests[0] as $nextChest):
+                    if ($counter > 3) { ?>
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="res/<?php print $nextChest; ?>_chest.png" alt="failed to load img"
+                                     class="img-responsive little-chest"/>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    $counter++;
+                endforeach;
+
+                foreach ($fatChests as $key => $chest) {
+                    if ($key > 3) { ?>
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="res/<?php print $chest; ?>_chest.png" alt="failed to load img"
+                                     class="img-responsive big-chest"/>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
     </div>
 
     <br> <br><br>
@@ -126,7 +141,7 @@ ksort($fatChests);
                 echo '<tr>';
                 echo '<th class="whiteShadow">' . $player['rank'] . '</th>';
                 echo '<td id="playerTag" class="whiteShadow">' . $player['tag'] . '</td>';
-                echo '<td class="whiteShadow">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']).'</td>';
+                echo '<td class="whiteShadow">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
                 echo '<td class="whiteShadow">' . $player['level'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['trophies'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['max_trophies'] . '</td>';
