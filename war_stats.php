@@ -53,20 +53,11 @@ $firstWarDate = getFirstWarDate($db);
     <table class="table" id="tableIndex">
         <thead>
         <tr class="rowIndex">
-            <th class="headIndex">Rang du joueur</th>
-            <th class="headIndex">Nom du joueur</th>
-            <th class="headIndex">Collections jouées</th>
-            <th class="headIndex">Collections gagnées</th>
-            <th class="headIndex">Pourcentage victoire collection</th>
-            <th class="headIndex">Absence collections</th>
-            <th class="headIndex">Pourcentage de présence collection</th>
-            <th class="headIndex">Cartes récoltées</th>
-            <th class="headIndex">Batailles jouées</th>
-            <th class="headIndex">Batailles gagnées</th>
-            <th class="headIndex">Pourcentage victoire guerre</th>
-            <th class="headIndex">Absence batailles</th>
-            <th class="headIndex">Pourcentage de présence guerre</th>
-            <th class="headIndex">Statut</th>
+            <th class="text-center">Rang</th>
+            <th>Joueur</th>
+            <th class="text-center" colspan="6">Collections</th>
+            <th class="text-center" colspan="5">Batailles</th>
+            <th>Statut</th>
         </tr>
         </thead>
         <tbody>
@@ -124,62 +115,68 @@ $firstWarDate = getFirstWarDate($db);
             $ban = ($missedCollection + $missedWar) >= 3;
 
             echo '<tr>';
-            echo '<th class="headIndex">' . utf8_encode($player['rank']) . '</th>';
-            echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
+            echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
+            echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
             // Collections
-            echo '<td class="lineIndex">' . $totalCollectionPlayed . '</td>';
-            echo '<td class="lineIndex">' . $totalCollectionWon . '</td>';
-            if ($totalCollectionPlayed != 0) echo '<td class="lineIndex">' . round((($totalCollectionWon / $totalCollectionPlayed) * 100)) . '</td>';
-            else echo '<td class="lineIndex">0</td>';
-            echo '<td class="lineIndex">' . $missedCollection . '</td>';
-            if ($totalCollectionPlayed != 0) echo '<td class="lineIndex">' . round(($totalCollection / $totalCollectionPlayed) * 100) . '</td>';
-            else echo '<td class="lineIndex">0</td>';
-            echo '<td class="lineIndex">' . $totalCardsEarned . '</td>';
+            echo '<td class="whiteShadow text-center">jouées<br>' . $totalCollectionPlayed . '</td>';
+            echo '<td class="whiteShadow text-center">gagnées<br>' . $totalCollectionWon . '</td>';
+            echo '<td class="whiteShadow text-center">Victoires <br>';
+            echo ($totalCollectionPlayed != 0) ? round((($totalCollectionWon / $totalCollectionPlayed) * 100)). '%' : '--';
+            echo '<td class="whiteShadow  text-center">Absence<br>' . $missedCollection . '</td>';
+            echo '<td class="whiteShadow text-center">Présence<br>' ;
+            echo ($totalCollectionPlayed != 0) ? round(($totalCollection / $totalCollectionPlayed) * 100) : 0;
+            echo  '</td>';
+            echo '<td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $totalCardsEarned . '</td>';
             // War
-            echo '<td class="lineIndex">' . $totalBattlesPlayed . '</td>';
-            echo '<td class="lineIndex">' . $totalBattlesWon . '</td>';
-            if ($totalBattlesPlayed != 0) echo '<td class="lineIndex">' . round((($totalBattlesWon / $totalBattlesPlayed) * 100)) . '</td>';
-            else echo '<td class="lineIndex">0</td>';
-            echo '<td class="lineIndex">' . $missedWar . '</td>';
-            if ($totalBattlesPlayed != 0) echo '<td class="lineIndex">' . round(($totalWar / $totalBattlesPlayed) * 100) . '</td>';
-            else echo '<td class="lineIndex">0</td>';
+            echo '<td class="whiteShadow text-center">jouées<br>' . $totalBattlesPlayed . '</td>';
+            echo '<td class="whiteShadow text-center">gagnées<br>' . $totalBattlesWon . '</td>';
+            echo '<td class="whiteShadow text-center">Victoires<br>';
+            echo ($totalBattlesPlayed != 0) ? round((($totalBattlesWon / $totalBattlesPlayed) * 100)). '%' : 0;
+            echo '</td>';
+            echo '<td class="whiteShadow text-center">Absence<br>' . $missedWar . '</td>';
+            echo '<td class="whiteShadow text-center">Présence<br>';
+            echo ($totalBattlesPlayed != 0) ? round(($totalWar / $totalBattlesPlayed) * 100). "%" : 0;
+            echo '</td>';
             // Status
             if ($ban) {
-                echo '<td bgcolor="#D42F2F">Exlure</td>';
+                echo '<td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>';
                 $allBadStatus++;
             } else if ($warning) {
-                echo '<td bgcolor="#FFB732">A surveiller</td>';
+                echo '<td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>';
                 $allBadStatus++;
             } else {
-                echo '<td bgcolor="#66B266">RAS</td>';
+                echo '<td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>';
             }
             echo '</tr>';
         }
         ?>
         <tr>
-            <th class="headTotalIndex"><?php echo sizeof($allPlayers); ?></th>
-            <td class="lineTotalIndex"><?php echo 'X'; ?></td>
-            <td class="lineTotalIndex"><?php echo $allCollectionsPlayed; ?></td>
-            <td class="lineTotalIndex"><?php echo $allCollectionsWon; ?></td>
-            <?php if ($allCollectionsPlayed != 0) echo '<td class="lineTotalIndex">' . round((($allCollectionsWon / $allCollectionsPlayed) * 100)) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>'; ?>
-            <td class="lineTotalIndex"><?php echo $allMissedCollections; ?></td>
-            <?php if ($allCollectionsPlayed != 0) echo '<td class="lineIndex">' . round(($allCollections / $allCollectionsPlayed) * 100) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>'; ?>
-            <td class="lineTotalIndex"><?php echo $allCardsEarned; ?></td>
-            <td class="lineTotalIndex"><?php echo $allBattlePlayed; ?></td>
-            <td class="lineTotalIndex"><?php echo $allBattleWon; ?></td>
-            <?php if ($allBattlePlayed != 0) echo '<td class="lineTotalIndex">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>'; ?>
-            <td class="lineTotalIndex"><?php echo $allMissedWar; ?></td>
-            <?php if ($allWars != 0) echo '<td class="lineTotalIndex">' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
-            else echo '<td class="lineTotalIndex">0</td>'; ?>
+            <th class="whiteShadow text-center"><?php echo sizeof($allPlayers); ?></th>
+            <td class="whiteShadow text-center"><?php echo 'X'; ?></td>
+            <td class="whiteShadow text-center"><?php echo $allCollectionsPlayed; ?></td>
+            <td class="whiteShadow text-center"><?php echo $allCollectionsWon; ?></td>
+            <td class="whiteShadow text-center">
+            <?php 
+            echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : 0; ?>
+            </td>
+            <td class="whiteShadow text-center"><?php echo $allMissedCollections; ?></td>
+            <td class="lineIndex text-center">
+            <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : 0; ?>
+            </td>
+            <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
+            <td class="whiteShadow text-center"><?php echo $allBattlePlayed; ?></td>
+            <td class="whiteShadow text-center"><?php echo $allBattleWon; ?></td>
+            <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
+            else echo '<td class="whiteShadow">0</td>'; ?>
+            <td class="whiteShadow text-center"><?php echo $allMissedWar; ?></td>
+            <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
+            else echo '<td class="whiteShadow">0</td>'; ?>
             <td bgcolor="#66B266"><?php echo $allBadStatus; ?></td>
         </tr>
         </tbody>
         <thead>
         <tr class="rowIndex">
-            <th class="headTotalIndex">Nombre de joueur éligible à la guerre</th>
+            <th class="">Nombre de joueur éligible à la guerre</th>
             <th class="headTotalIndex">X</th>
             <th class="headTotalIndex">Total des collections jouées</th>
             <th class="headTotalIndex">Total des collections gagnées</th>
