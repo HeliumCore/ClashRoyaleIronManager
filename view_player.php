@@ -124,16 +124,16 @@ ksort($fatChests);
                 <h2 class="whiteShadow">Joueur</h2>
                 <?php
                 echo '<tr>';
-                echo '<th class="whiteShadow">' . $getPlayer['rank'] . '</th>';
-                echo '<td id="playerTag" class="whiteShadow">' . $getPlayer['tag'] . '</td>';
-                echo '<td class="whiteShadow">' . utf8_encode($getPlayer['playerName']) . '<br>' . utf8_encode($getPlayer['playerRole']).'</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['level'] . '</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['trophies'] . '</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['max_trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['donations'] . '</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['received'] . '</td>';
-                echo '<td class="whiteShadow">' . $getPlayer['delta'] . '</td>';
+                echo '<th class="whiteShadow">' . $player['rank'] . '</th>';
+                echo '<td id="playerTag" class="whiteShadow">' . $player['tag'] . '</td>';
+                echo '<td class="whiteShadow">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']).'</td>';
+                echo '<td class="whiteShadow">' . $player['level'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['trophies'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['max_trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['donations'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['received'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['delta'] . '</td>';
                 echo "<td bgcolor='#66B266'>Good</td>";
                 echo '</tr>';
                 ?>
