@@ -100,19 +100,19 @@ $counter = 1?>
                     }
                     $counter++;
                 endforeach;
-
-                foreach ($fatChests as $key => $chest) {
-                    if ($key > 3) { ?>
-                        <div class="col-xs-3">
-                            <div class="img-responsive">
-                                <img src="res/<?php print $chest; ?>_chest.png" alt="failed to load img"
-                                     class="img-responsive big-chest"/>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                }
-                ?>
+//TODO rajouter les fat chests
+//                foreach ($fatChests as $key => $chest) {
+//                    if ($key > 3) { ?>
+<!--                        <div class="col-xs-3">-->
+<!--                            <div class="img-responsive">-->
+<!--                                <img src="res/--><?php //print $chest; ?><!--_chest.png" alt="failed to load img"-->
+<!--                                     class="img-responsive big-chest"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        --><?php
+//                    }
+//                }
+//                ?>
             </div>
         </div>
     </div>
