@@ -17,8 +17,7 @@ $firstWarDate = getFirstWarDate($db);
 <head>
     <meta charset="UTF-8">
     <title>Historique des guerres</title>
-    <link rel="stylesheet" type="text/css" href="css/css.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <?php include("head.php"); ?>
     <script>
         function update() {
             $.ajax({
@@ -46,12 +45,12 @@ $firstWarDate = getFirstWarDate($db);
 </head>
 <body>
 <?php include("header.html"); ?>
-<div class="bodyIndex">
-    <h1 class="pageTitle">Statistiques des guerres</h1>
-    <span class="pageSubtitle">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
+<div class="container">
+    <h1 class="whiteShadow">Statistiques des guerres</h1>
+    <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
-    <table class="tableIndex" id="tableIndex">
+    <table class="table" id="tableIndex">
         <thead>
         <tr class="rowIndex">
             <th class="headIndex">Rang du joueur</th>

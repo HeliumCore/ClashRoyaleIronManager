@@ -41,8 +41,7 @@ ksort($fatChests);
 <head>
     <meta charset="utf-8">
     <title>Les membres</title>
-    <link rel="stylesheet" type="text/css" href="css/css.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <?php include("head.php"); ?>
     <script>
         function update() {
             $.ajax({
@@ -64,8 +63,8 @@ ksort($fatChests);
 </head>
 <body>
 <?php include("header.html"); ?>
-<div class="bodyIndex">
-    <h1 class="pageTitle">Détails du joueur</h1><br>
+<div class="container">
+    <h1 class="whiteShadow">Détails du joueur</h1><br>
     <div class="chestDiv">
         <?php
         $counter = 1;
@@ -84,53 +83,57 @@ ksort($fatChests);
         }
         ?>
     </div>
-    <h2 class="pageSecondTitle">Deck du moment</h2>
+    <h2 class="whiteShadow">Deck du moment</h2>
     <br>
-    <div class="divInfoPlayer">
-        <?php
-        foreach ($apiDeck as $card) {
-            echo '<img src="' . $card['icon'] . '" alt="failed to load img" class="cardClass"/>';
-        }
-        echo '<br>';
-        echo '<a href="' . $deckLink . '" class="deckLink">Copier le deck</a>';
-        echo 'Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations';
-        ?>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <?php foreach ($apiDeck as $card): ?>
+                    <div class="col-xs-3">
+                        <div class="img-responsive">
+                            <img src="<?php print $card['icon']; ?>" alt="failed to load img" class="img-responsive"/>
+                        </div>
+                    </div>   
+                <?php endforeach; ?>
+                <a href="<?php print $deckLink ?>" class="deckLink">Copier le deck</a>
+                Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations
+            </div>
+        </div>
+        <div class="col-md-6"></div>
     </div>
+
     <br> <br><br>
     <div class="divInfoPlayer">
-        <table class="tableIndex">
+        <table class="table">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
                 <th class="headIndex">Tag</th>
                 <th class="headIndex">Nom</th>
-                <th class="headIndex">Role</th>
                 <th class="headIndex">Niveau joueur</th>
                 <th class="headIndex">Trophée</th>
                 <th class="headIndex">Trophée Max</th>
                 <th class="headIndex">Arène</th>
-                <th class="headIndex">Donations</th>
-                <th class="headIndex">Donations reçues</th>
-                <th class="headIndex">Delta don/reception</th>
+                <th class="headIndex text-center" colspan="2">Dons</th>
+                <th class="headIndex">Delta dons</th>
                 <th class="headIndex">Statut</th>
             </tr>
             </thead>
             <tbody>
             <div>
-                <h2 class="pageSecondTitle">Joueur</h2>
+                <h2 class="whiteShadow">Joueur</h2>
                 <?php
                 echo '<tr>';
-                echo '<th class="headIndex">' . $player['rank'] . '</th>';
-                echo '<td id="playerTag" class="lineIndex">' . $player['tag'] . '</td>';
-                echo '<td class="lineIndex">' . utf8_encode($player['playerName']) . '</td>';
-                echo '<td class="lineIndex">' . utf8_encode($player['playerRole']) . '</td>';
-                echo '<td class="lineIndex">' . $player['level'] . '</td>';
-                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $player['max_trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
-                echo '<td class="lineIndex">' . $player['donations'] . '</td>';
-                echo '<td class="lineIndex">' . $player['received'] . '</td>';
-                echo '<td class="lineIndex">' . $player['delta'] . '</td>';
+                echo '<th class="whiteShadow">' . $getPlayer['rank'] . '</th>';
+                echo '<td id="playerTag" class="whiteShadow">' . $getPlayer['tag'] . '</td>';
+                echo '<td class="whiteShadow">' . utf8_encode($getPlayer['playerName']) . '<br>' . utf8_encode($getPlayer['playerRole']).'</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['level'] . '</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['trophies'] . '</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['max_trophies'] . '</td>';
+                echo '<td class="lineIndex">' . $getPlayer['arena'] . '</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['donations'] . '</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['received'] . '</td>';
+                echo '<td class="whiteShadow">' . $getPlayer['delta'] . '</td>';
                 echo "<td bgcolor='#66B266'>Good</td>";
                 echo '</tr>';
                 ?>
@@ -138,7 +141,7 @@ ksort($fatChests);
         </table>
     </div>
     <div class="divInfoPlayer">
-        <table class="tableIndex">
+        <table class="table">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Nom arène</th>
@@ -149,7 +152,7 @@ ksort($fatChests);
             </thead>
             <tbody>
             <div>
-                <h2 class="pageSecondTitle">Arène</h2>
+                <h2 class="whiteShadow">Arène</h2>
                 <?php
                 echo '<tr>';
                 echo '<td class="lineIndex">' . $player['arena'] . '</td>';
@@ -162,7 +165,7 @@ ksort($fatChests);
         </table>
     </div>
     <div class="divInfoPlayer">
-        <table class="tableIndex">
+        <table class="table">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Guerres jouées</th>
@@ -175,7 +178,7 @@ ksort($fatChests);
             </thead>
             <tbody>
             <div>
-                <h2 class="pageSecondTitle">Guerre</h2>
+                <h2 class="whiteShadow">Guerre</h2>
                 <?php
                 echo '<tr>';
                 echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
@@ -192,7 +195,7 @@ ksort($fatChests);
         </table>
     </div>
     <div class="divInfoPlayer">
-        <table class="tableIndex">
+        <table class="table">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Collections jouées</th>
@@ -205,7 +208,7 @@ ksort($fatChests);
             </thead>
             <tbody>
             <div>
-                <h2 class="pageSecondTitle">Clan</h2>
+                <h2 class="whiteShadow">Clan</h2>
                 <?php
                 // TODO changer le nom du tableau CLAN pour afficher les bonnes informations (collection, etc)
                 echo '<tr>';

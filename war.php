@@ -24,8 +24,7 @@ if ($state == "collectionDay") {
 <head>
     <meta charset="UTF-8">
     <title>Guerre en cours</title>
-    <link rel="stylesheet" type="text/css" href="css/css.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <?php include("head.php"); ?>
     <script>
         $(document).ready(function () {
             $('#tableIndex').on('click', 'tbody td', function () {
@@ -53,14 +52,14 @@ if ($state == "collectionDay") {
 </head>
 <body>
 <?php include("header.html"); ?>
-<div class="bodyIndex">
-    <h1 class="pageTitle">Guerre en cours</h1>
-    <span class="pageSubtitle"><?php echo $stateName ?></span>
+<div class="container">
+    <h1 class="whiteShadow">Guerre en cours</h1>
+    <span class="whiteShadow"><?php echo $stateName ?></span>
     <?php
     if ($stateName == "Jour de guerre") { ?>
         <br><br>
         <div class="divStandings">
-            <table class="tableIndex">
+            <table class="table">
                 <thead>
                 <tr class="rowIndex">
                     <th class="headIndex">Position</th>
@@ -105,7 +104,7 @@ if ($state == "collectionDay") {
     <?php } ?>
     <br><br>
     <div class="divCurrentWar">
-        <table id="tableIndex" class="tableIndex">
+        <table id="tableIndex" class="table">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
