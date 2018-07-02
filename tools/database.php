@@ -310,8 +310,6 @@ players.donations_delta = %d,
 players.donations_ratio= %f
 WHERE players.tag = \"%s\"
 ";
-    var_dump(utf8_decode(sprintf($pattern, $name, $rank, $trophies, getRoleIdByMachineName($db, $role), $expLevel,
-        $arenaId, $donations, $donationsReceived, $donationsDelta, $donationsPercent, $tag)));
     $query = utf8_decode(sprintf($pattern, $name, $rank, $trophies, getRoleIdByMachineName($db, $role), $expLevel,
         $arenaId, $donations, $donationsReceived, $donationsDelta, $donationsPercent, $tag));
     execute_query($db, $query);
