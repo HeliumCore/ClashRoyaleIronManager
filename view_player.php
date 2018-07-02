@@ -40,7 +40,7 @@ ksort($fatChests);
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Les membres</title>
+    <title>Détail du joueur</title>
     <?php include("head.php"); ?>
     <script>
         function update() {
@@ -95,8 +95,8 @@ ksort($fatChests);
                         </div>
                     </div>   
                 <?php endforeach; ?>
-                <a href="<?php print $deckLink ?>" class="deckLink">Copier le deck</a>
-                Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations
+<!--                <a href="--><?php //print $deckLink ?><!--" class="deckLink "><img src="" alt="Copier le lien"</a>-->
+                <span class="whiteShadow">Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations</span>
             </div>
         </div>
         <div class="col-md-6"></div>
@@ -130,7 +130,7 @@ ksort($fatChests);
                 echo '<td class="whiteShadow">' . $player['level'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['trophies'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['max_trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+                echo '<td class="whiteShadow">' . $player['arena'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['donations'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['received'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['delta'] . '</td>';

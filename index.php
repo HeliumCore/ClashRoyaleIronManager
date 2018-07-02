@@ -71,9 +71,10 @@ include("tools/database.php");
                 </td>
                 <td class="">
                     <?php if($player['arena_id'] > 12): ?>
-                    <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png" title="<?php print $player['arena'] ?>">
+                    <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png"
+                         title="<?php print $player['arena'] ?>" height="50px">
                     <?php else : ?>
-                    <img src="res/arena/arena-.png" title="">
+                    <img src="res/arena/arena-.png" title="" height="50px">
                     <?php endif; ?>
                 </td>
                 <td class=" text-center">
@@ -91,7 +92,7 @@ include("tools/database.php");
     <br>
 </div>
 <div id="loaderDiv">
-   
+    <img id="loaderImg" src="res/loader.gif"/>
 </div>
 <?php include("footer.html"); ?>
 </body>
