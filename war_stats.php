@@ -131,11 +131,11 @@ $firstWarDate = getFirstWarDate($db);
             echo '<td class="whiteShadow text-center">jouées<br>' . $totalBattlesPlayed . '</td>';
             echo '<td class="whiteShadow text-center">gagnées<br>' . $totalBattlesWon . '</td>';
             echo '<td class="whiteShadow text-center">Victoires<br>';
-            echo ($totalBattlesPlayed != 0) ? round((($totalBattlesWon / $totalBattlesPlayed) * 100)). '%' : 0;
+            echo ($totalBattlesPlayed != 0) ? round((($totalBattlesWon / $totalBattlesPlayed) * 100)). '%' : '-';
             echo '</td>';
             echo '<td class="whiteShadow text-center">Absence<br>' . $missedWar . '</td>';
             echo '<td class="whiteShadow text-center">Présence<br>';
-            echo ($totalBattlesPlayed != 0) ? round(($totalWar / $totalBattlesPlayed) * 100). "%" : 0;
+            echo ($totalBattlesPlayed != 0) ? round(($totalWar / $totalBattlesPlayed) * 100). "%" : '-';
             echo '</td>';
             // Status
             if ($ban) {
@@ -160,7 +160,7 @@ $firstWarDate = getFirstWarDate($db);
             echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : 0; ?>
             </td>
             <td class="whiteShadow text-center"><?php echo $allMissedCollections; ?></td>
-            <td class="lineIndex text-center">
+            <td class="whiteShadow text-center">
             <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : 0; ?>
             </td>
             <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
@@ -200,4 +200,5 @@ $firstWarDate = getFirstWarDate($db);
 </div>
 <?php include("footer.html"); ?>
 </body>
+<!-- TODO corriger lien <tr> pour page joueur -->
 </html>

@@ -62,14 +62,13 @@ ksort($fatChests);
     </script>
 </head>
 <body>
-<?php include("header.html");
-$counter = 1?>
+<?php include("header.html");?>
 <div class="container">
     <h1 class="whiteShadow">Détails du joueur</h1><br>
     <h2 class="whiteShadow">Deck du moment</h2>
     <br>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="row">
                 <?php foreach ($apiDeck as $card): ?>
                     <div class="col-xs-3">
@@ -78,21 +77,21 @@ $counter = 1?>
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <!--                <a href="-->
-                <?php //print $deckLink ?><!--" class="deckLink "><img src="" alt="Copier le lien"</a>-->
+                <a href="<?php print $deckLink ?>" class="deckLink "><img src="images/ui/copy-deck.png" height="50px"
+                                                                          alt="Copier le lien"/></a>
                 <span class="whiteShadow">Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations</span>
             </div>
         </div>
-<!--        TODO ajouter margin left sur la div de droite, elle est trop collée au deck-->
-<!--        TODO mettre les bonnes images pour les decks, et trouver un moyen d'afficher les positions (ex: +54)-->
-        <div class="col-md-6">
+        <!-- TODO trouver un moyen d'afficher les positions (ex: +54)-->
+        <div class="col-md-5 col-md-offset-2">
             <div class="row">
                 <?php
+                $counter = 1;
                 foreach ($upcomingChests[0] as $nextChest):
-                    if ($counter > 3) { ?>
+                    if ($counter <= 3) { ?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="res/<?php print $nextChest; ?>_chest.png" alt="failed to load img"
+                                <img src="images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive little-chest"/>
                             </div>
                         </div>
@@ -100,19 +99,18 @@ $counter = 1?>
                     }
                     $counter++;
                 endforeach;
-//TODO rajouter les fat chests
-//                foreach ($fatChests as $key => $chest) {
-//                    if ($key > 3) { ?>
-<!--                        <div class="col-xs-3">-->
-<!--                            <div class="img-responsive">-->
-<!--                                <img src="res/--><?php //print $chest; ?><!--_chest.png" alt="failed to load img"-->
-<!--                                     class="img-responsive big-chest"/>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        --><?php
-//                    }
-//                }
-//                ?>
+                foreach ($fatChests as $key => $chest) {
+                    if ($key > 3) { ?>
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
+                                     class="img-responsive big-chest"/>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
             </div>
         </div>
     </div>
