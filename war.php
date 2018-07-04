@@ -28,19 +28,20 @@ if ($state == "collectionDay") {
     <script>
         $(document).ready(function () {
             $('#tableIndex').on('click', 'tbody td', function () {
-                window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
+                $("body").css("cursor", "wait");
+                window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
         });
 
         function update() {
             $.ajax({
-                url: '../query/update_clan.php',
+                url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
                 success: function () {
                     $.ajax({
-                        url: '../query/update_war.php',
+                        url: 'query/update_war.php',
                         success: function () {
                             window.location.reload(true);
                         }
@@ -56,21 +57,10 @@ if ($state == "collectionDay") {
     <h1 class="whiteShadow">Guerre en cours</h1>
     <span class="whiteShadow"><?php echo $stateName ?></span>
     <?php
-    if ($stateName == "Jour de guerre") { ?>
+    if ($state == "warDay") { ?>
         <br><br>
         <div class="divStandings">
             <table class="table">
-                <thead>
-                <tr class="rowIndex">
-                    <th class="headIndex">Position</th>
-                    <th class="headIndex">Nom du clan</th>
-                    <th class="headIndex">Nombre de participants</th>
-                    <th class="headIndex">Batailles jouéees</th>
-                    <th class="headIndex">Batailles gagnées</th>
-                    <th class="headIndex">Nombre de couronnes</th>
-                    <th class="headIndex">Trophées de guerre</th>
-                </tr>
-                </thead>
                 <tbody>
                 <?php
                 if (isset($standings)) {
@@ -82,13 +72,13 @@ if ($state == "collectionDay") {
                             $pos--;
                         }
                         echo '<tr>';
-                        echo '<th class="headIndex">' . $pos . '</th>';
-                        echo '<td class="lineIndex">' . utf8_encode($clan['name']) . '</td>';
-                        echo '<td class="lineIndex">' . $clan['participants'] . '</td>';
-                        echo '<td class="lineIndex">' . $clan['battles_played'] . '</td>';
-                        echo '<td class="lineIndex">' . $clan['battles_won'] . '</td>';
-                        echo '<td class="lineIndex">' . $clan['crowns'] . '</td>';
-                        echo '<td class="lineIndex">' . $clan['war_trophies'] . '</td>';
+                        echo '<th class="whiteShadow text-center rank"><span>' . $pos . '</span></th>';
+                        echo '<td class="whiteShadow text-center">' . utf8_encode($clan['name']) . '</td>';
+                        echo '<td class="whiteShadow text-center">Participants<br>' . $clan['participants'] . '</td>';
+                        echo '<td class="whiteShadow text-center">Jouées<br>' . $clan['battles_played'] . '</td>';
+                        echo '<td class="whiteShadow text-center">Gagnées<br>' . $clan['battles_won'] . '</td>';
+                        echo '<td class="whiteShadow text-center">Couronnes<br>' . $clan['crowns'] . '</td>';
+                        echo '<td class="whiteShadow text-center">Trophées<br>' . $clan['war_trophies'] . '</td>';
                         echo '</tr>';
                         $pos++;
                         $lastBattlesWon = $clan['battles_won'];
@@ -99,23 +89,18 @@ if ($state == "collectionDay") {
                 </tbody>
             </table>
         </div>
-        <br><br>
-        <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
     <?php } ?>
+    <br><br>
+    <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
     <br><br>
     <div class="divCurrentWar">
         <table id="tableIndex" class="table">
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex">Rang</th>
-                <th class="headIndex">Nom</th>
-                <th class="headIndex">Role</th>
-                <th class="headIndex">Trophées</th>
-                <th class="headIndex">Collections jouées</th>
-                <th class="headIndex">Collections gagnées</th>
-                <th class="headIndex">Cartes gagnées</th>
-                <th class="headIndex">Batailles jouées</th>
-                <th class="headIndex">Batailles gagnées</th>
+                <th class="text-center">Rang</th>
+                <th>Joueur</th>
+                <th class="text-center" colspan="3">Collections</th>
+                <th class="text-center" colspan="2">Batailles</th>
             </tr>
             </thead>
             <tbody>
@@ -156,48 +141,37 @@ if ($state == "collectionDay") {
                 }
 
                 echo '<tr>';
-                echo '<th class="headIndex">' . $player['rank'] . '</th>';
-                echo '<td class="lineIndex"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
-                echo '<td class="lineIndex">' . utf8_encode($player['role_name']) . '</td>';
-                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';
-                echo '<td class="lineIndex">' . $player['cards'] . '</td>';
-                echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['battle_won'] . '</td>';
+                echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
+                echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
+                echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
+                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
+                echo '<td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
+                echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
+                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
                 echo '</tr>';
             }
             ?>
             <br>
-            <tr>
-                <th class="headTotalIndex"><?php echo sizeof($warPlayers); ?></th>
-                <td class="lineTotalIndex"><?php
-                    $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
-                    echo $numberOfParticipant; ?></td>
-                <td class="lineTotalIndex"><?php echo $minusParticipant; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalTrophies; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalCollectionPlayed; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalCollectionWon; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalCardsEarned; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalBattlesPlayed; ?></td>
-                <td class="lineTotalIndex"><?php echo $totalBattlesWon; ?></td>
-            </tr>
             </tbody>
-            <tfoot>
-            <tr class="rowIndex">
-                <th class="headTotalIndex">Nombre de joueur éligible à la guerre</th>
-                <th class="headTotalIndex">Nombre de participant</th>
-                <th class="headTotalIndex">Nombre d'absent</th>
-                <th class="headTotalIndex">Total des trophées</th>
-                <th class="headTotalIndex">Total des collections jouées</th>
-                <th class="headTotalIndex">Total des collections gagnées</th>
-                <th class="headTotalIndex">Total des cartes gagnées</th>
-                <th class="headTotalIndex">Total des batailles jouées</th>
-                <th class="headTotalIndex">Total des batailles gagnées</th>
-            </tr>
-            </tfoot>
         </table>
     </div>
+    <?php if ($state == "collectionDay") {
+        $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
+        ?>
+        <div class="totalTable">
+            <table>
+                <tbody>
+                <tr>
+                    <td class="whiteShadow text-center">Participants<br><?php echo $numberOfParticipant; ?></td>
+                    <td class="whiteShadow text-center">Absent<br><?php echo $minusParticipant; ?></td>
+                    <td class="whiteShadow text-center">Jouées<br><?php echo $totalCollectionPlayed ?></td>
+                    <td class="whiteShadow text-center">Gagnées<br><?php echo $totalCollectionWon ?></td>
+                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/><?php echo $totalCardsEarned ?></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    <?php } ?>
     <br><br>
 </div>
 <div id="loaderDiv">

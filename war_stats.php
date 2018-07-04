@@ -21,13 +21,13 @@ $firstWarDate = getFirstWarDate($db);
     <script>
         function update() {
             $.ajax({
-                url: '../query/update_clan.php',
+                url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
                 success: function () {
                     $.ajax({
-                        url: '../query/update_war_stats.php',
+                        url: 'query/update_war_stats.php',
                         success: function () {
                             window.location.reload(true);
                         }
@@ -38,7 +38,8 @@ $firstWarDate = getFirstWarDate($db);
 
         $(document).ready(function () {
             $('#tableIndex').on('click', 'tbody td', function () {
-                window.location = $(this).closest('tr').find('td:eq(0) a').attr('href');
+                $("body").css("cursor", "wait");
+                window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
         });
     </script>
@@ -151,7 +152,7 @@ $firstWarDate = getFirstWarDate($db);
         }
         ?>
         <tr>
-            <th class="whiteShadow text-center"><?php echo sizeof($allPlayers); ?></th>
+            <td class="whiteShadow text-center"><?php echo sizeof($allPlayers); ?></td>
             <td class="whiteShadow text-center"><?php echo 'X'; ?></td>
             <td class="whiteShadow text-center"><?php echo $allCollectionsPlayed; ?></td>
             <td class="whiteShadow text-center"><?php echo $allCollectionsWon; ?></td>
@@ -200,5 +201,4 @@ $firstWarDate = getFirstWarDate($db);
 </div>
 <?php include("footer.html"); ?>
 </body>
-<!-- TODO corriger lien <tr> pour page joueur -->
 </html>

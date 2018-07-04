@@ -13,6 +13,7 @@ if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else header('Location: index.php');
 
 $player = getPlayersInfoByTag($db, $playerTag);
+$totalWarPlayed = getTotalWarPlayedByPlayerId($db, $player['playerId']);
 
 // DECK
 $apiDeck = getPlayerCurrentDeckFromApi($api, $playerTag);
@@ -45,13 +46,13 @@ ksort($fatChests);
     <script>
         function update() {
             $.ajax({
-                url: '../query/update_clan.php',
+                url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
                 success: function () {
                     $.ajax({
-                        url: '../query/update_player.php?tag=' + $('#playerTag').html(),
+                        url: 'query/update_player.php?tag=' + $('#playerTag').html(),
                         success: function () {
                             window.location.reload(true);
                         }
@@ -62,7 +63,7 @@ ksort($fatChests);
     </script>
 </head>
 <body>
-<?php include("header.html");?>
+<?php include("header.html"); ?>
 <div class="container">
     <h1 class="whiteShadow">Détails du joueur</h1><br>
     <h2 class="whiteShadow">Deck du moment</h2>
@@ -121,15 +122,10 @@ ksort($fatChests);
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
-                <th class="headIndex">Tag</th>
-                <th class="headIndex">Nom</th>
-                <th class="headIndex">Niveau joueur</th>
-                <th class="headIndex">Trophée</th>
-                <th class="headIndex">Trophée Max</th>
+                <th class="headIndex text-center" colspan="3">Joueur</th>
+                <th class="headIndex text-center" colspan="2">Trophées</th>
                 <th class="headIndex">Arène</th>
                 <th class="headIndex text-center" colspan="2">Dons</th>
-                <th class="headIndex">Delta dons</th>
-                <th class="headIndex">Statut</th>
             </tr>
             </thead>
             <tbody>
@@ -138,101 +134,95 @@ ksort($fatChests);
                 <?php
                 echo '<tr>';
                 echo '<th class="whiteShadow">' . $player['rank'] . '</th>';
-                echo '<td id="playerTag" class="whiteShadow">' . $player['tag'] . '</td>';
-                echo '<td class="whiteShadow">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
-                echo '<td class="whiteShadow">' . $player['level'] . '</td>';
-                echo '<td class="whiteShadow">' . $player['trophies'] . '</td>';
-                echo '<td class="whiteShadow">' . $player['max_trophies'] . '</td>';
+                echo '<td id="playerTag" class="whiteShadow">Tag<br>' . $player['tag'] . '</td>';
+                echo '<td class="whiteShadow">Nom<br>' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
+                echo '<td class="whiteShadow">Niveau<br>' . $player['level'] . '</td>';
+                echo '<td class="whiteShadow">Courant<br>' . $player['trophies'] . '</td>';
+                echo '<td class="whiteShadow">Max<br>' . $player['max_trophies'] . '</td>';
                 echo '<td class="whiteShadow">' . $player['arena'] . '</td>';
-                echo '<td class="whiteShadow">' . $player['donations'] . '</td>';
-                echo '<td class="whiteShadow">' . $player['received'] . '</td>';
-                echo '<td class="whiteShadow">' . $player['delta'] . '</td>';
-                echo "<td bgcolor='#66B266'>Good</td>";
+                echo '<td class="whiteShadow">Données<br>' . $player['donations'] . '</td>';
+                echo '<td class="whiteShadow">Reçues<br>' . $player['received'] . '</td>';
                 echo '</tr>';
                 ?>
             </tbody>
         </table>
     </div>
+    <!--    TODO retrait temporaire du tableau arène, discuter son utilité-->
+    <!--    <div class="divInfoPlayer">-->
+    <!--        <table class="table">-->
+    <!--            <thead>-->
+    <!--            <tr class="rowIndex">-->
+    <!--                <th class="headIndex">Nom arène</th>-->
+    <!--                <th class="headIndex">Trophées actuels</th>-->
+    <!--                <th class="headIndex">Trophées minimum de l'arène</th>-->
+    <!--                <th class="headIndex">Numéro arène</th>-->
+    <!--            </tr>-->
+    <!--            </thead>-->
+    <!--            <tbody>-->
+    <!--            <div>-->
+    <!--                <h2 class="whiteShadow">Arène</h2>-->
+    <!--                --><?php
+    //                echo '<tr>';
+    //                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
+    //                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
+    //                echo '<td class="lineIndex">' . $player['trophy_limit'] . '</td>';
+    //                echo '<td class="lineIndex">' . $player['arena_id'] . '</td>';
+    //                echo '</tr>';
+    //                ?>
+    <!--            </tbody>-->
+    <!--        </table>-->
+    <!--    </div>-->
+    <!--    TODO Faire un tableau des absences? la tableau de la guerre est reporté plus bas-->
+    <!--    <div class="divInfoPlayer">-->
+    <!--        <table class="table">-->
+    <!--            <thead>-->
+    <!--            <tr class="rowIndex">-->
+    <!--                <th class="headIndex">Guerres jouées</th>-->
+    <!--                <th class="headIndex">Guerres gagnées</th>-->
+    <!--                <th class="headIndex">Pourcentage de victoire</th>-->
+    <!--                <th class="headIndex">Total de guerre</th>-->
+    <!--                <th class="headIndex">Total de victoire</th>-->
+    <!--                <th class="headIndex">Pourcentage global de victoire</th>-->
+    <!--            </tr>-->
+    <!--            </thead>-->
+    <!--            <tbody>-->
+    <!--            <div>-->
+    <!--                <h2 class="whiteShadow">Guerre</h2>-->
+    <!--                --><?php
+    //                echo '<tr>';
+    //                echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
+    //                echo '<td class="lineIndex">' . $player['battle_won'] . '</td>';
+    //                if ($player['battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['battle_won'] / $player['battle_played']) * 100)) . "</td>";
+    //                else echo "<td class=\"lineIndex\">0</td>";
+    //                echo '<td class="lineIndex">' . $player['total_battle_played'] . '</td>';
+    //                echo '<td class="lineIndex">' . $player['total_battle_won'] . '</td>';
+    //                if ($player['total_battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['total_battle_won'] / $player['total_battle_played']) * 100)) . "</td>";
+    //                else echo "<td class=\"lineIndex\">0</td>";
+    //                echo '</tr>';
+    //                ?>
+    <!--            </tbody>-->
+    <!--        </table>-->
+    <!--    </div>-->
     <div class="divInfoPlayer">
         <table class="table">
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex">Nom arène</th>
-                <th class="headIndex">Trophées actuels</th>
-                <th class="headIndex">Trophées minimum de l'arène</th>
-                <th class="headIndex">Numéro arène</th>
+                <th class="headIndex"></th>
+                <th class="headIndex text-center" colspan="3">Collections</th>
+                <th class="headIndex text-center" colspan="2">Batailles</th>
             </tr>
             </thead>
             <tbody>
             <div>
-                <h2 class="whiteShadow">Arène</h2>
+                <h2 class="whiteShadow">Guerres</h2>
                 <?php
                 echo '<tr>';
-                echo '<td class="lineIndex">' . $player['arena'] . '</td>';
-                echo '<td class="lineIndex">' . $player['trophies'] . '</td>';
-                echo '<td class="lineIndex">' . $player['trophy_limit'] . '</td>';
-                echo '<td class="lineIndex">' . $player['arena_id'] . '</td>';
-                echo '</tr>';
-                ?>
-            </tbody>
-        </table>
-    </div>
-    <div class="divInfoPlayer">
-        <table class="table">
-            <thead>
-            <tr class="rowIndex">
-                <th class="headIndex">Guerres jouées</th>
-                <th class="headIndex">Guerres gagnées</th>
-                <th class="headIndex">Pourcentage de victoire</th>
-                <th class="headIndex">Total de guerre</th>
-                <th class="headIndex">Total de victoire</th>
-                <th class="headIndex">Pourcentage global de victoire</th>
-            </tr>
-            </thead>
-            <tbody>
-            <div>
-                <h2 class="whiteShadow">Guerre</h2>
-                <?php
-                echo '<tr>';
-                echo '<td class="lineIndex">' . $player['battle_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['battle_won'] . '</td>';
-                if ($player['battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['battle_won'] / $player['battle_played']) * 100)) . "</td>";
-                else echo "<td class=\"lineIndex\">0</td>";
-                echo '<td class="lineIndex">' . $player['total_battle_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['total_battle_won'] . '</td>';
-                if ($player['total_battle_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['total_battle_won'] / $player['total_battle_played']) * 100)) . "</td>";
-                else echo "<td class=\"lineIndex\">0</td>";
-                echo '</tr>';
-                ?>
-            </tbody>
-        </table>
-    </div>
-    <div class="divInfoPlayer">
-        <table class="table">
-            <thead>
-            <tr class="rowIndex">
-                <th class="headIndex">Collections jouées</th>
-                <th class="headIndex">Collections gagnées</th>
-                <th class="headIndex">Pourcentage de victoire</th>
-                <th class="headIndex">Cartes gagnées</th>
-                <th class="headIndex">Cartes gagnées totales</th>
-                <th class="headIndex">Pourcentage global de victoires</th>
-            </tr>
-            </thead>
-            <tbody>
-            <div>
-                <h2 class="whiteShadow">Clan</h2>
-                <?php
-                // TODO changer le nom du tableau CLAN pour afficher les bonnes informations (collection, etc)
-                echo '<tr>';
-                echo '<td class="lineIndex">' . $player['collection_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['collection_won'] . '</td>';
-                if ($player['collection_won'] != 0) echo "<td class=\"lineIndex\">" . round((($player['collection_played'] / $player['collection_won']) * 100)) . "</td>";
-                else echo "<td class=\"lineIndex\">0</td>";
-                echo '<td class="lineIndex">' . $player['total_collection_played'] . '</td>';
-                echo '<td class="lineIndex">' . $player['total_collection_won'] . '</td>';
-                if ($player['total_collection_played'] != 0) echo "<td class=\"lineIndex\">" . round((($player['total_collection_won'] / $player['total_collection_played']) * 100)) . "</td>";
-                else echo "<td class=\"lineIndex\">0</td>";
+                echo '<td class="whiteShadow">Guerres jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
+                echo '<td class="whiteShadow text-center">Jouées<br>' . $player['total_collection_played'] . '</td>';
+                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
+                echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
+                echo '<td class="whiteShadow text-center">Jouées<br>' . $player['total_battle_played'] . '</td>';
+                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_battle_won'] . '</td>';
                 echo '</tr>';
                 ?>
             </tbody>

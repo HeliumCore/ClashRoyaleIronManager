@@ -18,7 +18,7 @@ include("tools/database.php");
     <script>
         function update() {
             $.ajax({
-                url: '../query/update_clan.php',
+                url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
                 },
@@ -30,7 +30,8 @@ include("tools/database.php");
 
         $(document).ready(function () {
             $('#tableIndex').on('click', 'tbody td', function () {
-                window.location = $(this).closest('tr').find('td:eq(1) a').attr('href');
+                $("body").css("cursor", "wait");
+                window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
         });
     </script>
@@ -77,11 +78,11 @@ include("tools/database.php");
                     <img src="res/arena/arena-.png" title="" height="50px">
                     <?php endif; ?>
                 </td>
-                <td class=" text-center">
+                <td class=" text-center whiteShadow">
                     Reçues <br>
                     <?php print $player['donations'] ?>
                 </td>
-                <td class=" text-center">
+                <td class=" text-center whiteShadow">
                     Données <br>
                     <?php print $player['donations_received'] ?>
                 </td>

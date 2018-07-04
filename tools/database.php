@@ -505,6 +505,17 @@ WHERE tag = \"%s\"
     return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
 }
 
+function getTotalWarPlayedByPlayerId($db, $id) {
+    $pattern = "
+    SELECT COUNT(player_war.id) as total_war_played
+    FROM player_war
+    WHERE collection_played > 0
+    AND player_id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $id));
+}
+
 function getCardsInCurrentDeck($db, $playerId)
 {
     $pattern = "
