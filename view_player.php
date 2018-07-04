@@ -207,7 +207,7 @@ ksort($fatChests);
         <table class="table">
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex"></th>
+                <th class="headIndex">Guerres</th>
                 <th class="headIndex text-center" colspan="3">Collections</th>
                 <th class="headIndex text-center" colspan="2">Batailles</th>
             </tr>
@@ -217,7 +217,7 @@ ksort($fatChests);
                 <h2 class="whiteShadow">Guerres</h2>
                 <?php
                 echo '<tr>';
-                echo '<td class="whiteShadow">Guerres jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
+                echo '<td class="whiteShadow">Jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['total_collection_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
                 echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
