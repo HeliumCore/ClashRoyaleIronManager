@@ -52,7 +52,7 @@ ksort($fatChests);
                 },
                 success: function () {
                     $.ajax({
-                        url: 'query/update_player.php?tag=' + $('#playerTag').html(),
+                        url: 'query/update_player.php?tag=' + $('input:hidden[name=playerTagHidden]').val(),
                         success: function () {
                             window.location.reload(true);
                         }
@@ -133,6 +133,7 @@ ksort($fatChests);
                 <h2 class="whiteShadow">Joueur</h2>
                 <?php
                 echo '<tr>';
+                echo '<input id="playerTagHidden" type="hidden" name="playerTagHidden" value="' . $player['tag'] . '" />';
                 echo '<th class="whiteShadow">' . $player['rank'] . '</th>';
                 echo '<td id="playerTag" class="whiteShadow">Tag<br>' . $player['tag'] . '</td>';
                 echo '<td class="whiteShadow">Nom<br>' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
