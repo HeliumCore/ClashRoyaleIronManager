@@ -10,6 +10,66 @@ include("tools/database.php");
 
 $allPlayers = getAllPlayersByRank($db);
 $firstWarDate = getFirstWarDate($db);
+
+global $allCollections;
+global $allCollectionsPlayed;
+global $allCollectionsWon;
+global $allCardsEarned;
+global $allWars;
+global $allBattlePlayed;
+global $allBattleWon;
+global $allMissedCollections;
+global $allMissedWar;
+global $missedConsecutiveCollection;
+global $missedConsecutiveWar;
+global $allBadStatus;
+
+$allCollections = 0;
+$allCollectionsPlayed = 0;
+$allCollectionsWon = 0;
+$allCardsEarned = 0;
+$allWars = 0;
+$allBattlePlayed = 0;
+$allBattleWon = 0;
+$allMissedCollections = 0;
+$allMissedWar = 0;
+$allBadStatus = 0;
+$finalPlayerList = array();
+foreach ($allPlayers as $player) {
+    $warStats = getWarStatsByPlayerId($db, $player['id']);
+    $thisPlayer['rank'] = $player['rank'];
+    $thisPlayer['tag'] = $player['tag'];
+    $thisPlayer['name'] = $player['name'];
+    $thisPlayer['totalCollectionPlayed'] = $totalCollectionPlayed = $warStats['total_collection_played'] != null ? $warStats['total_collection_played'] : 0;
+    $thisPlayer['totalCollectionWon'] = $totalCollectionWon = $warStats['total_collection_won'] != null ? $warStats['total_collection_won'] : 0;
+    $thisPlayer['totalCardsEarned'] = $totalCardsEarned = $warStats['total_cards_earned'] != null ? $warStats['total_cards_earned'] : 0;
+    $thisPlayer['totalBattlesPlayed'] = $totalBattlesPlayed = $warStats['total_battle_played'] != null ? $warStats['total_battle_played'] : 0;
+    $thisPlayer['totalBattlesWon'] = $totalBattlesWon = $warStats['total_battle_won'] != null ? $warStats['total_battle_won'] : 0;
+    $missedCollection = countMissedCollection($db, $player['id'])['missed_collection'];
+    $thisPlayer['missedWar'] = $missedCollection == null ? 0 : $missedCollection;
+    $missedWar = countMissedWar($db, $player['id'])['missed_war'];
+    $thisPlayer['missedWar'] = $missedWar == null ? 0 : $missedWar;
+
+    $totalCollection = $totalCollectionPlayed + $missedCollection;
+    $totalWar = $totalBattlesPlayed + $missedWar;
+
+    $allCollections += $totalCollection;
+    $allCollectionsPlayed += $totalCollectionPlayed;
+    $allCollectionsWon += $totalCollectionWon;
+    $allMissedCollections += $missedCollection;
+    $allCardsEarned += $totalCardsEarned;
+    $allWars += $totalWar;
+    $allBattlePlayed += $totalBattlesPlayed;
+    $allBattleWon += $totalBattlesWon;
+    $allMissedWar += $missedWar;
+
+    $thisPlayer['warning'] = ($missedCollection + $missedWar) >= 2;
+    $thisPlayer['ban'] = ($missedCollection + $missedWar) >= 3;
+    if($thisPlayer['warning'] || $thisPlayer['ban']){
+        $allBadStatus++;
+    }
+    $finalPlayerList[] = $thisPlayer;
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,149 +111,111 @@ $firstWarDate = getFirstWarDate($db);
     <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
-    <table class="table" id="tableIndex">
-        <thead>
-        <tr class="rowIndex">
-            <th class="text-center">Rang</th>
-            <th>Joueur</th>
-            <th class="text-center" colspan="6">Collections</th>
-            <th class="text-center" colspan="5">Batailles</th>
-            <th>Statut</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        global $allCollections;
-        global $allCollectionsPlayed;
-        global $allCollectionsWon;
-        global $allCardsEarned;
-        global $allWars;
-        global $allBattlePlayed;
-        global $allBattleWon;
-        global $allMissedCollections;
-        global $allMissedWar;
-        global $missedConsecutiveCollection;
-        global $missedConsecutiveWar;
-        global $allBadStatus;
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab" data-toggle="tab">Collections</a></li>
+    <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab">Batailles</a></li>
+    </ul>
 
-        $allCollections = 0;
-        $allCollectionsPlayed = 0;
-        $allCollectionsWon = 0;
-        $allCardsEarned = 0;
-        $allWars = 0;
-        $allBattlePlayed = 0;
-        $allBattleWon = 0;
-        $allMissedCollections = 0;
-        $allMissedWar = 0;
-        $allBadStatus = 0;
-        foreach ($allPlayers as $player) {
-            $warStats = getWarStatsByPlayerId($db, $player['id']);
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="collect">
+            <table class="table" id="tableIndex">
+                <tbody>
+                <tr>
+                    <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
+                    <td class="whiteShadow text-center">Jouées<br><?php echo $allCollectionsPlayed; ?></td>
+                    <td class="whiteShadow text-center">Gagnées<br><?php echo $allCollectionsWon; ?></td>
+                    <td class="whiteShadow text-center">
+                        % victoires<br>
+                    <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : 0; ?>
+                    </td>
+                    <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
+                    <td class="whiteShadow text-center">% présences<br>
+                    <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : 0; ?>
+                    </td>
+                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
+                    <td bgcolor="#66B266"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table" id="tableIndex">
+                <tbody>
+                    <?php foreach($finalPlayerList as $player) : ?> 
+                    <tr>
+                        <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
+                        <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                            <?php echo utf8_encode($player['name']); ?></a></td>
+                        <td class="whiteShadow text-center">jouées<br><?php echo $player['totalCollectionPlayed']; ?></td>
+                        <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalCollectionWon']; ?></td>
+                        <td class="whiteShadow text-center">Victoires <br>
+                        <?php echo ($player['totalCollectionPlayed'] != 0) ? round((($player['totalCollectionWon'] / $player['totalCollectionPlayed']) * 100)). '%' : '--'; ?>
+                        <td class="whiteShadow  text-center">Absence<br><?php echo $player['missedCollection'] ?></td>
+                        <td class="whiteShadow text-center">Présence<br>
+                        <?php echo ($player['totalCollectionPlayed'] != 0) ? round(($player['totalCollection'] / $player['totalCollectionPlayed']) * 100) : 0; ?>
+                        </td>
+                        <td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?></td>
+                        <!-- Status -->
+                        <?php if ($player['ban']) : ?>
+                            <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
+                        <?php elseif ($player['warning']): ?>
+                            <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
+                        <?php else : ?>
+                            <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="war">
+            <table class="table" id="tableIndex">
+                <tbody>
+                <tr>
+                    <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
+                    <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
+                    <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
+                    <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">% victoires<br>' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
+                    else echo '<td class="whiteShadow">0</td>'; ?>
+                    <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
+                    <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">% présences<br>' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
+                    else echo '<td class="whiteShadow">0</td>'; ?>
+                    <td bgcolor="#66B266"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table" id="tableIndex">
+                <tbody>
+                   <?php foreach($finalPlayerList as $player) : ?> 
+                    <tr>
+                        <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
+                        <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                            <?php echo utf8_encode($player['name']); ?></a></td>
+                        <td class="whiteShadow text-center">jouées<br><?php echo $player['totalBattlesPlayed']; ?></td>
+                        <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalBattlesWon']; ?></td>
+                        <td class="whiteShadow text-center">Victoires<br>
+                        <?php echo ($player['totalBattlesPlayed'] != 0) ? round((($player['totalBattlesWon'] / $player['totalBattlesPlayed']) * 100)). '%' : '-'; ?>
+                        </td>
+                        <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?></td>
+                        <td class="whiteShadow text-center">Présence<br>
+                        <?php echo ($player['totalBattlesPlayed'] != 0) ? round(($player['totalWar'] / $player['totalBattlesPlayed']) * 100). "%" : '-'; ?>
+                        </td>
 
-            $totalCollectionPlayed = $warStats['total_collection_played'] != null ? $warStats['total_collection_played'] : 0;
-            $totalCollectionWon = $warStats['total_collection_won'] != null ? $warStats['total_collection_won'] : 0;
-            $totalCardsEarned = $warStats['total_cards_earned'] != null ? $warStats['total_cards_earned'] : 0;
-            $totalBattlesPlayed = $warStats['total_battle_played'] != null ? $warStats['total_battle_played'] : 0;
-            $totalBattlesWon = $warStats['total_battle_won'] != null ? $warStats['total_battle_won'] : 0;
-            $missedCollection = countMissedCollection($db, $player['id'])['missed_collection'];
-            $missedCollection = $missedCollection == null ? 0 : $missedCollection;
-            $missedWar = countMissedWar($db, $player['id'])['missed_war'];
-            $missedWar = $missedWar == null ? 0 : $missedWar;
-
-            $totalCollection = $totalCollectionPlayed + $missedCollection;
-            $totalWar = $totalBattlesPlayed + $missedWar;
-
-            $allCollections += $totalCollection;
-            $allCollectionsPlayed += $totalCollectionPlayed;
-            $allCollectionsWon += $totalCollectionWon;
-            $allMissedCollections += $missedCollection;
-            $allCardsEarned += $totalCardsEarned;
-            $allWars += $totalWar;
-            $allBattlePlayed += $totalBattlesPlayed;
-            $allBattleWon += $totalBattlesWon;
-            $allMissedWar += $missedWar;
-
-            $warning = ($missedCollection + $missedWar) >= 2;
-            $ban = ($missedCollection + $missedWar) >= 3;
-
-            echo '<tr>';
-            echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
-            echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
-            // Collections
-            echo '<td class="whiteShadow text-center">jouées<br>' . $totalCollectionPlayed . '</td>';
-            echo '<td class="whiteShadow text-center">gagnées<br>' . $totalCollectionWon . '</td>';
-            echo '<td class="whiteShadow text-center">Victoires <br>';
-            echo ($totalCollectionPlayed != 0) ? round((($totalCollectionWon / $totalCollectionPlayed) * 100)). '%' : '--';
-            echo '<td class="whiteShadow  text-center">Absence<br>' . $missedCollection . '</td>';
-            echo '<td class="whiteShadow text-center">Présence<br>' ;
-            echo ($totalCollectionPlayed != 0) ? round(($totalCollection / $totalCollectionPlayed) * 100) : 0;
-            echo  '</td>';
-            echo '<td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $totalCardsEarned . '</td>';
-            // War
-            echo '<td class="whiteShadow text-center">jouées<br>' . $totalBattlesPlayed . '</td>';
-            echo '<td class="whiteShadow text-center">gagnées<br>' . $totalBattlesWon . '</td>';
-            echo '<td class="whiteShadow text-center">Victoires<br>';
-            echo ($totalBattlesPlayed != 0) ? round((($totalBattlesWon / $totalBattlesPlayed) * 100)). '%' : '-';
-            echo '</td>';
-            echo '<td class="whiteShadow text-center">Absence<br>' . $missedWar . '</td>';
-            echo '<td class="whiteShadow text-center">Présence<br>';
-            echo ($totalBattlesPlayed != 0) ? round(($totalWar / $totalBattlesPlayed) * 100). "%" : '-';
-            echo '</td>';
-            // Status
-            if ($ban) {
-                echo '<td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>';
-                $allBadStatus++;
-            } else if ($warning) {
-                echo '<td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>';
-                $allBadStatus++;
-            } else {
-                echo '<td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>';
-            }
-            echo '</tr>';
-        }
-        ?>
-        <tr>
-            <td class="whiteShadow text-center"><?php echo sizeof($allPlayers); ?></td>
-            <td class="whiteShadow text-center"><?php echo 'X'; ?></td>
-            <td class="whiteShadow text-center"><?php echo $allCollectionsPlayed; ?></td>
-            <td class="whiteShadow text-center"><?php echo $allCollectionsWon; ?></td>
-            <td class="whiteShadow text-center">
-            <?php 
-            echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : 0; ?>
-            </td>
-            <td class="whiteShadow text-center"><?php echo $allMissedCollections; ?></td>
-            <td class="whiteShadow text-center">
-            <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : 0; ?>
-            </td>
-            <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
-            <td class="whiteShadow text-center"><?php echo $allBattlePlayed; ?></td>
-            <td class="whiteShadow text-center"><?php echo $allBattleWon; ?></td>
-            <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
-            else echo '<td class="whiteShadow">0</td>'; ?>
-            <td class="whiteShadow text-center"><?php echo $allMissedWar; ?></td>
-            <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
-            else echo '<td class="whiteShadow">0</td>'; ?>
-            <td bgcolor="#66B266"><?php echo $allBadStatus; ?></td>
-        </tr>
-        </tbody>
-        <thead>
-        <tr class="rowIndex">
-            <th class="">Nombre de joueur éligible à la guerre</th>
-            <th class="headTotalIndex">X</th>
-            <th class="headTotalIndex">Total des collections jouées</th>
-            <th class="headTotalIndex">Total des collections gagnées</th>
-            <th class="headTotalIndex">Pourcentage victoire collections</th>
-            <th class="headTotalIndex">Total des absence collections</th>
-            <th class="headTotalIndex">Pourcentage de présences absences</th>
-            <th class="headTotalIndex">Total des cartes récoltées</th>
-            <th class="headTotalIndex">Total des batailles jouées</th>
-            <th class="headTotalIndex">Total des batailles gagnées</th>
-            <th class="headTotalIndex">Pourcentage victoire guerres</th>
-            <th class="headTotalIndex">Total des absence batailles</th>
-            <th class="headTotalIndex">Pourcentage de présence guerres</th>
-            <th class="headTotalIndex">Nombre de status pas RAS</th>
-        </tr>
-        </thead>
-    </table>
+                        <!-- Status -->
+                        <?php if ($player['ban']) : ?>
+                            <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
+                        <?php elseif ($player['warning']): ?>
+                            <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
+                        <?php else : ?>
+                            <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
+                        <?php endif; ?>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
     <br>
 </div>
 <div id="loaderDiv">
