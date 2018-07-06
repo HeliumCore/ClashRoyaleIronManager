@@ -151,7 +151,6 @@ if ($state == "collectionDay") {
                 echo '</tr>';
             }
             ?>
-            <br>
             </tbody>
         </table>
     </div>
