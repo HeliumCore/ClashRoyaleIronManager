@@ -129,3 +129,21 @@ tbody tr:nth-child(3) .rank span{
 .pointerHand {
     cursor: pointer;
 }
+
+.headIndex {
+    color: #84afd3;
+    text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
+}
+
+.table-border {
+    border-right: 2px solid #84afd3;
+    border-left: 2px solid #84afd3;
+}
+
+.table-border-left {
+    border-left: 2px solid #84afd3;
+}
+
+.table-border-right {
+    border-right: 2px solid #84afd3;
+}

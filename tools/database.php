@@ -510,7 +510,9 @@ FROM players
 INNER JOIN arena ON arena.arena_id = players.arena
 INNER JOIN role ON role.id = players.role_id
 INNER JOIN player_war ON player_war.player_id = players.id
+INNER JOIN war ON player_war.war_id = war.id
 WHERE tag = \"%s\"
+AND war.id > 23
 ";
     return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
 }

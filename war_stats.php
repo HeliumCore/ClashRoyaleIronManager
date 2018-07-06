@@ -97,9 +97,11 @@ foreach ($allPlayers as $player) {
         }
 
         $(document).ready(function () {
-            $('.js-player-table').on('click', 'tbody td', function () {
-                $("body").css("cursor", "wait");
-                window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
+            $('.js-player-table').each(function() {
+            $(this).on('click', 'tbody td', function () {
+                    $("body").css("cursor", "wait");
+                    window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
+                });
             });
         });
     </script>
@@ -143,7 +145,7 @@ foreach ($allPlayers as $player) {
             <table class="table js-player-table" id="tableIndex">
                 <tbody>
                     <?php foreach($finalPlayerList as $player) : ?> 
-                    <tr>
+                    <tr class="pointerHand">
                         <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
                         <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
                             <?php echo utf8_encode($player['name']); ?></a></td>
@@ -173,7 +175,7 @@ foreach ($allPlayers as $player) {
             <div class="table-responsive">
                 <table class="table" id="tableIndex">
                     <tbody>
-                    <tr class="pointerHand">
+                    <tr>
                         <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
                         <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
                         <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
@@ -192,7 +194,7 @@ foreach ($allPlayers as $player) {
                 </table>
             </div>
             <div class="table-responsive">
-                <table class="table" id="tableIndex">
+                <table class="table js-player-table" id="tableIndex">
                     <tbody>
                     <?php foreach($finalPlayerList as $player) : ?>
                         <tr class="pointerHand">

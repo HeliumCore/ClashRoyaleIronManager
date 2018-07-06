@@ -72,7 +72,7 @@ if ($state == "collectionDay") {
                             $pos--;
                         }
                         echo '<tr>';
-                        echo '<th class="whiteShadow text-center rank"><span>' . $pos . '</span></th>';
+                        echo '<td class="whiteShadow text-center rank"><span>' . $pos . '</span></td>';
                         echo '<td class="whiteShadow text-center">' . utf8_encode($clan['name']) . '</td>';
                         echo '<td class="whiteShadow text-center">Participants<br>' . $clan['participants'] . '</td>';
                         echo '<td class="whiteShadow text-center">Jouées<br>' . $clan['battles_played'] . '</td>';
@@ -97,10 +97,10 @@ if ($state == "collectionDay") {
         <table id="tableIndex" class="table">
             <thead>
             <tr class="rowIndex">
-                <th class="text-center">Rang</th>
-                <th>Joueur</th>
-                <th class="text-center" colspan="3">Collections</th>
-                <th class="text-center" colspan="2">Batailles</th>
+                <th class="text-center headIndex">Rang</th>
+                <th class="headIndex">Joueur</th>
+                <th class="text-center headIndex" colspan="3">Collections</th>
+                <th class="text-center headIndex" colspan="2">Batailles</th>
             </tr>
             </thead>
             <tbody>
@@ -156,9 +156,10 @@ if ($state == "collectionDay") {
         </table>
     </div>
     <?php if ($state == "collectionDay") {
+//        TODO mettre les classes du tableau pour bien l'afficher
         $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
         ?>
-        <div class="totalTable">
+        <div class="table">
             <table>
                 <tbody>
                 <tr>
