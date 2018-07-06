@@ -25,6 +25,7 @@ h1.whiteShadow {
 
 .table-responsive {
     background: #DDEAEF;
+    overflow-x: initial;
 }
 
 /* CHEST */

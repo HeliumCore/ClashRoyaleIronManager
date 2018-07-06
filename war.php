@@ -58,7 +58,7 @@ if ($state == "collectionDay") {
     <span class="whiteShadow"><?php echo $stateName ?></span>
     <?php
     if ($state == "warDay") { ?>
-        <br><br>
+        <br>
         <div class="divStandings table-responsive">
             <table class="table">
                 <tbody>

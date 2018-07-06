@@ -147,8 +147,8 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </div>
         </div>
     </div>
-
-    <br> <br><br>
+    <br><br><br>
+    <h2 class="whiteShadow">Joueur</h2>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
@@ -162,7 +162,6 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </thead>
             <tbody>
             <div>
-                <h2 class="whiteShadow">Joueur</h2>
                 <?php
                 echo '<tr>';
                 echo '<input id="playerTagHidden" type="hidden" name="playerTagHidden" value="' . $player['tag'] . '" />';
@@ -180,6 +179,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
+    <h2 class="whiteShadow">Guerres</h2><br>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
@@ -191,7 +191,6 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </thead>
             <tbody>
             <div>
-                <h2 class="whiteShadow">Guerres</h2>
                 <?php
                 echo '<tr>';
                 echo '<td class="whiteShadow">Jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
@@ -205,12 +204,12 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
+    <h2 class="whiteShadow">Absences</h2><br>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
             <tbody>
             <div>
-                <h2 class="whiteShadow">Absences</h2>
                 <?php
 
                 echo '<tr>';
