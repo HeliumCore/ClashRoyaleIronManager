@@ -173,7 +173,7 @@ foreach ($allPlayers as $player) {
             <div class="table-responsive">
                 <table class="table" id="tableIndex">
                     <tbody>
-                    <tr>
+                    <tr class="pointerHand">
                         <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
                         <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
                         <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
@@ -195,7 +195,7 @@ foreach ($allPlayers as $player) {
                 <table class="table" id="tableIndex">
                     <tbody>
                     <?php foreach($finalPlayerList as $player) : ?>
-                        <tr>
+                        <tr class="pointerHand">
                             <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
                             <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
                                     <?php echo utf8_encode($player['name']); ?></a></td>

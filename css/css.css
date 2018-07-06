@@ -104,3 +104,23 @@ tbody tr:nth-child(3) .rank span{
 .tab-link:hover {
     color: #337ab7;
 }
+
+.img-responsive {
+    position: relative;
+    text-align: center;
+}
+
+.chestNumber {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
+
+#spanDeckLink {
+    position: relative;
+    bottom: 15px;
+}
+
+.pointerHand {
+    cursor: pointer;
+}

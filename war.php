@@ -140,7 +140,7 @@ if ($state == "collectionDay") {
                     $minusParticipant++;
                 }
 
-                echo '<tr>';
+                echo '<tr class="pointerHand">';
                 echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
                 echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';

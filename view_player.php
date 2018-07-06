@@ -60,6 +60,24 @@ ksort($fatChests);
                 }
             })
         }
+        $(document).ready(function () {
+            $('#deckLinkDiv').click(function () {
+                $.ajax({
+                    url: 'query/update_clan.php',
+                    beforeSend: function () {
+                        $('#loaderDiv').show();
+                    },
+                    success: function () {
+                        $.ajax({
+                            url: 'query/update_player.php?tag=' + $('input:hidden[name=playerTagHidden]').val(),
+                            success: function () {
+                                window.location = $('#hd_deckLink').data('link');
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -72,7 +90,6 @@ ksort($fatChests);
         <div class="col-md-5">
             <div class="row">
                 <?php
-//                TODO afficher X coffres supplemetaires (les upcomings) si un des gros est dans cette liste
                 foreach ($apiDeck as $card): ?>
                     <div class="col-xs-3">
                         <div class="img-responsive">
@@ -80,22 +97,30 @@ ksort($fatChests);
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <a href="<?php print $deckLink ?>" class="deckLink "><img src="images/ui/copy-deck.png" height="50px"
-                                                                          alt="Copier le lien"/></a>
-                <span class="whiteShadow">Si le lien ne marche pas ou ne pointe pas sur le bon deck, actualiser les informations</span>
+                <div id="deckLinkDiv" class="text-center pointerHand">
+                    <input type="hidden" id="hd_deckLink" data-link="<?php print $deckLink ?>"/>
+                    <input class="deckLink" id="input_deckLink" type="image" src="images/ui/copy-deck.png" height="50px"
+                           alt="Copier le lien"/>
+                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                </div>
             </div>
         </div>
-        <!-- TODO trouver un moyen d'afficher les positions (ex: +54)-->
         <div class="col-md-5 col-md-offset-2">
             <div class="row">
                 <?php
                 $counter = 1;
+                global $needed;
+                $needed = 3;
                 foreach ($upcomingChests[0] as $nextChest):
-                    if ($counter <= 3) { ?>
+                    $isFatChest = !($nextChest == 'silver' || $nextChest == 'gold');
+                    if ($isFatChest)
+                        $needed++;
+                if ($counter <= $needed) { ?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive little-chest chests"/>
+                                <span class="chestNumber whiteShadow">+<?php print $counter ;?></span>
                             </div>
                         </div>
                         <?php
@@ -108,6 +133,7 @@ ksort($fatChests);
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive big-chest chests"/>
+                                <span class="chestNumber whiteShadow">+<?php print $chests[$chest];?></span>
                             </div>
                         </div>
                         <?php

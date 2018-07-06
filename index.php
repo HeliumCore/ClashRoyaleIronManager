@@ -55,7 +55,7 @@ include("tools/database.php");
         </thead>
         <tbody>
         <?php foreach (getAllPlayersForIndex($db) as $player) : ?>
-            <tr>
+            <tr class="pointerHand">
                 <td class="rank text-center"><span> <?php echo $player['rank']; ?></span></td>
                 <td class=" whiteShadow">
                     <a class="linkToPlayer" href="view_player.php?tag=<?php print $player['tag']?>">
