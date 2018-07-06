@@ -12,7 +12,7 @@ include("tools/database.php");
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home</title>
+    <title>Iron</title>
     
     <?php include("head.php"); ?>
     <script>
