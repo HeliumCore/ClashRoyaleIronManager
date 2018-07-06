@@ -46,7 +46,7 @@ foreach ($allPlayers as $player) {
     $thisPlayer['totalBattlesPlayed'] = $totalBattlesPlayed = $warStats['total_battle_played'] != null ? $warStats['total_battle_played'] : 0;
     $thisPlayer['totalBattlesWon'] = $totalBattlesWon = $warStats['total_battle_won'] != null ? $warStats['total_battle_won'] : 0;
     $missedCollection = countMissedCollection($db, $player['id'])['missed_collection'];
-    $thisPlayer['missedWar'] = $missedCollection == null ? 0 : $missedCollection;
+    $thisPlayer['missedCollection'] = $missedCollection == null ? 0 : $missedCollection;
     $missedWar = countMissedWar($db, $player['id'])['missed_war'];
     $thisPlayer['missedWar'] = $missedWar == null ? 0 : $missedWar;
 
@@ -128,17 +128,19 @@ foreach ($allPlayers as $player) {
                     <td class="whiteShadow text-center">Gagnées<br><?php echo $allCollectionsWon; ?></td>
                     <td class="whiteShadow text-center">
                         % victoires<br>
-                    <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : 0; ?>
+                    <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : '--'; ?>
                     </td>
                     <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
                     <td class="whiteShadow text-center">% présences<br>
-                    <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : 0; ?>
+                    <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : '--'; ?>
                     </td>
                     <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
-                    <td bgcolor="#66B266"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
+                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
                 </tr>
                 </tbody>
             </table>
+<!--            TODO essayer de centrer le AllBadStatus (v align dispo dans le bootstrap ?)-->
+<!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur-->
             <table class="table" id="tableIndex">
                 <tbody>
                     <?php foreach($finalPlayerList as $player) : ?> 
@@ -180,7 +182,7 @@ foreach ($allPlayers as $player) {
                     <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
                     <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">% présences<br>' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
                     else echo '<td class="whiteShadow">0</td>'; ?>
-                    <td bgcolor="#66B266"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
+                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
                 </tr>
                 </tbody>
             </table>

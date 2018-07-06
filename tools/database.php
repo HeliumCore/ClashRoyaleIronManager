@@ -384,6 +384,16 @@ ORDER BY rank ASC
     return fetch_all_query($db, $query);
 }
 
+function removePlayerFromClan($db, $tag) {
+    $pattern = "
+    UPDATE players
+    SET in_clan = 0
+    WHERE tag = \"%s\"
+    ";
+
+    execute_query($db, utf8_decode(sprintf($pattern, $tag)));
+}
+
 // ----------------- DECKS -----------------
 function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
 {
@@ -559,6 +569,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_id = %d
 AND war.past_war > 0
+AND war.id > 23
 ";
 
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -572,6 +583,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.battle_played = 0
 AND war.past_war > 0
+AND war.id > 23
 AND player_war.player_id = %d
 ";
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -580,12 +592,12 @@ AND player_war.player_id = %d
 function countMissedCollection($db, $playerId)
 {
     $pattern = "
-SELECT player_war.collection_played as missed_collection
+SELECT COUNT(player_war.id) as missed_collection
 FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.collection_played = 0
 AND war.past_war > 0
-AND war.created != 1530050844
+AND war.id > 23
 AND player_war.player_id = %d
 ";
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -597,7 +609,7 @@ function getFirstWarDate($db)
 SELECT created
 FROM war
 WHERE past_war > 0
-AND created != 1530050844
+AND war.id > 23
 LIMIT 1
 ";
     return fetch_query($db, $query);
