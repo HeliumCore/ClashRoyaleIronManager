@@ -92,7 +92,7 @@ if ($state == "collectionDay") {
     <?php } ?>
     <br><br>
     <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
-    <br><br>
+    <br>
     <div class="divCurrentWar">
         <table id="tableIndex" class="table">
             <thead>

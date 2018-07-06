@@ -84,6 +84,10 @@ tbody tr:nth-child(3) .rank span{
     background: #BE7A54;
 }
 
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    vertical-align: middle;
+}
+
 .chests {
     max-height: 80px;
     margin: 5px;
@@ -91,4 +95,12 @@ tbody tr:nth-child(3) .rank span{
 
 .cards {
     max-height: 109px;
+}
+
+.tab-link:not(.active) {
+    color: #fff;
+}
+
+.tab-link:hover {
+    color: #337ab7;
 }

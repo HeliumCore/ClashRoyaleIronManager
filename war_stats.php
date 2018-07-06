@@ -112,9 +112,9 @@ foreach ($allPlayers as $player) {
     <br>
     <br><br>
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab" data-toggle="tab">Collections</a></li>
-    <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab">Batailles</a></li>
+    <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab" data-toggle="tab" class="tab-link">Collections</a></li>
+    <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab" class="tab-link">Batailles</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -139,7 +139,6 @@ foreach ($allPlayers as $player) {
                 </tr>
                 </tbody>
             </table>
-<!--            TODO essayer de centrer le AllBadStatus (v align dispo dans le bootstrap ?)-->
 <!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur-->
             <table class="table js-player-table" id="tableIndex">
                 <tbody>
