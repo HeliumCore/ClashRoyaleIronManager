@@ -97,7 +97,7 @@ foreach ($allPlayers as $player) {
         }
 
         $(document).ready(function () {
-            $('#tableIndex').on('click', 'tbody td', function () {
+            $('.js-player-table').on('click', 'tbody td', function () {
                 $("body").css("cursor", "wait");
                 window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
@@ -141,7 +141,7 @@ foreach ($allPlayers as $player) {
             </table>
 <!--            TODO essayer de centrer le AllBadStatus (v align dispo dans le bootstrap ?)-->
 <!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur-->
-            <table class="table" id="tableIndex">
+            <table class="table js-player-table" id="tableIndex">
                 <tbody>
                     <?php foreach($finalPlayerList as $player) : ?> 
                     <tr>
