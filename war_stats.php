@@ -177,11 +177,15 @@ foreach ($allPlayers as $player) {
                         <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
                         <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
                         <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
-                        <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">% victoires<br>' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
-                        else echo '<td class="whiteShadow">0</td>'; ?>
+                        <td class="whiteShadow text-center">% victoires<br>
+                            <?php if ($allBattlePlayed != 0) echo round((($allBattleWon / $allBattlePlayed) * 100));
+                            else echo '--'; ?>
+                        </td>
                         <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
-                        <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">% présences<br>' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
-                        else echo '<td class="whiteShadow">0</td>'; ?>
+                        <td class="whiteShadow text-center">% présences<br>
+                            <?php if ($allWars != 0) echo '' . round(($allBattlePlayed / $allWars) * 100);
+                            else echo '--'; ?>
+                        </td>
                         <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
                     </tr>
                     </tbody>
