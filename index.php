@@ -75,7 +75,10 @@ include("tools/database.php");
                     <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png"
                          title="<?php print $player['arena'] ?>" height="50px">
                     <?php else : ?>
-                    <img src="res/arena/arena-.png" title="" height="50px">
+                    <div>
+                        <img src="res/arena/arena-.png" title="" height="50px">
+                        <span class="whiteShadow arenaNumber"><?php print $player['arena_id'];?></span>
+                    </div>
                     <?php endif; ?>
                 </td>
                 <td class=" text-center whiteShadow">

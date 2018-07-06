@@ -121,6 +121,11 @@ tbody tr:nth-child(3) .rank span{
     bottom: 15px;
 }
 
+.arenaNumber {
+    position: relative;
+    right: 32%;
+}
+
 .pointerHand {
     cursor: pointer;
 }
