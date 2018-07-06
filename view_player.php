@@ -179,7 +179,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
-    <h2 class="whiteShadow">Guerres</h2><br>
+    <h2 class="whiteShadow">Guerres</h2>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
@@ -204,7 +204,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
-    <h2 class="whiteShadow">Absences</h2><br>
+    <h2 class="whiteShadow">Absences</h2>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
