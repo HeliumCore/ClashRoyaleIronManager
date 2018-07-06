@@ -122,54 +122,58 @@ foreach ($allPlayers as $player) {
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="collect">
-            <table class="table" id="tableIndex">
-                <tbody>
-                <tr>
-                    <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
-                    <td class="whiteShadow text-center">Jouées<br><?php echo $allCollectionsPlayed; ?></td>
-                    <td class="whiteShadow text-center">Gagnées<br><?php echo $allCollectionsWon; ?></td>
-                    <td class="whiteShadow text-center">
-                        % victoires<br>
-                    <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : '--'; ?>
-                    </td>
-                    <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
-                    <td class="whiteShadow text-center">% présences<br>
-                    <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : '--'; ?>
-                    </td>
-                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
-                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
-                </tr>
-                </tbody>
-            </table>
-<!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur-->
-            <table class="table js-player-table" id="tableIndex">
-                <tbody>
-                    <?php foreach($finalPlayerList as $player) : ?> 
-                    <tr class="pointerHand">
-                        <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
-                        <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
-                            <?php echo utf8_encode($player['name']); ?></a></td>
-                        <td class="whiteShadow text-center">jouées<br><?php echo $player['totalCollectionPlayed']; ?></td>
-                        <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalCollectionWon']; ?></td>
-                        <td class="whiteShadow text-center">Victoires <br>
-                        <?php echo ($player['totalCollectionPlayed'] != 0) ? round((($player['totalCollectionWon'] / $player['totalCollectionPlayed']) * 100)). '%' : '--'; ?>
-                        <td class="whiteShadow  text-center">Absence<br><?php echo $player['missedCollection'] ?></td>
-                        <td class="whiteShadow text-center">Présence<br>
-                        <?php echo ($player['totalCollectionPlayed'] != 0) ? round(($player['totalCollection'] / $player['totalCollectionPlayed']) * 100) : 0; ?>
+            <div class="table-responsive">
+                <table class="table" id="tableIndex">
+                    <tbody>
+                    <tr>
+                        <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
+                        <td class="whiteShadow text-center">Jouées<br><?php echo $allCollectionsPlayed; ?></td>
+                        <td class="whiteShadow text-center">Gagnées<br><?php echo $allCollectionsWon; ?></td>
+                        <td class="whiteShadow text-center">
+                            % victoires<br>
+                            <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : '--'; ?>
                         </td>
-                        <td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?></td>
-                        <!-- Status -->
-                        <?php if ($player['ban']) : ?>
-                            <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
-                        <?php elseif ($player['warning']): ?>
-                            <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
-                        <?php else : ?>
-                            <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
-                        <?php endif; ?>
+                        <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
+                        <td class="whiteShadow text-center">% présences<br>
+                            <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : '--'; ?>
+                        </td>
+                        <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $allCardsEarned; ?></td>
+                        <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
                     </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+<!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur-->
+            <div class="table-responsive">
+                <table class="table js-player-table" id="tableIndex">
+                    <tbody>
+                    <?php foreach($finalPlayerList as $player) : ?>
+                        <tr class="pointerHand">
+                            <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
+                            <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                                    <?php echo utf8_encode($player['name']); ?></a></td>
+                            <td class="whiteShadow text-center">jouées<br><?php echo $player['totalCollectionPlayed']; ?></td>
+                            <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalCollectionWon']; ?></td>
+                            <td class="whiteShadow text-center">Victoires <br>
+                                <?php echo ($player['totalCollectionPlayed'] != 0) ? round((($player['totalCollectionWon'] / $player['totalCollectionPlayed']) * 100)). '%' : '--'; ?>
+                            <td class="whiteShadow  text-center">Absence<br><?php echo $player['missedCollection'] ?></td>
+                            <td class="whiteShadow text-center">Présence<br>
+                                <?php echo ($player['totalCollectionPlayed'] != 0) ? round(($player['totalCollection'] / $player['totalCollectionPlayed']) * 100) : 0; ?>
+                            </td>
+                            <td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?></td>
+                            <!-- Status -->
+                            <?php if ($player['ban']) : ?>
+                                <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
+                            <?php elseif ($player['warning']): ?>
+                                <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
+                            <?php else : ?>
+                                <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="war">
             <div class="table-responsive">

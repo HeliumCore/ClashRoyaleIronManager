@@ -59,7 +59,7 @@ if ($state == "collectionDay") {
     <?php
     if ($state == "warDay") { ?>
         <br><br>
-        <div class="divStandings">
+        <div class="divStandings table-responsive">
             <table class="table">
                 <tbody>
                 <?php
@@ -93,7 +93,7 @@ if ($state == "collectionDay") {
     <br><br>
     <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
     <br>
-    <div class="divCurrentWar">
+    <div class="divCurrentWar table-responsive">
         <table id="tableIndex" class="table">
             <thead>
             <tr class="rowIndex">
@@ -159,7 +159,7 @@ if ($state == "collectionDay") {
 //        TODO mettre les classes du tableau pour bien l'afficher
         $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
         ?>
-        <div class="table">
+        <div class="table table-responsive">
             <table>
                 <tbody>
                 <tr>
