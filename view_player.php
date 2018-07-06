@@ -71,10 +71,12 @@ ksort($fatChests);
     <div class="row">
         <div class="col-md-5">
             <div class="row">
-                <?php foreach ($apiDeck as $card): ?>
+                <?php
+//                TODO afficher X coffres supplemetaires (les upcomings) si un des gros est dans cette liste
+                foreach ($apiDeck as $card): ?>
                     <div class="col-xs-3">
                         <div class="img-responsive">
-                            <img src="<?php print $card['icon']; ?>" alt="failed to load img" class="img-responsive"/>
+                            <img src="<?php print $card['icon']; ?>" alt="failed to load img" class="img-responsive cards"/>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -93,7 +95,7 @@ ksort($fatChests);
                         <div class="col-xs-3">
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
-                                     class="img-responsive little-chest"/>
+                                     class="img-responsive little-chest chests"/>
                             </div>
                         </div>
                         <?php
@@ -105,7 +107,7 @@ ksort($fatChests);
                         <div class="col-xs-3">
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
-                                     class="img-responsive big-chest"/>
+                                     class="img-responsive big-chest chests"/>
                             </div>
                         </div>
                         <?php

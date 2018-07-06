@@ -171,50 +171,54 @@ foreach ($allPlayers as $player) {
             </table>
         </div>
         <div role="tabpanel" class="tab-pane" id="war">
-            <table class="table" id="tableIndex">
-                <tbody>
-                <tr>
-                    <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
-                    <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
-                    <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
-                    <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">% victoires<br>' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
-                    else echo '<td class="whiteShadow">0</td>'; ?>
-                    <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
-                    <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">% présences<br>' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
-                    else echo '<td class="whiteShadow">0</td>'; ?>
-                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table" id="tableIndex">
-                <tbody>
-                   <?php foreach($finalPlayerList as $player) : ?> 
+            <div class="table-responsive">
+                <table class="table" id="tableIndex">
+                    <tbody>
                     <tr>
-                        <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
-                        <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
-                            <?php echo utf8_encode($player['name']); ?></a></td>
-                        <td class="whiteShadow text-center">jouées<br><?php echo $player['totalBattlesPlayed']; ?></td>
-                        <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalBattlesWon']; ?></td>
-                        <td class="whiteShadow text-center">Victoires<br>
-                        <?php echo ($player['totalBattlesPlayed'] != 0) ? round((($player['totalBattlesWon'] / $player['totalBattlesPlayed']) * 100)). '%' : '-'; ?>
-                        </td>
-                        <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?></td>
-                        <td class="whiteShadow text-center">Présence<br>
-                        <?php echo ($player['totalBattlesPlayed'] != 0) ? round(($player['totalWar'] / $player['totalBattlesPlayed']) * 100). "%" : '-'; ?>
-                        </td>
-
-                        <!-- Status -->
-                        <?php if ($player['ban']) : ?>
-                            <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
-                        <?php elseif ($player['warning']): ?>
-                            <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
-                        <?php else : ?>
-                            <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
-                        <?php endif; ?>
+                        <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($finalPlayerList); ?></td>
+                        <td class="whiteShadow text-center">Jouées<br><?php echo $allBattlePlayed; ?></td>
+                        <td class="whiteShadow text-center">Gagnées<br><?php echo $allBattleWon; ?></td>
+                        <?php if ($allBattlePlayed != 0) echo '<td class="whiteShadow text-center">% victoires<br>' . round((($allBattleWon / $allBattlePlayed) * 100)) . '</td>';
+                        else echo '<td class="whiteShadow">0</td>'; ?>
+                        <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
+                        <?php if ($allWars != 0) echo '<td class="whiteShadow text-center">% présences<br>' . round(($allBattlePlayed / $allWars) * 100) . '</td>';
+                        else echo '<td class="whiteShadow">0</td>'; ?>
+                        <td bgcolor="#D42F2F"><span class="whiteShadow text-center" style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span></td>
                     </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive">
+                <table class="table" id="tableIndex">
+                    <tbody>
+                    <?php foreach($finalPlayerList as $player) : ?>
+                        <tr>
+                            <td class="whiteShadow text-center rank"><span><?php echo utf8_encode($player['rank']); ?></span></td>
+                            <td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                                    <?php echo utf8_encode($player['name']); ?></a></td>
+                            <td class="whiteShadow text-center">jouées<br><?php echo $player['totalBattlesPlayed']; ?></td>
+                            <td class="whiteShadow text-center">gagnées<br><?php echo $player['totalBattlesWon']; ?></td>
+                            <td class="whiteShadow text-center">Victoires<br>
+                                <?php echo ($player['totalBattlesPlayed'] != 0) ? round((($player['totalBattlesWon'] / $player['totalBattlesPlayed']) * 100)). '%' : '-'; ?>
+                            </td>
+                            <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?></td>
+                            <td class="whiteShadow text-center">Présence<br>
+                                <?php echo ($player['totalBattlesPlayed'] != 0) ? round(($player['totalWar'] / $player['totalBattlesPlayed']) * 100). "%" : '-'; ?>
+                            </td>
+
+                            <!-- Status -->
+                            <?php if ($player['ban']) : ?>
+                                <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png" height="35px"/></td>
+                            <?php elseif ($player['warning']): ?>
+                                <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png" height="35px"/></td>
+                            <?php else : ?>
+                                <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png" height="35px"/></td>
+                            <?php endif; ?>
+                        </tr>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
