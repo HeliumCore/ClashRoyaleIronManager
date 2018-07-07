@@ -10,25 +10,16 @@ include("../tools/api_conf.php");
 include("../tools/database.php");
 
 $battles = getWarBattlesFromApi($api);
-//$currentWar = getWarFromApi($api);
-//$lastWar = getLastWarEndDate($db);
-//$currentEnd = $currentWar['warEndTime'];
-//$lastEnd = intval($lastWar['created']);
+$currentWar = getWarFromApi($api);
+$lastWar = getLastWarEndDate($db);
+$currentEnd = $currentWar['warEndTime'];
+$lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
-
-// todo remove below lines and uncomment all above
-$warId--;
-$lastEnd = 1530743005;
-$currentEnd = 1530916877;
-cleanDeckResults($db, $warId);
-//-------------
-
 $state = getWarStateFromApi($api);
+
 if ($state == "warDay") {
     cleanDeckResults($db, $warId);
 }
-// TODO creer une page pour afficher les dekcs utiliés pendant la journée de guerre, avec leurs stats
-// TODO lancer cette requete lorsqu'on sera en jour de guerre et faire les tests
 
 foreach ($battles as $battle) {
     if ($battle['type'] != 'clanWarWarDay')

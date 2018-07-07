@@ -10,10 +10,6 @@ include("tools/database.php");
 include("tools/api_conf.php");
 
 $warId = getCurrentWar($db)['id'];
-// todo remove below lines and uncomment all above
-$warId--;
-//$deck = getDeckById($db, $deckId);
-//-----------------------
 $deckIds = getWarDecksId($db, $warId);
 $deckId = $deckIds[0]['id'];
 
