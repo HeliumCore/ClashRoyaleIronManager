@@ -451,7 +451,7 @@ function updateDeckResults($db, $deckId, $played, $win, $crowns)
     SET played = %d,
     wins = %d,
     crowns = %d
-    WHERE id = %d
+    WHERE deck_id = %d
     ";
     execute_query($db, sprintf($pattern, $played, $win, $crowns, $deckId));
 }
@@ -471,7 +471,7 @@ function getDeckResults($db, $id)
     $pattern = "
     SELECT played, wins, crowns
     FROM deck_results
-    WHERE id = %d
+    WHERE deck_id = %d
     ";
     return fetch_query($db, sprintf($pattern, $id));
 }
@@ -572,6 +572,16 @@ function getCardsNameByDeckId($db, $id)
     ";
     $cards = getDeckById($db, $id);
     return fetch_all_query($db, sprintf($pattern, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]));
+}
+
+function getAllCurrentWarDecks($db) {
+    $query = "
+    SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+    FROM decks
+    WHERE player_id = 610
+    ";
+
+    return fetch_all_query($db, $query);
 }
 
 // ----------------- CARDS -----------------
