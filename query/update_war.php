@@ -15,7 +15,6 @@ if (getNumberOfPlayersInClan($db) > $numberOfCurrentPlayers && $numberOfCurrentP
     $notEligible = getNotEligiblePlayers($db);
 }
 $warId = getCurrentWarId($db);
-global $warState;
 $warState = $data['state'];
 
 // Standings
@@ -40,10 +39,8 @@ foreach (getAllPlayersInClan($db) as $player) {
         }
     }
     $counter++;
-    $getPlayerWarResult = getPlayerWar($db, $player['id'], $warId);
-
-    global $battlesPlayed;
-    global $wins;
+    $playerId = intval($player['id']);
+    $getPlayerWarResult = getPlayerWar($db, $playerId, $warId);
     $cardsEarned = null;
     $battlesPlayed = null;
     $wins = null;
@@ -61,12 +58,13 @@ foreach (getAllPlayersInClan($db) as $player) {
     }
     $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
     $wins = $wins != null ? $wins : 0;
-    if (is_array($getPlayerWarResult)) {
+    if (sizeof($getPlayerWarResult) > 0) {
+        $playerWarId = intval($getPlayerWarResult['player_war_id']);
         // Si le joueur a déjà été enregistré pour cette guerre, on update
         if ($warState == "collectionDay") {
-            updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $getPlayerWarResult['id']);
+            updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $playerWarId);
         } else if ($warState == "warDay") {
-            updateWarDay($db, $battlesPlayed, $wins, $getPlayerWarResult['id']);
+            updateWarDay($db, $battlesPlayed, $wins, $playerWarId);
         }
     } else {
         // Si le joueur n'est pas encore dans cette guerre, on insert

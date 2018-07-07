@@ -11,7 +11,6 @@ include("../tools/api_conf.php");
 
 $wars = getWarLogFromApi($api);
 $allPlayers = getAllPlayersInClan($db);
-// todo revoir les requetes de passage de current war a old war. perte de collection
 // todo revoir eligible players (ex: bonobo marqué absent alors qu'il est arrivé en cours de guerre)
 foreach ($wars as $war) {
     if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530223645
@@ -26,9 +25,6 @@ foreach ($wars as $war) {
         $created);
 
     foreach ($allPlayers as $player) {
-        global $cardsEarned;
-        global $battlesPlayed;
-        global $wins;
         $cardsEarned = null;
         $battlesPlayed = null;
         $wins = null;
@@ -42,12 +38,12 @@ foreach ($wars as $war) {
         $cardsEarned = $cardsEarned != null ? $cardsEarned : 0;
         $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
         $wins = $wins != null ? $wins : 0;
-        $playerWarResult = getPlayerWar($db, $player['id'], $warId);
-
-        if (is_array($playerWarResult)) {
-            updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId);
+        $playerId = intval($player['id']);
+        $playerWarResult = getPlayerWar($db, $playerId, $warId);
+        if (sizeof($playerWarResult) > 0) {
+            updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId);
         } else {
-            insertPlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId);
+            insertPlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId);
         }
         $playerWarResult = null;
     }

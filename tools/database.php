@@ -56,13 +56,13 @@ VALUE (%d, %d, %d, %d, %d)
 function getPlayerWar($db, $playerId, $warId)
 {
     $pattern = "
-SELECT player_war.id, cards_earned, collection_played, collection_won, battle_played, battle_won
+SELECT player_war.id as player_war_id, cards_earned, collection_played, collection_won, battle_played, battle_won
 FROM player_war
 WHERE player_id = %d
 AND war_id = %d
 ";
 
-    return fetch_query($db, utf8_decode(sprintf($pattern, $playerId, $warId)));
+    return fetch_query($db, sprintf($pattern, $playerId, $warId));
 }
 
 // ----------------- WAR -----------------
@@ -79,17 +79,16 @@ SET created = %d,
 past_war = 1
 WHERE id = %d
 ";
-
     if (!is_array($war)) {
         if (!is_array($currentWar)) {
             execute_query($db, sprintf($insertWarPattern, $created, 1));
             return $db->lastInsertId();
         } else {
-            execute_query($db, sprintf($updateCurrentWarPattern, $created, $currentWar['id']));
-            return getWarID($db, $war, $currentWar, $created);
+            execute_query($db, sprintf($updateCurrentWarPattern, $created, intval($currentWar['id'])));
+            return getWarID($db, getWar($db, $created), $currentWar, $created);
         }
     } else {
-        return $war['id'];
+        return intval($war['id']);
     }
 }
 
@@ -142,7 +141,7 @@ function getCurrentWarId($db)
         $currentWar = getCurrentWar($db);
 
     if (is_array($currentWar)) {
-        return $currentWar['id'];
+        return intval($currentWar['id']);
     } else {
         insertNewWar($db);
         return $db->lastInsertId();
@@ -574,7 +573,8 @@ function getCardsNameByDeckId($db, $id)
     return fetch_all_query($db, sprintf($pattern, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]));
 }
 
-function getAllCurrentWarDecks($db) {
+function getAllCurrentWarDecks($db)
+{
     $query = "
     SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     FROM decks

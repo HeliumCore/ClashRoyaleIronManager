@@ -62,14 +62,27 @@ if ($state == "collectionDay") {
                     $('#loaderDiv').show();
                 },
                 success: function () {
-                    $.ajax({
-                        url: 'query/update_war.php',
-                        success: function () {
-                            window.location.reload(true);
-                        }
-                    });
+                    updateWarStats();
                 }
-            })
+            });
+        }
+
+        function updateWarStats() {
+            $.ajax({
+                url: 'query/update_war_stats.php',
+                success: function () {
+                    updateWar();
+                }
+            });
+        }
+
+        function updateWar() {
+            $.ajax({
+                url: 'query/update_war.php',
+                success: function () {
+                    window.location.reload(true);
+                }
+            });
         }
     </script>
 </head>
