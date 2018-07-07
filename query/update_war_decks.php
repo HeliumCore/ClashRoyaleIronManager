@@ -10,22 +10,18 @@ include("../tools/api_conf.php");
 include("../tools/database.php");
 
 $battles = getWarBattlesFromApi($api);
-//$currentWar = getWarFromApi($api);
-//$lastWar = getLastWarEndDate($db);
-//$currentEnd = $currentWar['warEndTime'];
-//$lastEnd = intval($lastWar['created']);
+$currentWar = getWarFromApi($api);
+$lastWar = getLastWarEndDate($db);
+$currentEnd = $currentWar['warEndTime'];
+$lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
-//$state = getWarStateFromApi($api);
-// todo remove below lines and uncomment all above
-$warId--;
-$lastEnd = 1530743005;
-$currentEnd = 1530916877;
-//-------------
-// TODO faire une fonction qui permet de determiner si c'est le meme deck mais cartes a position differentes
-//if ($state == "warDay")
-//    cleanDeckResults($db, $warId);
-//else
-//    return;
+$state = getWarStateFromApi($api);
+
+if ($state == "warDay")
+    cleanDeckResults($db, $warId);
+else
+    return;
+
 foreach ($battles as $battle) {
     if ($battle['type'] != 'clanWarWarDay')
         continue;
