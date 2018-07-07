@@ -13,12 +13,12 @@ $warPlayers = getWarPlayers($db);
 $state = getWarStateFromApi($api);
 if ($state == "collectionDay") {
     $stateName = "Jour de collection";
+    $endTime = getWarFromApi($api)['collectionEndTime'];
 } else {
     $stateName = "Jour de guerre";
     $standings = getAllStandings($db);
+    $endTime = getWarFromApi($api)['warEndTime'];
 }
-
-// TODO recuperer la date de la guerre pour determiner l'heure de fin, et l'afficher. Ou faire compte a rebours (ingame)
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +57,8 @@ if ($state == "collectionDay") {
 <?php include("header.html"); ?>
 <div class="container">
     <h1 class="whiteShadow">Guerre en cours</h1>
-    <span class="whiteShadow"><?php echo $stateName ?></span>
+    <span class="whiteShadow"><?php echo $stateName ?></span><br>
+    <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
     <?php
     if ($state == "warDay") { ?>
         <br>
