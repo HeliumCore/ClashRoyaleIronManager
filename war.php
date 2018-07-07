@@ -61,7 +61,7 @@ if ($state == "collectionDay") {
     <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
     <?php
     if ($state == "warDay") { ?>
-        <br>
+        <br><a href="war_decks.php" class="whiteShadow" title="Decks de guerre">Decks de guerre</a><br>
         <div class="divStandings table-responsive">
             <table class="table">
                 <tbody>

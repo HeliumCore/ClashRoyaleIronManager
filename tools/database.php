@@ -476,6 +476,16 @@ function getDeckResults($db, $id)
     return fetch_query($db, sprintf($pattern, $id));
 }
 
+function getDeckResultByDeckId($db, $deckId)
+{
+    $pattern = "
+    SELECT played, wins, crowns
+    FROM deck_results
+    WHERE deck_id = %d
+    ";
+    return fetch_query($db, sprintf($pattern, $deckId));
+}
+
 function disableAllDeck($db, $playerId)
 {
     $pattern = "
@@ -529,6 +539,39 @@ AND player_id =
 
     $query = sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8);
     return fetch_query($db, $query . $playerId);
+}
+
+function getWarDecksId($db, $warId)
+{
+    $pattern = "
+    SELECT id
+    FROM decks
+    WHERE war_id = %d
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $warId));
+}
+
+function getDeckById($db, $id)
+{
+    $pattern = "
+    SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+    FROM decks
+    WHERE id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $id));
+}
+
+function getCardsNameByDeckId($db, $id)
+{
+    $pattern = "
+    SELECT cards.card_key
+    FROM cards
+    WHERE cards.id IN(%d, %d, %d, %d, %d, %d, %d, %d)
+    ";
+    $cards = getDeckById($db, $id);
+    return fetch_all_query($db, sprintf($pattern, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]));
 }
 
 // ----------------- CARDS -----------------
@@ -639,6 +682,15 @@ OR cards.id = %d
 ";
 
     return fetch_all_query($db, sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+}
+
+function getDeckLinkFromDeckId($db, $deckId)
+{
+    $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
+    $cards = getDeckById($db, $deckId);
+    $crIds = getCrIdsByCards($db, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]);
+    return sprintf($pattern, $crIds[0]['cr_id'], $crIds[1]['cr_id'], $crIds[2]['cr_id'], $crIds[3]['cr_id'], $crIds[4]['cr_id'], $crIds[5]['cr_id'], $crIds[6]['cr_id'], $crIds[7]['cr_id']);
+
 }
 
 // ----------------- WAR STATS -----------------

@@ -10,11 +10,19 @@ include("../tools/api_conf.php");
 include("../tools/database.php");
 
 $battles = getWarBattlesFromApi($api);
-$currentWar = getWarFromApi($api);
-$lastWar = getLastWarEndDate($db);
-$currentEnd = $currentWar['warEndTime'];
-$lastEnd = intval($lastWar['created']);
+//$currentWar = getWarFromApi($api);
+//$lastWar = getLastWarEndDate($db);
+//$currentEnd = $currentWar['warEndTime'];
+//$lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
+
+// todo remove below lines and uncomment all above
+$warId--;
+$lastEnd = 1530743005;
+$currentEnd = 1530916877;
+cleanDeckResults($db, $warId);
+//-------------
+
 $state = getWarStateFromApi($api);
 if ($state == "warDay") {
     cleanDeckResults($db, $warId);
