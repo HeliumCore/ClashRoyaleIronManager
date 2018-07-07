@@ -17,9 +17,10 @@ $lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
 $state = getWarStateFromApi($api);
 
-if ($state == "warDay") {
+if ($state == "warDay")
     cleanDeckResults($db, $warId);
-}
+else
+    return;
 
 foreach ($battles as $battle) {
     if ($battle['type'] != 'clanWarWarDay')
