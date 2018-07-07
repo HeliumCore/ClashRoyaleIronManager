@@ -105,7 +105,7 @@ foreach ($allPlayers as $player) {
             });
 
             $('#tx_search').on("keyup paste", function() {
-                let value = $(this).val();
+                let value = $(this).val().toLowerCase();
                 const playerLine = $('.playerTr');
                 if (value.length < 3) {
                     playerLine.show();
