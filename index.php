@@ -59,7 +59,6 @@ include("tools/database.php");
     <br><br>
     <div class="table-responsive">
         <table id="tableIndex" class="table tableIndex">
-<!--            TODO faire le tri par colonne en cliquant dessus (a dupliquer sur les autres pages) -->
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>

@@ -15,7 +15,7 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
     $order = substr($order, 0, -1);
     $warPlayers = getWarPlayers($db, $order);
 } else {
-    $selectValue = 0;
+    $selectValue = -1;
     $warPlayers = getWarPlayers($db);
 }
 $state = getWarStateFromApi($api);
@@ -91,9 +91,7 @@ if ($state == "collectionDay") {
                 }
             });
 
-            let selectValue = $('#hd_selectValue').val();
-            console.log(selectValue);
-            orderSelect.val(selectValue);
+            orderSelect.val($('#hd_selectValue').val());
         });
 
         function update() {
@@ -133,11 +131,22 @@ if ($state == "collectionDay") {
     <h1 class="whiteShadow">Guerre en cours</h1>
     <span class="whiteShadow"><?php echo $stateName ?></span><br>
     <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
-    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
-    <br><br>
+    <br><br>        <div>
+        <span class="pageSubtitle whiteShadow">Résultats du clan</span>
+        <select id="orderSelect" class="pull-right">
+            <option value="-1">Trier par colonne</option>
+            <option value="0">Rang</option>
+            <option value="1">Collections jouées</option>
+            <option value="2">Collections gagnées</option>
+            <option value="3">Cartes gagnées</option>
+            <option value="4">Batailles jouées</option>
+            <option value="5">Batailles gagnées</option>
+        </select>
+        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+    </div>
+    <br>
     <?php
     if ($state == "warDay") { ?>
-        <br><a href="war_decks.php" class="whiteShadow" title="Decks de guerre">Decks de guerre</a><br>
         <div class="divStandings table-responsive">
             <table class="table">
                 <tbody>
@@ -169,8 +178,6 @@ if ($state == "collectionDay") {
             </table>
         </div>
     <?php } else { ?>
-        <span class="pageSubtitle whiteShadow">Résultats du clan</span>
-        <br>
         <div class="table-responsive">
             <table class="table">
                 <tbody>
@@ -189,16 +196,7 @@ if ($state == "collectionDay") {
     <br>
     <div>
         <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
-        <select id="orderSelect" class="pull-right">
-            <option value="-1">Trier par colonne</option>
-            <option value="0">Rang</option>
-            <option value="1">Collections jouées</option>
-            <option value="2">Collections gagnées</option>
-            <option value="3">Cartes gagnées</option>
-            <option value="4">Batailles jouées</option>
-            <option value="5">Batailles gagnées</option>
-        </select>
-        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+        <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
     </div>
     <br>
     <div class="divCurrentWar table-responsive">
