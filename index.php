@@ -7,7 +7,6 @@
  */
 
 include("tools/database.php");
-//TODO ajouter un input text avec autocomplete + ajax qui filtre le tableau par nom ou tag du joueur (a dupliquer partout)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +33,20 @@ include("tools/database.php");
                 $("body").css("cursor", "wait");
                 window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
+
+            $('#tx_search').on("keyup paste", function() {
+                let value = $(this).val();
+                const playerLine = $('.playerTr');
+                if (value.length < 3) {
+                    playerLine.show();
+                    return;
+                }
+
+                playerLine.each(function() {
+                    if ($(this).next().val().toLowerCase().indexOf(value) < 0)
+                        $(this).hide();
+                });
+            });
         });
     </script>
 </head>
@@ -42,9 +55,12 @@ include("tools/database.php");
 <div class="container">
     <h1 class="whiteShadow">Liste des joueurs</h1>
     <span class="pageIndexSubtitle whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</b></span>
+<!--    TODO stylisé l'input de recherche (mettre a droite, etc) -->
+    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
     <br><br>
     <div class="table-responsive">
         <table id="tableIndex" class="table tableIndex">
+<!--            TODO faire le tri par colonne en cliquant dessus (a dupliquer sur les autres pages) -->
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
@@ -57,15 +73,15 @@ include("tools/database.php");
             </thead>
             <tbody>
             <?php foreach (getAllPlayersForIndex($db) as $player) : ?>
-                <tr class="pointerHand">
+                <tr class="pointerHand playerTr">
                     <td class="rank text-center"><span> <?php echo $player['rank']; ?></span></td>
                     <td class=" whiteShadow">
-                        <a class="linkToPlayer" href="view_player.php?tag=<?php print $player['tag'] ?>">
+                        <a class="linkToPlayer" href="view_player.php?tag=<?php print $player['tag']; ?>">
                             <?php print utf8_encode($player['playerName']); ?>
                         </a>
                         <br>
                         <span class="small">
-                        <?php print utf8_encode($player['playerRole']) ?>
+                        <?php print utf8_encode($player['playerRole']); ?>
                     </span>
                     </td>
                     <td class=" whiteShadow"> <?php print $player['tag']; ?></td>
@@ -74,8 +90,8 @@ include("tools/database.php");
                     </td>
                     <td class="">
                         <?php if ($player['arena_id'] > 12): ?>
-                            <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png"
-                                 title="<?php print $player['arena'] ?>" height="50px">
+                            <img src="res/arena/arena-<?php print $player['arena_id']; ?>.png"
+                                 title="<?php print $player['arena']; ?>" height="50px">
                         <?php else : ?>
                             <div>
                                 <img src="res/arena/arena-.png" title="" height="50px">
@@ -92,6 +108,7 @@ include("tools/database.php");
                         <?php print $player['donations_received'] ?>
                     </td>
                 </tr>
+                <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['playerName']); ?>"/>
             <?php endforeach; ?>
             </tbody>
         </table>

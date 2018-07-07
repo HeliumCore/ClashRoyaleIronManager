@@ -103,6 +103,20 @@ foreach ($allPlayers as $player) {
                     window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
                 });
             });
+
+            $('#tx_search').on("keyup paste", function() {
+                let value = $(this).val();
+                const playerLine = $('.playerTr');
+                if (value.length < 3) {
+                    playerLine.show();
+                    return;
+                }
+
+                playerLine.each(function() {
+                    if ($(this).next().val().toLowerCase().indexOf(value) < 0)
+                        $(this).hide();
+                });
+            });
         });
     </script>
 </head>
@@ -112,6 +126,9 @@ foreach ($allPlayers as $player) {
     <h1 class="whiteShadow">Statistiques des guerres</h1>
     <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
+    <br><br>
+    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
+    <!--    todo faire design du champ de recherche-->
     <br><br>
     <!-- Nav tabs -->
     <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
@@ -154,7 +171,7 @@ foreach ($allPlayers as $player) {
                 <table class="table js-player-table" id="tableIndex">
                     <tbody>
                     <?php foreach ($finalPlayerList as $player) : ?>
-                        <tr class="pointerHand">
+                        <tr class="pointerHand playerTr">
                             <td class="whiteShadow text-center rank">
                                 <span><?php echo utf8_encode($player['rank']); ?></span></td>
                             <td class="whiteShadow"><a class="linkToPlayer"
@@ -186,6 +203,7 @@ foreach ($allPlayers as $player) {
                                                                                height="35px"/></td>
                             <?php endif; ?>
                         </tr>
+                        <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['name']); ?>"/>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -219,7 +237,7 @@ foreach ($allPlayers as $player) {
                 <table class="table js-player-table" id="tableIndex">
                     <tbody>
                     <?php foreach ($finalPlayerList as $player) : ?>
-                        <tr class="pointerHand">
+                        <tr class="pointerHand playerTr">
                             <td class="whiteShadow text-center rank">
                                 <span><?php echo utf8_encode($player['rank']); ?></span></td>
                             <td class="whiteShadow"><a class="linkToPlayer"
@@ -249,6 +267,7 @@ foreach ($allPlayers as $player) {
                                                                                height="35px"/></td>
                             <?php endif; ?>
                         </tr>
+                        <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['name']); ?>"/>
                     <?php endforeach; ?>
                     </tbody>
                 </table>

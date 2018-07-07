@@ -85,11 +85,11 @@ tbody tr:first-child .rank span {
     background: #E5C449;
 }
 
-tbody tr:nth-child(2) .rank span {
+tbody tr:nth-child(3) .rank span {
     background: #BBC5C0;
 }
 
-tbody tr:nth-child(3) .rank span {
+tbody tr:nth-child(5) .rank span {
     background: #BE7A54;
 }
 

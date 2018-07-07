@@ -39,6 +39,20 @@ if ($state == "collectionDay") {
             $('#numberOfCollectionPlayed').html($('#hd_numberOfCollectionPlayed').val());
             $('#numberOfCollectionWon').html($('#hd_numberOfCollectionWon').val());
             $('#numberOfCardsEarned').html($('#hd_numberOfCardsEarned').val());
+
+            $('#tx_search').on("keyup paste", function() {
+                let value = $(this).val();
+                const playerLine = $('.playerTr');
+                if (value.length < 3) {
+                    playerLine.show();
+                    return;
+                }
+
+                playerLine.each(function() {
+                    if ($(this).next().val().toLowerCase().indexOf(value) < 0)
+                        $(this).hide();
+                });
+            });
         });
 
         function update() {
@@ -103,14 +117,14 @@ if ($state == "collectionDay") {
         <span class="pageSubtitle whiteShadow">Résultats du clan</span>
         <br>
         <div class="table-responsive">
-            <table id="tableIndex" class="table">
+            <table class="table">
                 <tbody>
                 <tr>
                     <td class="whiteShadow text-center">Participants<br><span id="numberOfParticipant"></span></td>
                     <td class="whiteShadow text-center">Absents<br><span id="numberOfMissing"></span></td>
                     <td class="whiteShadow text-center">Jouées<br><span id="numberOfCollectionPlayed"></span></td>
                     <td class="whiteShadow text-center">Gagnées<br><span id="numberOfCollectionWon"></span></td>
-                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/><span
+                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<span
                                 id="numberOfCardsEarned"></span></td>
                 </tr>
                 </tbody>
@@ -119,6 +133,8 @@ if ($state == "collectionDay") {
     <?php } ?>
     <br>
     <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
+    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
+<!--    todo faire design du champ de recherche-->
     <br>
     <div class="divCurrentWar table-responsive">
         <table id="tableIndex" class="table">
@@ -167,7 +183,7 @@ if ($state == "collectionDay") {
                     $minusParticipant++;
                 }
 
-                echo '<tr class="pointerHand">';
+                echo '<tr class="pointerHand playerTr">';
                 echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
                 echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
@@ -176,6 +192,7 @@ if ($state == "collectionDay") {
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
                 echo '</tr>';
+                echo '<input type="hidden" class="hd_playerName" value="'. utf8_encode($player['name']) . '"/>';
             }
             ?>
             </tbody>
