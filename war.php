@@ -157,11 +157,10 @@ if ($state == "collectionDay") {
         </table>
     </div>
     <?php if ($state == "collectionDay") {
-//        TODO mettre les classes du tableau pour bien l'afficher
         $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
         ?>
-        <div class="table table-responsive">
-            <table>
+        <div class="table-responsive">
+            <table id="tableIndex" class="table">
                 <tbody>
                 <tr>
                     <td class="whiteShadow text-center">Participants<br><?php echo $numberOfParticipant; ?></td>
