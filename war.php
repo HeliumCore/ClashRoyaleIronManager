@@ -128,10 +128,14 @@ if ($state == "collectionDay") {
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <h1 class="whiteShadow">Guerre en cours</h1>
-    <span class="whiteShadow"><?php echo $stateName ?></span><br>
-    <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
-    <br><br>        <div>
+    <div>
+        <h1 class="whiteShadow">Guerre en cours</h1>
+        <span class="whiteShadow"><?php echo $stateName ?></span><br>
+        <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
+        <a href="war_decks.php" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
+    </div>
+    <br><br>
+    <div>
         <span class="pageSubtitle whiteShadow">Résultats du clan</span>
         <select id="orderSelect" class="pull-right">
             <option value="-1">Trier par colonne</option>

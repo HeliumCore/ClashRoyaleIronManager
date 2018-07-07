@@ -104,6 +104,7 @@ tbody tr:nth-child(5) .rank span {
 
 .cards {
     max-height: 109px;
+    min-height: 69px;
 }
 
 .tab-link:not(.active) {
@@ -155,4 +156,8 @@ tbody tr:nth-child(5) .rank span {
 
 .table-border-right {
     border-right: 2px solid #84afd3;
+}
+
+.second-row {
+    margin-top: 2%;
 }
