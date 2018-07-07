@@ -241,9 +241,9 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
         $warTrophies, $warId)));
 }
 
-function getWarPlayers($db)
+function getWarPlayers($db, $order = null)
 {
-    $query = "
+    $pattern = "
 SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
 player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned as cards
 FROM player_war
@@ -251,8 +251,16 @@ INNER JOIN war ON war.id = player_war.war_id
 INNER JOIN players ON players.id = player_war.player_id
 INNER JOIN role ON role.id = players.role_id
 WHERE war.past_war = 0
-ORDER BY players.rank ASC
+%s
 ";
+    $defaultOrder = "ORDER BY players.rank ASC";
+    if ($order == null)
+        $query = sprintf($pattern, $defaultOrder);
+    else {
+        $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
+        $orderPattern = sprintf($customOrderPattern, $order);
+        $query = sprintf($pattern, $orderPattern);
+    }
     return fetch_all_query($db, $query);
 }
 

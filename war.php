@@ -9,7 +9,15 @@
 include("tools/database.php");
 include("tools/api_conf.php");
 
-$warPlayers = getWarPlayers($db);
+if (isset($_GET['order']) && !empty($_GET['order'])) {
+    $order = $_GET['order'];
+    $selectValue = substr($order, -1);
+    $order = substr($order, 0, -1);
+    $warPlayers = getWarPlayers($db, $order);
+} else {
+    $selectValue = 0;
+    $warPlayers = getWarPlayers($db);
+}
 $state = getWarStateFromApi($api);
 if ($state == "collectionDay") {
     $stateName = "Jour de collection";
@@ -40,7 +48,7 @@ if ($state == "collectionDay") {
             $('#numberOfCollectionWon').html($('#hd_numberOfCollectionWon').val());
             $('#numberOfCardsEarned').html($('#hd_numberOfCardsEarned').val());
 
-            $('#tx_search').on("keyup paste", function() {
+            $('#tx_search').on("keyup paste", function () {
                 let value = $(this).val().toLowerCase();
                 const playerLine = $('.playerTr');
                 if (value.length < 3) {
@@ -48,11 +56,44 @@ if ($state == "collectionDay") {
                     return;
                 }
 
-                playerLine.each(function() {
+                playerLine.each(function () {
                     if ($(this).next().val().toLowerCase().indexOf(value) < 0)
                         $(this).hide();
                 });
             });
+            let orderSelect = $('#orderSelect');
+            orderSelect.change(function () {
+                const val = $(this).val();
+                let url = "war.php", order;
+                switch (val) {
+                    case '1':
+                        order = "?order=collection_played1";
+                        break;
+                    case '2':
+                        order = "?order=collection_won2";
+                        break;
+                    case '3':
+                        order = "?order=cards_earned3";
+                        break;
+                    case '4':
+                        order = "?order=battle_played4";
+                        break;
+                    case '5':
+                        order = "?order=battle_won5";
+                        break;
+                    default:
+                        order = "";
+                        break;
+                }
+                if (parseInt(val) >= 0) {
+                    url = url + order;
+                    window.location = url;
+                }
+            });
+
+            let selectValue = $('#hd_selectValue').val();
+            console.log(selectValue);
+            orderSelect.val(selectValue);
         });
 
         function update() {
@@ -146,7 +187,19 @@ if ($state == "collectionDay") {
         </div>
     <?php } ?>
     <br>
-    <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
+    <div>
+        <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
+        <select id="orderSelect" class="pull-right">
+            <option value="-1">Trier par colonne</option>
+            <option value="0">Rang</option>
+            <option value="1">Collections jouées</option>
+            <option value="2">Collections gagnées</option>
+            <option value="3">Cartes gagnées</option>
+            <option value="4">Batailles jouées</option>
+            <option value="5">Batailles gagnées</option>
+        </select>
+        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+    </div>
     <br>
     <div class="divCurrentWar table-responsive">
         <table id="tableIndex" class="table">
@@ -160,14 +213,6 @@ if ($state == "collectionDay") {
             </thead>
             <tbody>
             <?php
-            global $totalTrophies;
-            global $totalCollectionPlayed;
-            global $totalCollectionWon;
-            global $totalCardsEarned;
-            global $totalBattlesPlayed;
-            global $totalBattlesWon;
-            global $minusParticipant;
-
             $totalTrophies = 0;
             $totalCollectionPlayed = 0;
             $totalCollectionWon = 0;
@@ -204,7 +249,7 @@ if ($state == "collectionDay") {
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
                 echo '</tr>';
-                echo '<input type="hidden" class="hd_playerName" value="'. utf8_encode($player['name']) . '"/>';
+                echo '<input type="hidden" class="hd_playerName" value="' . utf8_encode($player['name']) . '"/>';
             }
             ?>
             </tbody>
