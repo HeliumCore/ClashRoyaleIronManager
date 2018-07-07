@@ -55,8 +55,7 @@ include("tools/database.php");
 <div class="container">
     <h1 class="whiteShadow">Liste des joueurs</h1>
     <span class="pageIndexSubtitle whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</b></span>
-<!--    TODO styliser l'input de recherche (mettre a droite, etc) -->
-    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
+    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
     <br><br>
     <div class="table-responsive">
         <table id="tableIndex" class="table tableIndex">

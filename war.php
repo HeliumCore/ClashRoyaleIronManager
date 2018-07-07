@@ -92,6 +92,7 @@ if ($state == "collectionDay") {
     <h1 class="whiteShadow">Guerre en cours</h1>
     <span class="whiteShadow"><?php echo $stateName ?></span><br>
     <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
+    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
     <br><br>
     <?php
     if ($state == "warDay") { ?>
@@ -146,8 +147,6 @@ if ($state == "collectionDay") {
     <?php } ?>
     <br>
     <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
-    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
-<!--    todo faire design du champ de recherche-->
     <br>
     <div class="divCurrentWar table-responsive">
         <table id="tableIndex" class="table">

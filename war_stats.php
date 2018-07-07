@@ -131,8 +131,6 @@ foreach ($allPlayers as $player) {
     <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
-    <input type="text" id="tx_search" class="" placeholder="Trier par nom"/>
-    <!--    todo faire design du champ de recherche-->
     <br><br>
     <!-- Nav tabs -->
     <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
@@ -140,6 +138,7 @@ foreach ($allPlayers as $player) {
                                                   class="tab-link">Collections</a></li>
         <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab" class="tab-link">Batailles</a>
         </li>
+        <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
     </ul>
 
     <!-- Tab panes -->
