@@ -33,6 +33,12 @@ if ($state == "collectionDay") {
                 $("body").css("cursor", "wait");
                 window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
+
+            $('#numberOfParticipant').html($('#hd_numberOfParticipants').val());
+            $('#numberOfMissing').html($('#hd_numberOfMissing').val());
+            $('#numberOfCollectionPlayed').html($('#hd_numberOfCollectionPlayed').val());
+            $('#numberOfCollectionWon').html($('#hd_numberOfCollectionWon').val());
+            $('#numberOfCardsEarned').html($('#hd_numberOfCardsEarned').val());
         });
 
         function update() {
@@ -59,6 +65,7 @@ if ($state == "collectionDay") {
     <h1 class="whiteShadow">Guerre en cours</h1>
     <span class="whiteShadow"><?php echo $stateName ?></span><br>
     <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
+    <br><br>
     <?php
     if ($state == "warDay") { ?>
         <br><a href="war_decks.php" class="whiteShadow" title="Decks de guerre">Decks de guerre</a><br>
@@ -92,8 +99,25 @@ if ($state == "collectionDay") {
                 </tbody>
             </table>
         </div>
+    <?php } else { ?>
+        <span class="pageSubtitle whiteShadow">Résultats du clan</span>
+        <br>
+        <div class="table-responsive">
+            <table id="tableIndex" class="table">
+                <tbody>
+                <tr>
+                    <td class="whiteShadow text-center">Participants<br><span id="numberOfParticipant"></span></td>
+                    <td class="whiteShadow text-center">Absents<br><span id="numberOfMissing"></span></td>
+                    <td class="whiteShadow text-center">Jouées<br><span id="numberOfCollectionPlayed"></span></td>
+                    <td class="whiteShadow text-center">Gagnées<br><span id="numberOfCollectionWon"></span></td>
+                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/><span
+                                id="numberOfCardsEarned"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     <?php } ?>
-    <br><br>
+    <br>
     <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
     <br>
     <div class="divCurrentWar table-responsive">
@@ -158,21 +182,12 @@ if ($state == "collectionDay") {
         </table>
     </div>
     <?php if ($state == "collectionDay") {
-        $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant);
-        ?>
-        <div class="table-responsive">
-            <table id="tableIndex" class="table">
-                <tbody>
-                <tr>
-                    <td class="whiteShadow text-center">Participants<br><?php echo $numberOfParticipant; ?></td>
-                    <td class="whiteShadow text-center">Absent<br><?php echo $minusParticipant; ?></td>
-                    <td class="whiteShadow text-center">Jouées<br><?php echo $totalCollectionPlayed ?></td>
-                    <td class="whiteShadow text-center">Gagnées<br><?php echo $totalCollectionWon ?></td>
-                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/><?php echo $totalCardsEarned ?></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant); ?>
+        <input type="hidden" id="hd_numberOfParticipants" value="<?php print $numberOfParticipant; ?>"/>
+        <input type="hidden" id="hd_numberOfMissing" value="<?php print $minusParticipant; ?>"/>
+        <input type="hidden" id="hd_numberOfCollectionPlayed" value="<?php print $totalCollectionPlayed; ?>"/>
+        <input type="hidden" id="hd_numberOfCollectionWon" value="<?php print $totalCollectionWon; ?>"/>
+        <input type="hidden" id="hd_numberOfCardsEarned" value="<?php print $totalCardsEarned; ?>"/>
     <?php } ?>
     <br><br>
 </div>

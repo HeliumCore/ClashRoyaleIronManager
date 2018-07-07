@@ -7,13 +7,14 @@
  */
 
 include("tools/database.php");
+//TODO ajouter un input text avec autocomplete + ajax qui filtre le tableau par nom ou tag du joueur (a dupliquer partout)
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Iron</title>
-    
+
     <?php include("head.php"); ?>
     <script>
         function update() {
@@ -59,7 +60,7 @@ include("tools/database.php");
                 <tr class="pointerHand">
                     <td class="rank text-center"><span> <?php echo $player['rank']; ?></span></td>
                     <td class=" whiteShadow">
-                        <a class="linkToPlayer" href="view_player.php?tag=<?php print $player['tag']?>">
+                        <a class="linkToPlayer" href="view_player.php?tag=<?php print $player['tag'] ?>">
                             <?php print utf8_encode($player['playerName']); ?>
                         </a>
                         <br>
@@ -72,13 +73,13 @@ include("tools/database.php");
                         <?php print $player['trophies'] ?> <img src="res/trophy.png" height="20px">
                     </td>
                     <td class="">
-                        <?php if($player['arena_id'] > 12): ?>
+                        <?php if ($player['arena_id'] > 12): ?>
                             <img src="res/arena/arena-<?php print $player['arena_id'] ?>.png"
                                  title="<?php print $player['arena'] ?>" height="50px">
                         <?php else : ?>
                             <div>
                                 <img src="res/arena/arena-.png" title="" height="50px">
-                                <span class="whiteShadow arenaNumber"><?php print $player['arena_id'];?></span>
+                                <span class="whiteShadow arenaNumber"><?php print $player['arena_id']; ?></span>
                             </div>
                         <?php endif; ?>
                     </td>

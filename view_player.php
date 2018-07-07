@@ -64,6 +64,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
                 }
             })
         }
+
         $(document).ready(function () {
             $('#deckLinkDiv').click(function () {
                 $.ajax({
@@ -97,7 +98,8 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
                 foreach ($apiDeck as $card): ?>
                     <div class="col-xs-3">
                         <div class="img-responsive">
-                            <img src="<?php print $card['icon']; ?>" alt="failed to load img" class="img-responsive cards"/>
+                            <img src="<?php print $card['icon']; ?>" alt="failed to load img"
+                                 class="img-responsive cards"/>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -119,12 +121,12 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
                     $isFatChest = !($nextChest == 'silver' || $nextChest == 'gold');
                     if ($isFatChest)
                         $needed++;
-                if ($counter <= $needed) { ?>
+                    if ($counter <= $needed) { ?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive little-chest chests"/>
-                                <span class="chestNumber whiteShadow">+<?php print $counter ;?></span>
+                                <span class="chestNumber whiteShadow">+<?php print $counter; ?></span>
                             </div>
                         </div>
                         <?php
@@ -137,7 +139,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
                             <div class="img-responsive">
                                 <img src="images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive big-chest chests"/>
-                                <span class="chestNumber whiteShadow">+<?php print $chests[$chest];?></span>
+                                <span class="chestNumber whiteShadow">+<?php print $chests[$chest]; ?></span>
                             </div>
                         </div>
                         <?php
@@ -161,20 +163,20 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tr>
             </thead>
             <tbody>
-                <?php
-                echo '<tr>';
-                echo '<input id="playerTagHidden" type="hidden" name="playerTagHidden" value="' . $player['tag'] . '" />';
-                echo '<td class="whiteShadow">' . $player['rank'] . '</td>';
-                echo '<td id="playerTag" class="whiteShadow text-center table-border-left">' . $player['tag'] . '</td>';
-                echo '<td class="whiteShadow text-center">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
-                echo '<td class="whiteShadow text-center">Niveau<br>' . $player['level'] . '</td>';
-                echo '<td class="whiteShadow text-center table-border-left">Courant<br>' . $player['trophies'] . '</td>';
-                echo '<td class="whiteShadow text-center">Max<br>' . $player['max_trophies'] . '</td>';
-                echo '<td class="whiteShadow text-center table-border">' . $player['arena'] . '</td>';
-                echo '<td class="whiteShadow text-center">Données<br>' . $player['donations'] . '</td>';
-                echo '<td class="whiteShadow text-center">Reçues<br>' . $player['received'] . '</td>';
-                echo '</tr>';
-                ?>
+            <?php
+            echo '<tr>';
+            echo '<input id="playerTagHidden" type="hidden" name="playerTagHidden" value="' . $player['tag'] . '" />';
+            echo '<td class="whiteShadow">' . $player['rank'] . '</td>';
+            echo '<td id="playerTag" class="whiteShadow text-center table-border-left">' . $player['tag'] . '</td>';
+            echo '<td class="whiteShadow text-center">' . utf8_encode($player['playerName']) . '<br>' . utf8_encode($player['playerRole']) . '</td>';
+            echo '<td class="whiteShadow text-center">Niveau<br>' . $player['level'] . '</td>';
+            echo '<td class="whiteShadow text-center table-border-left">Courant<br>' . $player['trophies'] . '</td>';
+            echo '<td class="whiteShadow text-center">Max<br>' . $player['max_trophies'] . '</td>';
+            echo '<td class="whiteShadow text-center table-border">' . $player['arena'] . '</td>';
+            echo '<td class="whiteShadow text-center">Données<br>' . $player['donations'] . '</td>';
+            echo '<td class="whiteShadow text-center">Reçues<br>' . $player['received'] . '</td>';
+            echo '</tr>';
+            ?>
             </tbody>
         </table>
     </div>
@@ -189,16 +191,16 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tr>
             </thead>
             <tbody>
-                <?php
-                echo '<tr>';
-                echo '<td class="whiteShadow">Jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
-                echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_collection_played'] . '</td>';
-                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
-                echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
-                echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_battle_played'] . '</td>';
-                echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_battle_won'] . '</td>';
-                echo '</tr>';
-                ?>
+            <?php
+            echo '<tr>';
+            echo '<td class="whiteShadow">Jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
+            echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_collection_played'] . '</td>';
+            echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
+            echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
+            echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_battle_played'] . '</td>';
+            echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_battle_won'] . '</td>';
+            echo '</tr>';
+            ?>
             </tbody>
         </table>
     </div>
@@ -207,14 +209,14 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
         <table class="table">
             <thead>
             <tbody>
-                <?php
+            <?php
 
-                echo '<tr>';
-                echo '<td class="whiteShadow text-center">Collections<br>' . $missedCollections . '</td>';
-                echo '<td class="whiteShadow text-center">Batailles<br>' . $missedWars . '</td>';
-                echo '<td class="whiteShadow text-center">Gagnées<br>' . ($missedCollections + $missedWars) . '</td>';
-                echo '</tr>';
-                ?>
+            echo '<tr>';
+            echo '<td class="whiteShadow text-center">Collections<br>' . $missedCollections . '</td>';
+            echo '<td class="whiteShadow text-center">Batailles<br>' . $missedWars . '</td>';
+            echo '<td class="whiteShadow text-center">Gagnées<br>' . ($missedCollections + $missedWars) . '</td>';
+            echo '</tr>';
+            ?>
             </tbody>
         </table>
     </div>

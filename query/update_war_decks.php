@@ -16,7 +16,7 @@ $currentEnd = $currentWar['warEndTime'];
 $lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
 $state = getWarStateFromApi($api);
-
+// TODO faire une fonction qui permet de determiner si c'est le meme deck mais cartes a position differentes
 if ($state == "warDay")
     cleanDeckResults($db, $warId);
 else

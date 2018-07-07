@@ -35,14 +35,14 @@ function getWarLogFromApi($api)
 
 function getPlayerFromApi($api, $tag)
 {
-    $url = "https://api.royaleapi.com/player/".$tag;
+    $url = "https://api.royaleapi.com/player/" . $tag;
     $result = file_get_contents($url, true, $api);
     return json_decode($result, true);
 }
 
 function getPlayerChestsFromApi($api, $tag)
 {
-    $url = "https://api.royaleapi.com/player/".$tag."/chests";
+    $url = "https://api.royaleapi.com/player/" . $tag . "/chests";
     $result = file_get_contents($url, true, $api);
     return json_decode($result, true);
 }
@@ -63,7 +63,8 @@ function getConstantsFromApi($api)
     return json_decode($apiResult, true);
 }
 
-function getWarBattlesFromApi($api) {
+function getWarBattlesFromApi($api)
+{
     $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/battles?type=war", true, $api);
     return json_decode($query, true);
 }
