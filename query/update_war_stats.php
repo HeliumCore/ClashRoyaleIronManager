@@ -11,6 +11,8 @@ include("../tools/api_conf.php");
 
 $wars = getWarLogFromApi($api);
 $allPlayers = getAllPlayersInClan($db);
+// todo revoir les requetes de passage de current war a old war. perte de collection
+// todo revoir eligible players (ex: bonobo marqué absent alors qu'il est arrivé en cours de guerre)
 foreach ($wars as $war) {
     if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530223645
         || $war['createdDate'] == 1530569765 || $war['createdDate'] == 1530396482) {

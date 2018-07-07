@@ -114,6 +114,18 @@ LIMIT 1
     return fetch_query($db, $query);
 }
 
+function getLastWarEndDate($db)
+{
+    $query = "
+SELECT id, created
+FROM war
+WHERE past_war = 1
+ORDER BY id DESC
+LIMIT 1
+";
+    return fetch_query($db, $query);
+}
+
 function insertNewWar($db)
 {
     $query = "
@@ -280,7 +292,8 @@ AND players.tag = \"%s\"
     return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
 }
 
-function getAllPlayersForIndex($db) {
+function getAllPlayersForIndex($db)
+{
     $query = "
 SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
 arena.arena as arena, arena.arena_id as arena_id, players.donations, players.donations_received  
@@ -384,7 +397,8 @@ ORDER BY rank ASC
     return fetch_all_query($db, $query);
 }
 
-function removePlayerFromClan($db, $tag) {
+function removePlayerFromClan($db, $tag)
+{
     $pattern = "
     UPDATE players
     SET in_clan = 0
@@ -395,13 +409,71 @@ function removePlayerFromClan($db, $tag) {
 }
 
 // ----------------- DECKS -----------------
-function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
+function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $warId)
+{
+    if ($warId == null) {
+        $pattern = "
+INSERT INTO decks (player_id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8, decks.current)
+VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d)
+";
+        execute_query($db,
+            sprintf($pattern, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+
+    } else {
+        $pattern = "
+INSERT INTO decks (player_id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8, decks.current, war_id)
+VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d, 0, %d)
+";
+        execute_query($db,
+            sprintf($pattern, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $warId));
+    }
+}
+
+function getLastDeckId($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $warId)
+{
+    insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $warId);
+    return $db->lastInsertId();
+}
+
+function insertDeckResults($db, $deckId, $played, $win, $crowns)
 {
     $pattern = "
-INSERT INTO decks (player_id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8, decks.current)
-VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d, 1)
-";
-    execute_query($db, sprintf($pattern, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+    INSERT INTO deck_results (deck_id, played, wins, crowns)
+    VALUES (%d, %d, %d, %d)
+    ";
+    execute_query($db, sprintf($pattern, $deckId, $played, $win, $crowns));
+}
+
+function updateDeckResults($db, $deckId, $played, $win, $crowns)
+{
+    $pattern = "
+    UPDATE deck_results
+    SET played = %d,
+    wins = %d,
+    crowns = %d
+    WHERE id = %d
+    ";
+    execute_query($db, sprintf($pattern, $played, $win, $crowns, $deckId));
+}
+
+function cleanDeckResults($db, $warId)
+{
+    $pattern = "
+    DELETE FROM deck_results
+    WHERE war_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $warId));
+}
+
+function getDeckResults($db, $id)
+{
+    $pattern = "
+    SELECT played, wins, crowns
+    FROM deck_results
+    WHERE id = %d
+    ";
+    return fetch_query($db, sprintf($pattern, $id));
 }
 
 function disableAllDeck($db, $playerId)
@@ -495,6 +567,16 @@ WHERE cards.card_key = \"%s\"
     return fetch_query($db, utf8_decode(sprintf($pattern, $key)));
 }
 
+function getCardByCrId($db, $crId)
+{
+    $pattern = "
+SELECT id
+FROM cards
+WHERE cards.cr_id = %d
+";
+    return fetch_query($db, sprintf($pattern, $crId));
+}
+
 function getPlayersInfoByTag($db, $tag)
 {
     $pattern = "
@@ -517,7 +599,8 @@ AND war.id > 23
     return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
 }
 
-function getTotalWarPlayedByPlayerId($db, $id) {
+function getTotalWarPlayedByPlayerId($db, $id)
+{
     $pattern = "
     SELECT COUNT(player_war.id) as total_war_played
     FROM player_war

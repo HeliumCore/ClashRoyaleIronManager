@@ -57,8 +57,13 @@ function getWarStateFromApi($api)
     return getWarFromApi($api)['state'];
 }
 
-function getConstants($api)
+function getConstantsFromApi($api)
 {
     $apiResult = file_get_contents("https://api.royaleapi.com/constants", true, $api);
     return json_decode($apiResult, true);
+}
+
+function getWarBattlesFromApi($api) {
+    $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/battles?type=war", true, $api);
+    return json_decode($query, true);
 }

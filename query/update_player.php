@@ -23,7 +23,7 @@ $getExistingDeck = getExistingDeck($db, $currentDeck[0], $currentDeck[1], $curre
 disableAllDeck($db, $playerId);
 if (!$getExistingDeck) {
     insertDeck($db, $playerId, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
-        $currentDeck[5], $currentDeck[6], $currentDeck[7]);
+        $currentDeck[5], $currentDeck[6], $currentDeck[7], null);
 } else {
     enableOldDeck($db, $getExistingDeck['id']);
 }

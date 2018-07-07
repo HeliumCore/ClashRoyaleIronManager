@@ -9,7 +9,7 @@
 include("../tools/api_conf.php");
 include("../tools/database.php");
 
-$constants = getConstants($api);
+$constants = getConstantsFromApi($api);
 
 foreach ($constants['cards'] as $card) {
     if (is_array(getCardByKey($db, $card['key']))) {

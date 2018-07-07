@@ -17,6 +17,8 @@ if ($state == "collectionDay") {
     $stateName = "Jour de guerre";
     $standings = getAllStandings($db);
 }
+
+// TODO recuperer la date de la guerre pour determiner l'heure de fin, et l'afficher. Ou faire compte a rebours (ingame)
 ?>
 
 <!DOCTYPE html>
