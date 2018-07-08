@@ -666,7 +666,7 @@ INNER JOIN role ON role.id = players.role_id
 INNER JOIN player_war ON player_war.player_id = players.id
 INNER JOIN war ON player_war.war_id = war.id
 WHERE tag = \"%s\"
-AND war.id > 23
+AND war.id > 24
 ";
     return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
 }
@@ -736,7 +736,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_id = %d
 AND war.past_war > 0
-AND war.id > 23
+AND war.id > 24
 ";
 
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -750,7 +750,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.battle_played = 0
 AND war.past_war > 0
-AND war.id > 23
+AND war.id > 24
 AND player_war.player_id = %d
 ";
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -764,7 +764,7 @@ FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.collection_played = 0
 AND war.past_war > 0
-AND war.id > 23
+AND war.id > 24
 AND player_war.player_id = %d
 ";
     return fetch_query($db, sprintf($pattern, $playerId));
@@ -776,7 +776,7 @@ function getFirstWarDate($db)
 SELECT created
 FROM war
 WHERE past_war > 0
-AND war.id > 23
+AND war.id > 24
 LIMIT 1
 ";
     return fetch_query($db, $query);
