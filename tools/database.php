@@ -362,7 +362,6 @@ LIKE \"%s\"
 
 function updateMaxTrophies($db, $maxTrophies, $tag)
 {
-// MAX TROPHIES
     $pattern = "
 UPDATE players
 SET players.max_trophies = %d
@@ -421,7 +420,7 @@ function insertDeck($db, $playerId, $card1, $card2, $card3, $card4, $card5, $car
     if ($warId == null) {
         $pattern = "
 INSERT INTO decks (player_id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8, decks.current)
-VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d)
+VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d, 1)
 ";
         execute_query($db,
             sprintf($pattern, $playerId, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
@@ -592,6 +591,15 @@ function getAllWarDecks($db, $current)
         $pattern = "WHERE war_id IS NOT NULL";
 
     return fetch_all_query($db, sprintf($query, $pattern));
+}
+
+function getPlayerDecks($db, $playerId) {
+    $pattern = "
+    SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+    FROM decks
+    WHERE player_id = %d
+    ";
+    return fetch_all_query($db, sprintf($pattern, $playerId));
 }
 
 // ----------------- CARDS -----------------
