@@ -8,14 +8,10 @@
 
 include("tools/database.php");
 include("tools/api_conf.php");
-if (getWarStateFromApi($api) == 'warDay')
-    $tabName = "Guerre en cours";
-else
-    $tabName = "Dernière guerre";
 
 $allCards = [];
 $lastUpdated = getLastUpdated($db, "war_decks");
-
+$state = getWarStateFromApi($api);
 function getDeckLink($deck)
 {
     $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
@@ -60,97 +56,106 @@ function getDeckLink($deck)
     <br><br>
 
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#current" data-toggle="tab"
-                                                  class="tab-link"><?php print $tabName; ?></a></li>
-        <li role="presentation"><a href="#allWar" data-toggle="tab" class="tab-link">Toutes les guerres</a></li>
+        <?php if ($state == 'warDay'): ?>
+            <li role="presentation" class="active"><a href="#current" data-toggle="tab"
+                                                      class="tab-link">Guerre en cours</a></li>
+        <? endif; ?>
+        <li role="presentation" <?php print 'class="active"'; ?>><a href="#allWar" data-toggle="tab" class="tab-link">Toutes
+                les guerres</a></li>
         <li role="presentation"><a href="#favCards" data-toggle="tab" class="tab-link">Cartes favorites</a></li>
     </ul>
     <br>
     <div class="tab-content">
-        <div class="tab-pane active" id="current">
-            <?php
-            $counter = 0;
-            $pos = 1;
-            $allDecks = getAllWarDecks($db, true);
-            $size = sizeof($allDecks);
-            foreach ($allDecks as $deck):
-                $deckLink = getDeckLink($deck);
-                if ($counter == 0): ?>
-                    <div class="row">
-                    <div class="col-md-5">
+        <?php if ($state == 'warDay'): ?>
+            <div class="tab-pane active" id="current">
+                <?php
+                $counter = 0;
+                $pos = 1;
+                $allDecks = getAllWarDecks($db, true);
+                $size = sizeof($allDecks);
+                foreach ($allDecks as $deck):
+                    $deckLink = getDeckLink($deck);
+                    if ($counter == 0): ?>
                         <div class="row">
-                            <?php
-                            for ($i = 1; $i <= 8; $i++):?>
-                                <div class="col-xs-3">
-                                    <div class="img-responsive">
-                                        <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                             alt="failed to load img"
-                                             class="img-responsive"/>
+                        <div class="col-md-5">
+                            <div class="row">
+                                <?php
+                                for ($i = 1; $i <= 8; $i++):?>
+                                    <div class="col-xs-3">
+                                        <div class="img-responsive">
+                                            <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                                 alt="failed to load img"
+                                                 class="img-responsive"/>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php
-                            endfor; ?>
-                        </div>
-                        <div class="second-row">
-                            <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                                <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
-                                <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                    &nbsp; - &nbsp;</span>
-                                <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <div id="deckLinkDiv" class="text-center pointerHand">
-                                    <a href="<?php print $deckLink; ?>" class="text-center">
-                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
-                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                                    </a>
+                                <?php
+                                endfor; ?>
+                            </div>
+                            <div class="second-row">
+                                <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                                    <span class="whiteShadow">Joués : <?php print $deck['played']; ?>
+                                        &nbsp; - &nbsp;</span>
+                                    <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
+                                        &nbsp; - &nbsp;</span>
+                                    <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                                    <div id="deckLinkDiv" class="text-center pointerHand">
+                                        <a href="<?php print $deckLink; ?>" class="text-center">
+                                            <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                            <span id="spanDeckLink"
+                                                  class="whiteShadow text-center">Copier le deck</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <?php
-                    if ($pos == $size)
-                        echo '</div>';
+                        <?php
+                        if ($pos == $size)
+                            echo '</div>';
 
-                    $counter++;
-                else:?>
-                    <div class="col-md-5 col-md-offset-2">
-                        <div class="row">
-                            <?php
-                            for ($i = 1; $i <= 8; $i++):?>
-                                <div class="col-xs-3">
-                                    <div class="img-responsive">
-                                        <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                             alt="failed to load img"
-                                             class="img-responsive"/>
+                        $counter++;
+                    else:?>
+                        <div class="col-md-5 col-md-offset-2">
+                            <div class="row">
+                                <?php
+                                for ($i = 1; $i <= 8; $i++):?>
+                                    <div class="col-xs-3">
+                                        <div class="img-responsive">
+                                            <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                                 alt="failed to load img"
+                                                 class="img-responsive"/>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php
-                            endfor; ?>
-                        </div>
-                        <div class="second-row">
-                            <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                                <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
-                                <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                    &nbsp; - &nbsp;</span>
-                                <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <div id="deckLinkDiv" class="text-center pointerHand">
-                                    <a href="<?php print $deckLink; ?>" class="text-center">
-                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
-                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                                    </a>
+                                <?php
+                                endfor; ?>
+                            </div>
+                            <div class="second-row">
+                                <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                                    <span class="whiteShadow">Joués : <?php print $deck['played']; ?>
+                                        &nbsp; - &nbsp;</span>
+                                    <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
+                                        &nbsp; - &nbsp;</span>
+                                    <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                                    <div id="deckLinkDiv" class="text-center pointerHand">
+                                        <a href="<?php print $deckLink; ?>" class="text-center">
+                                            <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                            <span id="spanDeckLink"
+                                                  class="whiteShadow text-center">Copier le deck</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                    <br><br>
-                    <?php
-                    $counter = 0;
-                endif;
-                $pos++;
-            endforeach;
-            ?>
-        </div>
-        <div class="tab-pane" id="allWar">
+                        </div>
+                        <br><br>
+                        <?php
+                        $counter = 0;
+                    endif;
+                    $pos++;
+                endforeach;
+                ?>
+            </div>
+        <?php endif ?>
+        <div class="tab-pane <?php if($state != 'warDay'): print 'active'; endif;?>" id="allWar">
             <?php
             $counter = 0;
             $pos = 1;
