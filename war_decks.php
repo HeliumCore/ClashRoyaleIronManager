@@ -49,6 +49,7 @@ function getDeckLink($deck)
 <div class="container">
     <h1 class="whiteShadow">Decks de guerre</h1><br>
     <h4 class="whiteShadow">Attention, actualiser ces informations peut prendre beaucoup de temps</h4>
+    <!--    todo ajouter la date de derniere mise a jour, dupliquer ailleurs, nouvelle table BDD-->
     <br><br>
     <ul id="navUlWarDecks" class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
@@ -59,11 +60,10 @@ function getDeckLink($deck)
             <a href="#allWar" aria-controls="allWar" role="tab" data-toggle="tab" class="tab-link">Toutes les
                 guerres</a>
         </li>
-<!--        TODO uncomment quand la tab des cartes favorites est terminée -->
-<!--        <li role="presentation">-->
-<!--            <a href="#favCards" aria-controls="favCards" role="tab" data-toggle="tab" class="tab-link">Cartes-->
-<!--                favorites</a>-->
-<!--        </li>-->
+        <li role="presentation">
+            <a href="#favCards" aria-controls="favCards" role="tab" data-toggle="tab" class="tab-link">Cartes
+                favorites</a>
+        </li>
     </ul>
     <br><br>
     <div class="tab-content">
@@ -228,45 +228,46 @@ function getDeckLink($deck)
             $counter = 0;
             $pos = 0;
             foreach ($bestCards as $key => $bestCard):
-                if ($pos > 7):
+                if ($pos > 8):
                     break;
                 endif;
                 $cardKey = getCardByCrId($db, $key)['card_key'];
                 if ($counter == 0): ?>
                     <div class="row">
-                    <div class="col-md-5 img-responsive">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage" class="img-responsive"/>
-                            </div>
-                            <div class="col-md-2">
-                                <h4 class="whiteShadow"><?php print $bestCard; ?> decks</h4>
-                            </div>
-                        </div>
+                    <div class="col-lg-4">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
+                    </div>
+                    <?php
+                    $counter++;
+                elseif ($counter == 1):?>
+                    <div class="col-lg-4">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
                     </div>
                     <?php
                     $counter++;
                 else:?>
-                    <div class="col-md-5 col-md-offset-2 img-responsive">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage" class="img-responsive"/>
-                            </div>
-                            <div class="col-md-2">
-                                <h4 class="whiteShadow"><?php print $bestCard; ?> decks</h4>
-                            </div>
-                        </div>
+                    <div class="col-lg-4">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
                     </div>
                     </div>
+                <br><br>
                     <?php
                     $counter = 0;
                 endif;
                 $pos++;
             endforeach; ?>
         </div>
-        <div id="loaderDiv">
-            <img id="loaderImg" src="res/loader.gif"/>
-        </div>
-        <?php include("footer.html"); ?>
+    </div>
+</div>
+<div id="loaderDiv">
+    <img id="loaderImg" src="res/loader.gif"/>
+</div>
+<?php include("footer.html"); ?>
 </body>
 </html>
