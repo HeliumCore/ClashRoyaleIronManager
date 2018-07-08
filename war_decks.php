@@ -183,8 +183,7 @@ function getDeckLink($deck)
                                 <div class="col-xs-3">
                                     <div class="img-responsive">
                                         <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                             alt="failed to load img"
-                                             class="img-responsive"/>
+                                             alt="failed to load img" class="img-responsive"/>
                                     </div>
                                 </div>
                             <?php

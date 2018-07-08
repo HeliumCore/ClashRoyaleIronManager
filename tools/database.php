@@ -484,16 +484,6 @@ function getDeckResults($db, $id)
     return fetch_query($db, sprintf($pattern, $id));
 }
 
-function getDeckResultByDeckId($db, $deckId)
-{
-    $pattern = "
-    SELECT played, wins, crowns
-    FROM deck_results
-    WHERE deck_id = %d
-    ";
-    return fetch_query($db, sprintf($pattern, $deckId));
-}
-
 function disableAllDeck($db, $playerId)
 {
     $pattern = "
@@ -549,18 +539,6 @@ AND player_id =
     return fetch_query($db, $query . $playerId);
 }
 
-function getWarDecksId($db, $warId)
-{
-    $pattern = "
-    SELECT id
-    FROM decks
-    WHERE war_id = %d
-    AND player_id = 610
-    ";
-
-    return fetch_all_query($db, sprintf($pattern, $warId));
-}
-
 function getDeckById($db, $id)
 {
     $pattern = "
@@ -570,17 +548,6 @@ function getDeckById($db, $id)
     ";
 
     return fetch_query($db, sprintf($pattern, $id));
-}
-
-function getCardsNameByDeckId($db, $id)
-{
-    $pattern = "
-    SELECT cards.card_key
-    FROM cards
-    WHERE cards.id IN(%d, %d, %d, %d, %d, %d, %d, %d)
-    ";
-    $cards = getDeckById($db, $id);
-    return fetch_all_query($db, sprintf($pattern, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]));
 }
 
 function getAllCurrentWarDecks($db, $warId)
@@ -710,8 +677,18 @@ function getTotalWarPlayedByPlayerId($db, $id)
 function getCardsInCurrentDeck($db, $playerId)
 {
     $pattern = "
-SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+SELECT c1.card_key as c1key, c2.card_key as c2key, c3.card_key as c3key, c4.card_key as c4key, c5.card_key as c5key, 
+c6.card_key as c6key, c7.card_key as c7key, c8.card_key as c8key, c1.cr_id as crid1, c2.cr_id as crid2, 
+c3.cr_id as crid3, c4.cr_id as crid4, c5.cr_id as crid5, c6.cr_id as crid6, c7.cr_id as crid7, c8.cr_id as crid8
 FROM decks
+JOIN cards as c1 ON c1.id = decks.card_1
+JOIN cards as c2 ON c2.id = decks.card_2
+JOIN cards as c3 ON c3.id = decks.card_3
+JOIN cards as c4 ON c4.id = decks.card_4
+JOIN cards as c5 ON c5.id = decks.card_5
+JOIN cards as c6 ON c6.id = decks.card_6
+JOIN cards as c7 ON c7.id = decks.card_7
+JOIN cards as c8 ON c8.id = decks.card_8
 WHERE decks.player_id = %d
 AND decks.current > 0
 ";
@@ -735,15 +712,6 @@ OR cards.id = %d
 ";
 
     return fetch_all_query($db, sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
-}
-
-function getDeckLinkFromDeckId($db, $deckId)
-{
-    $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
-    $cards = getDeckById($db, $deckId);
-    $crIds = getCrIdsByCards($db, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]);
-    return sprintf($pattern, $crIds[0]['cr_id'], $crIds[1]['cr_id'], $crIds[2]['cr_id'], $crIds[3]['cr_id'], $crIds[4]['cr_id'], $crIds[5]['cr_id'], $crIds[6]['cr_id'], $crIds[7]['cr_id']);
-
 }
 
 // ----------------- WAR STATS -----------------

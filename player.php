@@ -13,23 +13,15 @@ if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else header('Location: index.php');
 
 $player = getPlayersInfoByTag($db, $playerTag);
-$totalWarPlayed = getTotalWarPlayedByPlayerId($db, $player['playerId']);
-
-// DECK
-$apiDeck = getPlayerCurrentDeckFromApi($api, $playerTag);
-
-$currentDeck = getCardsInCurrentDeck($db, $player['playerId']);
-$getCrResult = getCrIdsByCards($db, $currentDeck['card_1'], $currentDeck['card_2'], $currentDeck['card_3'],
-    $currentDeck['card_4'], $currentDeck['card_5'], $currentDeck['card_6'], $currentDeck['card_7'],
-    $currentDeck['card_8']);
+$playerId = $player['playerId'];
+$totalWarPlayed = getTotalWarPlayedByPlayerId($db, $playerId);
+$currentDeck = getCardsInCurrentDeck($db, $playerId);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
-$deckLink = sprintf($deckLinkPattern, $getCrResult[0]['cr_id'], $getCrResult[1]['cr_id'], $getCrResult[2]['cr_id'],
-    $getCrResult[3]['cr_id'], $getCrResult[4]['cr_id'], $getCrResult[5]['cr_id'], $getCrResult[6]['cr_id'],
-    $getCrResult[7]['cr_id'], $getCrResult[8]['cr_id']);
+$deckLink = sprintf($deckLinkPattern, $currentDeck['crid1'], $currentDeck['crid2'], $currentDeck['crid3'],
+    $currentDeck['crid4'], $currentDeck['crid5'], $currentDeck['crid6'], $currentDeck['crid7'], $currentDeck['crid8']);
 
 // CHESTS
 $chests = getPlayerChestsFromApi($api, $playerTag);
-
 $upcomingChests[] = $chests["upcoming"];
 $fatChests = array(
     $chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary",
@@ -38,8 +30,8 @@ $fatChests = array(
 ksort($fatChests);
 
 // Absences
-$missedCollections = countMissedCollection($db, $player['playerId'])['missed_collection'];
-$missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
+$missedCollections = countMissedCollection($db, $playerId)['missed_collection'];
+$missedWars = countMissedWar($db, $playerId)['missed_war'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,29 +81,10 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
 <?php include("header.html"); ?>
 <div class="container">
     <h1 class="whiteShadow">Détails du joueur</h1><br>
-    <h2 class="whiteShadow">Deck du moment</h2>
     <br>
     <div class="row">
         <div class="col-md-5">
-            <div class="row">
-                <?php
-                foreach ($apiDeck as $card): ?>
-                    <div class="col-xs-3">
-                        <div class="img-responsive">
-                            <img src="<?php print $card['icon']; ?>" alt="failed to load img"
-                                 class="img-responsive cards"/>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-                <div id="deckLinkDiv" class="text-center pointerHand">
-                    <input type="hidden" id="hd_deckLink" data-link="<?php print $deckLink ?>"/>
-                    <input class="deckLink" id="input_deckLink" type="image" src="images/ui/copy-deck.png" height="50px"
-                           alt="Copier le lien"/>
-                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-5 col-md-offset-2">
+            <h3 class="whiteShadow">Coffres à venir</h3>
             <div class="row">
                 <?php
                 $counter = 1;
@@ -148,9 +121,29 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
                 ?>
             </div>
         </div>
+        <div class="col-md-5 col-md-offset-2">
+            <h3 class="whiteShadow">Deck du moment</h3>
+            <div class="row">
+                <?php
+                for ($i = 1; $i <= 8; $i++):?>
+                    <div class="col-xs-3">
+                        <div class="img-responsive">
+                            <img src="images/cards/<?php print $currentDeck['c' . $i . 'key']; ?>.png"
+                                 alt="failed to load img" class="img-responsive cards"/>
+                        </div>
+                    </div>
+                <?php endfor; ?>
+                <div id="deckLinkDiv" class="text-center pointerHand">
+                    <input type="hidden" id="hd_deckLink" data-link="<?php print $deckLink ?>"/>
+                    <input class="deckLink" id="input_deckLink" type="image" src="images/ui/copy-deck.png" height="50px"
+                           alt="Copier le lien"/>
+                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                </div>
+            </div>
+        </div>
     </div>
-    <br><br><br>
-    <h2 class="whiteShadow">Joueur</h2>
+    <br><br>
+    <h3 class="whiteShadow">Joueur</h3>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
@@ -180,7 +173,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
-    <h2 class="whiteShadow">Guerres</h2>
+    <h3 class="whiteShadow">Guerres</h3>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>
@@ -204,7 +197,7 @@ $missedWars = countMissedWar($db, $player['playerId'])['missed_war'];
             </tbody>
         </table>
     </div>
-    <h2 class="whiteShadow">Absences</h2>
+    <h3 class="whiteShadow">Absences</h3>
     <div class="divInfoPlayer table-responsive">
         <table class="table">
             <thead>

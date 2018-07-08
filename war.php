@@ -245,7 +245,7 @@ if ($state == "collectionDay") {
 
                 echo '<tr class="pointerHand playerTr">';
                 echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
-                echo '<td class="whiteShadow"><a class="linkToPlayer" href="view_player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
+                echo '<td class="whiteShadow"><a class="linkToPlayer" href="player.php?tag=' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
                 echo '<td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';

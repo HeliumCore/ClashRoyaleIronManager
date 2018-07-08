@@ -177,7 +177,7 @@ foreach ($allPlayers as $player) {
                             <td class="whiteShadow text-center rank">
                                 <span><?php echo utf8_encode($player['rank']); ?></span></td>
                             <td class="whiteShadow"><a class="linkToPlayer"
-                                                       href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                                                       href="player.php?tag=<?php echo $player['tag']; ?>">
                                     <?php echo utf8_encode($player['name']); ?></a></td>
                             <td class="whiteShadow text-center">
                                 jouées<br><?php echo $player['totalCollectionPlayed']; ?></td>
@@ -243,7 +243,7 @@ foreach ($allPlayers as $player) {
                             <td class="whiteShadow text-center rank">
                                 <span><?php echo utf8_encode($player['rank']); ?></span></td>
                             <td class="whiteShadow"><a class="linkToPlayer"
-                                                       href="view_player.php?tag=<?php echo $player['tag']; ?>">
+                                                       href="player.php?tag=<?php echo $player['tag']; ?>">
                                     <?php echo utf8_encode($player['name']); ?></a></td>
                             <td class="whiteShadow text-center">jouées<br><?php echo $player['totalBattlesPlayed']; ?>
                             </td>
