@@ -40,14 +40,6 @@ function getDeckLink($deck)
                 }
             })
         }
-
-        $(document).ready(function () {
-            $('.js-result-div').each(function () {
-                $(this).find('.js-span-deck-link').click(function () {
-                    window.location = $(this).parent().find(".js-deck-link").data('link');
-                });
-            });
-        });
     </script>
 </head>
 <body>
@@ -95,10 +87,12 @@ function getDeckLink($deck)
                                 <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                     &nbsp; - &nbsp;</span>
                                 <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <input type="hidden" id="hd_deckLink" class="js-deck-link"
-                                       data-link="<?php print $deckLink ?>"/>
-                                <span id="spanDeckLink"
-                                      class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
+                                <div id="deckLinkDiv" class="text-center pointerHand">
+                                    <a href="<?php print $deckLink; ?>" class="text-center">
+                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,10 +119,12 @@ function getDeckLink($deck)
                                 <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                     &nbsp; - &nbsp;</span>
                                 <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <input type="hidden" id="hd_deckLink" class="js-deck-link"
-                                       data-link="<?php print $deckLink ?>"/>
-                                <span id="spanDeckLink"
-                                      class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
+                                <div id="deckLinkDiv" class="text-center pointerHand">
+                                    <a href="<?php print $deckLink; ?>" class="text-center">
+                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,10 +162,12 @@ function getDeckLink($deck)
                                 <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                     &nbsp; - &nbsp;</span>
                                 <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <input type="hidden" id="hd_deckLink" class="js-deck-link"
-                                       data-link="<?php print $deckLink ?>"/>
-                                <span id="spanDeckLink"
-                                      class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
+                                <div id="deckLinkDiv" class="text-center pointerHand">
+                                    <a href="<?php print $deckLink; ?>" class="text-center">
+                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,10 +193,12 @@ function getDeckLink($deck)
                                 <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                     &nbsp; - &nbsp;</span>
                                 <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                                <input type="hidden" id="hd_deckLink" class="js-deck-link"
-                                       data-link="<?php print $deckLink ?>"/>
-                                <span id="spanDeckLink"
-                                      class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
+                                <div id="deckLinkDiv" class="text-center pointerHand">
+                                    <a href="<?php print $deckLink; ?>" class="text-center">
+                                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
