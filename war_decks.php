@@ -52,36 +52,36 @@ $deckId = $deckIds[0]['id'];
     foreach ($deckIds
 
              as $deckId):
-    $deckId = intval($deckId['id']);
-    if ($counter == 0) { ?>
-    <div class="row">
-        <div class="col-md-5">
+        $deckId = intval($deckId['id']);
+        if ($counter == 0) { ?>
             <div class="row">
-                <?php
-                foreach (getCardsNameByDeckId($db, $deckId) as $card): ?>
-                    <div class="col-xs-3 cards">
-                        <div class="img-responsive">
-                            <img src="images/cards/<?php print $card['card_key'] ?>.png" alt="failed to load img"
-                                 class="img-responsive cards"/>
+            <div class="col-md-5">
+                <div class="row">
+                    <?php
+                    foreach (getCardsNameByDeckId($db, $deckId) as $card): ?>
+                        <div class="col-xs-3 cards">
+                            <div class="img-responsive">
+                                <img src="images/cards/<?php print $card['card_key'] ?>.png" alt="failed to load img"
+                                     class="img-responsive cards"/>
+                            </div>
                         </div>
+                    <?php endforeach;
+                    $deckLink = getDeckLinkFromDeckId($db, $deckId);
+                    $results = getDeckResultByDeckId($db, $deckId); ?>
+                </div>
+                <div class="second-row">
+                    <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                        <span class="whiteShadow">Joués : <?php print $results['played']; ?>&nbsp; - &nbsp;</span>
+                        <span class="whiteShadow">Victoires : <?php print $results['wins']; ?>&nbsp; - &nbsp;</span>
+                        <span class="whiteShadow">Couronnes : <?php print $results['crowns']; ?></span><br><br>
+                        <input type="hidden" id="hd_deckLink" class="js-deck-link"
+                               data-link="<?php print $deckLink ?>"/>
+                        <span id="spanDeckLink" class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
                     </div>
-                <?php endforeach;
-                $deckLink = getDeckLinkFromDeckId($db, $deckId);
-                $results = getDeckResultByDeckId($db, $deckId); ?>
-            </div>
-            <div class="second-row">
-                <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                    <span class="whiteShadow">Joués : <?php print $results['played']; ?>&nbsp; - &nbsp;</span>
-                    <span class="whiteShadow">Victoires : <?php print $results['wins']; ?>&nbsp; - &nbsp;</span>
-                    <span class="whiteShadow">Couronnes : <?php print $results['crowns']; ?></span><br><br>
-                    <input type="hidden" id="hd_deckLink" class="js-deck-link"
-                           data-link="<?php print $deckLink ?>"/>
-                    <span id="spanDeckLink" class="whiteShadow text-center js-span-deck-link">Copier le deck</span>
                 </div>
             </div>
-        </div>
-        <?php
-        $counter++;
+            <?php
+            $counter++;
         } else { ?>
             <div class="col-md-5 col-md-offset-2">
                 <div class="row">
@@ -108,15 +108,16 @@ $deckId = $deckIds[0]['id'];
                     </div>
                 </div>
             </div>
+            </div>
             <br><br>
             <?php
             $counter = 0;
         }
-        endforeach; ?>
-    </div>
-    <div id="loaderDiv">
-        <img id="loaderImg" src="res/loader.gif"/>
-    </div>
-    <?php include("footer.html"); ?>
+    endforeach; ?>
+</div>
+<div id="loaderDiv">
+    <img id="loaderImg" src="res/loader.gif"/>
+</div>
+<?php include("footer.html"); ?>
 </body>
 </html>
