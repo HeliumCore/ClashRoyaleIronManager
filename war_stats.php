@@ -152,7 +152,7 @@ foreach ($allPlayers as $player) {
                         <td class="whiteShadow text-center">Jouées<br><?php echo $allCollectionsPlayed; ?></td>
                         <td class="whiteShadow text-center">Gagnées<br><?php echo $allCollectionsWon; ?></td>
                         <td class="whiteShadow text-center">
-                            % victoires<br>
+                            % victoire<br>
                             <?php echo ($allCollectionsPlayed != 0) ? round((($allCollectionsWon / $allCollectionsPlayed) * 100)) : '--'; ?>
                         </td>
                         <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
@@ -225,7 +225,7 @@ foreach ($allPlayers as $player) {
                             else echo '--'; ?>
                         </td>
                         <td class="whiteShadow text-center">Abscences<br><?php echo $allMissedWar; ?></td>
-                        <td class="whiteShadow text-center">% présences<br>
+                        <td class="whiteShadow text-center">% présence<br>
                             <?php if ($allWars != 0) echo '' . round(($allBattlePlayed / $allWars) * 100);
                             else echo '--'; ?>
                         </td>
