@@ -36,6 +36,12 @@ if ($deckId < 0) {
     enableOldDeck($db, $deckId);
 }
 
+$last = getLastUpdatedPlayer($db, $playerTag);
+if (is_array($last))
+    setLastUpdatedPlayer($db, $playerTag);
+else
+    insertLastUpdatedPlayer($db, $playerTag);
+
 // deck1 : deck provenant de l'API
 // deck 2 : deck provenant de la base
 function isSameDeck($db, $deck1, $deck2)

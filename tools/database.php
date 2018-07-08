@@ -593,7 +593,8 @@ function getAllWarDecks($db, $current)
     return fetch_all_query($db, sprintf($query, $pattern));
 }
 
-function getPlayerDecks($db, $playerId) {
+function getPlayerDecks($db, $playerId)
+{
     $pattern = "
     SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     FROM decks
@@ -779,4 +780,55 @@ AND war.id > 23
 LIMIT 1
 ";
     return fetch_query($db, $query);
+}
+
+// ----------------- LAST UPDATED ---------------
+function setLastUpdated($db, $pageName)
+{
+    $pattern = "
+    UPDATE last_updated
+    SET updated = NOW()
+    WHERE page_name = \"%s\"
+    ";
+    execute_query($db, utf8_decode(sprintf($pattern, $pageName)));
+}
+
+function getLastUpdated($db, $pageName)
+{
+    $pattern = "
+    SELECT updated
+    FROM last_updated
+    WHERE page_name = \"%s\"
+    ";
+    return fetch_query($db, utf8_decode(sprintf($pattern, $pageName)));
+}
+
+function setLastUpdatedPlayer($db, $playerTag)
+{
+    $pattern = "
+    UPDATE last_updated
+    SET updated = NOW()
+    WHERE page_name = player
+    AND tag = \"%s\"
+    ";
+    execute_query($db, utf8_decode(sprintf($pattern, $playerTag)));
+}
+
+function insertLastUpdatedPlayer($db, $playerTag)
+{
+    $pattern = "
+    INSERT INTO last_updated (page_name, updated, tag)
+    VALUES ('player', NOW(), \"%s\")
+    ";
+    execute_query($db, utf8_decode(sprintf($pattern, $playerTag)));
+}
+
+function getLastUpdatedPlayer($db, $playerTag)
+{
+    $pattern = "
+    SELECT id, updated
+    FROM last_updated
+    WHERE tag = \"%s\"
+    ";
+    return fetch_query($db, utf8_decode(sprintf($pattern, $playerTag)));
 }

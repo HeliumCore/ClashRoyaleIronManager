@@ -73,6 +73,8 @@ foreach ($battles as $battle) {
     }
 }
 
+setLastUpdated($db, "war_decks");
+
 function getCardId($db, $deck, $pos)
 {
     $cardId = getCardByCrId($db, $deck[$pos]['id']);

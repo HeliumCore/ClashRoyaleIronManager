@@ -73,3 +73,4 @@ foreach (getAllPlayersInClan($db) as $player) {
         }
     }
 }
+setLastUpdated($db, "war");

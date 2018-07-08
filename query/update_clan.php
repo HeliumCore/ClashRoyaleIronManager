@@ -34,3 +34,5 @@ foreach (getClanFromApi($api)['members'] as $player) {
 foreach (array_diff($allPlayersTags, $allPlayersTagsInClan) as $tag) {
     removePlayerFromClan($db, $tag);
 }
+
+setLastUpdated($db, "index");

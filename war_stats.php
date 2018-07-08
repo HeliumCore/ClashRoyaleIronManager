@@ -70,6 +70,8 @@ foreach ($allPlayers as $player) {
     }
     $finalPlayerList[] = $thisPlayer;
 }
+
+$lastUpdated = getLastUpdated($db, "war_stats");
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +110,7 @@ foreach ($allPlayers as $player) {
                 });
             });
 
-            $('#tx_search').on("keyup paste", function() {
+            $('#tx_search').on("keyup paste", function () {
                 let value = $(this).val().toLowerCase();
                 const playerLine = $('.playerTr');
                 if (value.length < 3) {
@@ -116,7 +118,7 @@ foreach ($allPlayers as $player) {
                     return;
                 }
 
-                playerLine.each(function() {
+                playerLine.each(function () {
                     if ($(this).next().val().toLowerCase().indexOf(value) < 0)
                         $(this).hide();
                 });
@@ -127,6 +129,13 @@ foreach ($allPlayers as $player) {
 <body>
 <?php include("header.html"); ?>
 <div class="container">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
+    <?php endif; ?>
     <h1 class="whiteShadow">Statistiques des guerres</h1>
     <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
@@ -205,7 +214,8 @@ foreach ($allPlayers as $player) {
                                                                                height="35px"/></td>
                             <?php endif; ?>
                         </tr>
-                        <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['name']); ?>"/>
+                        <input type="hidden" class="hd_playerName"
+                               value="<?php print utf8_encode($player['name']); ?>"/>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -269,7 +279,8 @@ foreach ($allPlayers as $player) {
                                                                                height="35px"/></td>
                             <?php endif; ?>
                         </tr>
-                        <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['name']); ?>"/>
+                        <input type="hidden" class="hd_playerName"
+                               value="<?php print utf8_encode($player['name']); ?>"/>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -278,9 +289,9 @@ foreach ($allPlayers as $player) {
     </div>
     <br>
 </div>
-<!--<div id="loaderDiv">-->
-<!--    <img id="loaderImg" src="res/loader.gif"/>-->
-<!--</div>-->
+<div id="loaderDiv">
+    <img id="loaderImg" src="res/loader.gif"/>
+</div>
 <?php include("footer.html"); ?>
 </body>
 </html>

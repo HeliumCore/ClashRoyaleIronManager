@@ -48,3 +48,5 @@ foreach ($wars as $war) {
         $playerWarResult = null;
     }
 }
+
+setLastUpdated($db, "war_stats");

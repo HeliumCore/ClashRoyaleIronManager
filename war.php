@@ -27,6 +27,8 @@ if ($state == "collectionDay") {
     $standings = getAllStandings($db);
     $endTime = getWarFromApi($api)['warEndTime'];
 }
+$lastUpdated = getLastUpdated($db, "war");
+
 ?>
 
 <!DOCTYPE html>
@@ -128,6 +130,13 @@ if ($state == "collectionDay") {
 <body>
 <?php include("header.html"); ?>
 <div class="container">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
+    <?php endif; ?>
     <div>
         <h1 class="whiteShadow">Guerre en cours</h1>
         <span class="whiteShadow"><?php echo $stateName ?></span><br>

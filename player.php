@@ -32,6 +32,9 @@ ksort($fatChests);
 // Absences
 $missedCollections = countMissedCollection($db, $playerId)['missed_collection'];
 $missedWars = countMissedWar($db, $playerId)['missed_war'];
+
+// last updated
+$lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,6 +64,13 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
 <body>
 <?php include("header.html"); ?>
 <div class="container">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
+    <?php endif; ?>
     <h1 class="whiteShadow">Détails du joueur</h1><br>
     <br>
     <div class="row">

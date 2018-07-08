@@ -7,6 +7,7 @@
  */
 
 include("tools/database.php");
+$lastUpdated = getLastUpdated($db, "index");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,8 +54,15 @@ include("tools/database.php");
 <body>
 <?php include("header.html"); ?>
 <div class="container">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
+    <?php endif; ?>
     <h1 class="whiteShadow">Liste des joueurs</h1>
-    <span class="pageIndexSubtitle whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</b></span>
+    <span class="pageIndexSubtitle whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
     <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
     <br><br>
     <div class="table-responsive">
