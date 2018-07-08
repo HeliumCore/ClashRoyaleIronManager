@@ -47,11 +47,6 @@ function getPlayerChestsFromApi($api, $tag)
     return json_decode($result, true);
 }
 
-function getPlayerCurrentDeckFromApi($api, $tag)
-{
-    return getPlayerFromApi($api, $tag)['currentDeck'];
-}
-
 function getWarStateFromApi($api)
 {
     return getWarFromApi($api)['state'];

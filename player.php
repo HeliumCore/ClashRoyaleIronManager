@@ -56,25 +56,6 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
                 }
             })
         }
-
-        $(document).ready(function () {
-            $('#deckLinkDiv').click(function () {
-                $.ajax({
-                    url: 'query/update_clan.php',
-                    beforeSend: function () {
-                        $('#loaderDiv').show();
-                    },
-                    success: function () {
-                        $.ajax({
-                            url: 'query/update_player.php?tag=' + $('input:hidden[name=playerTagHidden]').val(),
-                            success: function () {
-                                window.location = $('#hd_deckLink').data('link');
-                            }
-                        });
-                    }
-                });
-            });
-        });
     </script>
 </head>
 <body>
@@ -134,10 +115,10 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
                     </div>
                 <?php endfor; ?>
                 <div id="deckLinkDiv" class="text-center pointerHand">
-                    <input type="hidden" id="hd_deckLink" data-link="<?php print $deckLink ?>"/>
-                    <input class="deckLink" id="input_deckLink" type="image" src="images/ui/copy-deck.png" height="50px"
-                           alt="Copier le lien"/>
-                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                    <a href="<?php print $deckLink; ?>" class="text-center">
+                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                    </a>
                 </div>
             </div>
         </div>

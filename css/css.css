@@ -100,8 +100,11 @@ tbody tr:nth-child(5) .rank span {
 }
 
 #spanDeckLink {
-    position: relative;
-    bottom: 15px;
+    vertical-align: center;
+}
+
+.deckLink {
+    height: 50px;
 }
 
 .arenaNumber {
