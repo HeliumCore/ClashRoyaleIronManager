@@ -50,11 +50,15 @@ foreach ($battles as $battle) {
 
     if ($deckId > 0) {
         $deckResults = getDeckResults($db, $deckId);
-        $played = intval($deckResults['played']);
-        $win += intval($deckResults['wins']);
-        $crowns += intval($deckResults['crowns']);
-        $played++;
-        updateDeckResults($db, $deckId, $played, $win, $crowns);
+        if ($deckResults) {
+            $played = intval($deckResults['played']);
+            $win += intval($deckResults['wins']);
+            $crowns += intval($deckResults['crowns']);
+            $played++;
+            updateDeckResults($db, $deckId, $played, $win, $crowns);
+        } else {
+            insertDeckResults($db, $deckId, 1, $win, $crowns);
+        }
     } else {
         $card1 = getCardId($db, $deck, 0);
         $card2 = getCardId($db, $deck, 1);

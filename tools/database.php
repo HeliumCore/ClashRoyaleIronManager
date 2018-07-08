@@ -467,9 +467,10 @@ function cleanDeckResults($db, $warId)
 {
     $pattern = "
     DELETE FROM deck_results
-    WHERE war_id = %d
+USING deck_results, decks
+WHERE decks.id = deck_results.deck_id
+AND decks.war_id = %d
     ";
-
     execute_query($db, sprintf($pattern, $warId));
 }
 
