@@ -588,7 +588,7 @@ function getAllWarDecks($db, $current)
     if ($current)
         $pattern = "WHERE war.past_war = 0";
     else
-        $pattern = "WHERE war_id IS NOT NULL";
+        $pattern = "WHERE decks.war_id IS NOT NULL";
 
     return fetch_all_query($db, sprintf($query, $pattern));
 }
@@ -641,7 +641,7 @@ WHERE cards.card_key = \"%s\"
 function getCardByCrId($db, $crId)
 {
     $pattern = "
-SELECT id
+SELECT id, card_key
 FROM cards
 WHERE cards.cr_id = %d
 ";

@@ -13,6 +13,8 @@ if (getWarStateFromApi($api) == 'warDay')
 else
     $tabName = "Dernière guerre";
 
+$allCards = [];
+
 function getDeckLink($deck)
 {
     $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
@@ -57,6 +59,11 @@ function getDeckLink($deck)
             <a href="#allWar" aria-controls="allWar" role="tab" data-toggle="tab" class="tab-link">Toutes les
                 guerres</a>
         </li>
+<!--        TODO uncomment quand la tab des cartes favorites est terminée -->
+<!--        <li role="presentation">-->
+<!--            <a href="#favCards" aria-controls="favCards" role="tab" data-toggle="tab" class="tab-link">Cartes-->
+<!--                favorites</a>-->
+<!--        </li>-->
     </ul>
     <br><br>
     <div class="tab-content">
@@ -145,7 +152,9 @@ function getDeckLink($deck)
                     <div class="col-md-5">
                         <div class="row">
                             <?php
-                            for ($i = 1; $i <= 8; $i++):?>
+                            for ($i = 1; $i <= 8; $i++):
+                                array_push($allCards, intval($deck['crid' . $i]));
+                                ?>
                                 <div class="col-xs-3">
                                     <div class="img-responsive">
                                         <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
@@ -177,7 +186,9 @@ function getDeckLink($deck)
                     <div class="col-md-5 col-md-offset-2">
                         <div class="row">
                             <?php
-                            for ($i = 1; $i <= 8; $i++):?>
+                            for ($i = 1; $i <= 8; $i++):
+                                array_push($allCards, intval($deck['crid' . $i]));
+                                ?>
                                 <div class="col-xs-3">
                                     <div class="img-responsive">
                                         <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
@@ -210,11 +221,52 @@ function getDeckLink($deck)
             endforeach;
             ?>
         </div>
-    </div>
-</div>
-<div id="loaderDiv">
-    <img id="loaderImg" src="res/loader.gif"/>
-</div>
-<?php include("footer.html"); ?>
+        <div role="tabpanel" class="tab-pane" id="favCards">
+            <?php
+            $bestCards = array_count_values($allCards);
+            arsort($bestCards);
+            $counter = 0;
+            $pos = 0;
+            foreach ($bestCards as $key => $bestCard):
+                if ($pos > 7):
+                    break;
+                endif;
+                $cardKey = getCardByCrId($db, $key)['card_key'];
+                if ($counter == 0): ?>
+                    <div class="row">
+                    <div class="col-md-5 img-responsive">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage" class="img-responsive"/>
+                            </div>
+                            <div class="col-md-2">
+                                <h4 class="whiteShadow"><?php print $bestCard; ?> decks</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    $counter++;
+                else:?>
+                    <div class="col-md-5 col-md-offset-2 img-responsive">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage" class="img-responsive"/>
+                            </div>
+                            <div class="col-md-2">
+                                <h4 class="whiteShadow"><?php print $bestCard; ?> decks</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <?php
+                    $counter = 0;
+                endif;
+                $pos++;
+            endforeach; ?>
+        </div>
+        <div id="loaderDiv">
+            <img id="loaderImg" src="res/loader.gif"/>
+        </div>
+        <?php include("footer.html"); ?>
 </body>
 </html>
