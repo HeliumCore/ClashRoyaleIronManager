@@ -106,20 +106,26 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
             <h3 class="whiteShadow">Deck du moment</h3>
             <div class="row">
                 <?php
-                for ($i = 1; $i <= 8; $i++):?>
-                    <div class="col-xs-3">
-                        <div class="img-responsive">
-                            <img src="images/cards/<?php print $currentDeck['c' . $i . 'key']; ?>.png"
-                                 alt="failed to load img" class="img-responsive cards"/>
+                if (is_array($currentDeck)):
+                    for ($i = 1; $i <= 8; $i++):?>
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="images/cards/<?php print $currentDeck['c' . $i . 'key']; ?>.png"
+                                     alt="failed to load img" class="img-responsive cards"/>
+                            </div>
                         </div>
+                    <?php endfor; ?>
+                    <div id="deckLinkDiv" class="text-center pointerHand">
+                        <a href="<?php print $deckLink; ?>" class="text-center">
+                            <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                            <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                        </a>
                     </div>
-                <?php endfor; ?>
-                <div id="deckLinkDiv" class="text-center pointerHand">
-                    <a href="<?php print $deckLink; ?>" class="text-center">
-                        <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
-                        <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                    </a>
+                <?php else: ?>
+                <div>
+                    <span class="whiteShadow text-center">Actualisez les informations pour voir votre deck</span>
                 </div>
+                <?php endif;?>
             </div>
         </div>
     </div>
