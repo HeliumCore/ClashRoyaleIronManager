@@ -172,6 +172,7 @@ if ($state == "collectionDay") {
                         echo '<td class="whiteShadow text-center">Couronnes<br>' . $clan['crowns'] . '</td>';
                         echo '<td class="whiteShadow text-center">Trophées<br>' . $clan['war_trophies'] . '</td>';
                         echo '</tr>';
+                        echo '<input type="hidden" value=""/>';
                         $pos++;
                         $lastBattlesWon = $clan['battles_won'];
                         $lastCrowns = $clan['crowns'];

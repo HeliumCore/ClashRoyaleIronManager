@@ -555,6 +555,7 @@ function getWarDecksId($db, $warId)
     SELECT id
     FROM decks
     WHERE war_id = %d
+    AND player_id = 610
     ";
 
     return fetch_all_query($db, sprintf($pattern, $warId));
@@ -582,15 +583,48 @@ function getCardsNameByDeckId($db, $id)
     return fetch_all_query($db, sprintf($pattern, $cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5], $cards[6], $cards[7]));
 }
 
-function getAllCurrentWarDecks($db)
+function getAllCurrentWarDecks($db, $warId)
 {
-    $query = "
+    $pattern = "
     SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     FROM decks
     WHERE player_id = 610
+    AND war_id = %d
     ";
 
-    return fetch_all_query($db, $query);
+    return fetch_all_query($db, sprintf($pattern, $warId));
+}
+
+function getAllWarDecks($db, $current)
+{
+    $query = "
+    SELECT c1.card_key as c1key, c2.card_key as c2key, c3.card_key as c3key, c4.card_key as c4key, c5.card_key as c5key,
+    c6.card_key as c6key, c7.card_key as c7key, c8.card_key as c8key, c1.cr_id as crid1, c2.cr_id as crid2, 
+    c3.cr_id as crid3, c4.cr_id as crid4, c5.cr_id as crid5, c6.cr_id as crid6, c7.cr_id as crid7, c8.cr_id as crid8, 
+    sum(played) as played, sum(wins) as wins, sum(crowns) as crowns
+    FROM `decks`
+    JOIN deck_results ON deck_results.deck_id = decks.id
+    JOIN cards as c1 ON c1.id = decks.card_1
+    JOIN cards as c2 ON c2.id = decks.card_2
+    JOIN cards as c3 ON c3.id = decks.card_3
+    JOIN cards as c4 ON c4.id = decks.card_4
+    JOIN cards as c5 ON c5.id = decks.card_5
+    JOIN cards as c6 ON c6.id = decks.card_6
+    JOIN cards as c7 ON c7.id = decks.card_7
+    JOIN cards as c8 ON c8.id = decks.card_8
+    JOIN war ON decks.war_id = war.id
+    %s
+    AND player_id = 610
+    GROUP BY card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
+    ORDER BY played DESC, wins DESC, crowns DESC
+    ";
+
+    if ($current)
+        $pattern = "WHERE war.past_war = 0";
+    else
+        $pattern = "WHERE war_id IS NOT NULL";
+
+    return fetch_all_query($db, sprintf($query, $pattern));
 }
 
 // ----------------- CARDS -----------------

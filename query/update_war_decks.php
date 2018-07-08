@@ -38,7 +38,7 @@ foreach ($battles as $battle) {
     $deckId = 0;
     $played = 0;
 
-    $allWarDecks = getAllCurrentWarDecks($db);
+    $allWarDecks = getAllCurrentWarDecks($db, $warId);
     if (sizeof($allWarDecks) > 0) {
         foreach ($allWarDecks as $warDeck) {
             if (isSameDeck($db, $deck, $warDeck)) {

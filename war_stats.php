@@ -131,7 +131,6 @@ foreach ($allPlayers as $player) {
     <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
     <br><br>
-    <br><br>
     <!-- Nav tabs -->
     <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab" data-toggle="tab"
