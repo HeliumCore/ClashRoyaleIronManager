@@ -276,12 +276,11 @@ foreach ($allPlayers as $player) {
             </div>
         </div>
     </div>
-
     <br>
 </div>
-<div id="loaderDiv">
-    <img id="loaderImg" src="res/loader.gif"/>
-</div>
+<!--<div id="loaderDiv">-->
+<!--    <img id="loaderImg" src="res/loader.gif"/>-->
+<!--</div>-->
 <?php include("footer.html"); ?>
 </body>
 </html>

@@ -49,28 +49,23 @@ function getDeckLink($deck)
 <div class="container">
     <h1 class="whiteShadow">Decks de guerre</h1><br>
     <h4 class="whiteShadow">Attention, actualiser ces informations peut prendre beaucoup de temps</h4>
-    <!--    todo ajouter la date de derniere mise a jour, dupliquer ailleurs, nouvelle table BDD-->
     <br><br>
-    <ul id="navUlWarDecks" class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a href="#current" aria-controls="current" role="tab" data-toggle="tab"
-               class="tab-link"><?php print $tabName; ?></a>
-        </li>
-        <li role="presentation">
-            <a href="#allWar" aria-controls="allWar" role="tab" data-toggle="tab" class="tab-link">Toutes les
-                guerres</a>
-        </li>
-        <li role="presentation">
-            <a href="#favCards" aria-controls="favCards" role="tab" data-toggle="tab" class="tab-link">Cartes
-                favorites</a>
-        </li>
+
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#current" data-toggle="tab"
+                                                  class="tab-link"><?php print $tabName; ?></a></li>
+        <li role="presentation"><a href="#allWar" data-toggle="tab" class="tab-link">Toutes les guerres</a></li>
+        <li role="presentation"><a href="#favCards" data-toggle="tab" class="tab-link">Cartes favorites</a></li>
     </ul>
-    <br><br>
+    <br>
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="current">
+        <div class="tab-pane active" id="current">
             <?php
             $counter = 0;
-            foreach (getAllWarDecks($db, true) as $deck):
+            $pos = 1;
+            $allDecks = getAllWarDecks($db, true);
+            $size = sizeof($allDecks);
+            foreach ($allDecks as $deck):
                 $deckLink = getDeckLink($deck);
                 if ($counter == 0): ?>
                     <div class="row">
@@ -104,6 +99,9 @@ function getDeckLink($deck)
                         </div>
                     </div>
                     <?php
+                    if ($pos == $size)
+                        echo '</div>';
+
                     $counter++;
                 else:?>
                     <div class="col-md-5 col-md-offset-2">
@@ -140,13 +138,17 @@ function getDeckLink($deck)
                     <?php
                     $counter = 0;
                 endif;
+                $pos++;
             endforeach;
             ?>
         </div>
-        <div role="tabpanel" class="tab-pane" id="allWar">
+        <div class="tab-pane" id="allWar">
             <?php
             $counter = 0;
-            foreach (getAllWarDecks($db, false) as $deck):
+            $pos = 1;
+            $allDecks = getAllWarDecks($db, false);
+            $size = sizeof($allDecks);
+            foreach ($allDecks as $deck):
                 if ($counter == 0): ?>
                     <div class="row">
                     <div class="col-md-5">
@@ -181,6 +183,9 @@ function getDeckLink($deck)
                         </div>
                     </div>
                     <?php
+                    if ($pos == $size)
+                        echo '</div>';
+
                     $counter++;
                 else:?>
                     <div class="col-md-5 col-md-offset-2">
@@ -218,10 +223,11 @@ function getDeckLink($deck)
                     <?php
                     $counter = 0;
                 endif;
+                $pos++;
             endforeach;
             ?>
         </div>
-        <div role="tabpanel" class="tab-pane" id="favCards">
+        <div class="tab-pane" id="favCards">
             <?php
             $bestCards = array_count_values($allCards);
             arsort($bestCards);
@@ -237,7 +243,8 @@ function getDeckLink($deck)
                     <div class="col-lg-4">
                         <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
                              class="img-responsive center-block"/>
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
                     </div>
                     <?php
                     $counter++;
@@ -245,7 +252,8 @@ function getDeckLink($deck)
                     <div class="col-lg-4">
                         <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
                              class="img-responsive center-block"/>
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
                     </div>
                     <?php
                     $counter++;
@@ -253,10 +261,10 @@ function getDeckLink($deck)
                     <div class="col-lg-4">
                         <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
                              class="img-responsive center-block"/>
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?> decks</span>
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
                     </div>
                     </div>
-                <br><br>
                     <?php
                     $counter = 0;
                 endif;
