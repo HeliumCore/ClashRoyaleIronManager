@@ -58,7 +58,7 @@ foreach (getAllPlayersInClan($db) as $player) {
     }
     $battlesPlayed = $battlesPlayed != null ? $battlesPlayed : 0;
     $wins = $wins != null ? $wins : 0;
-    if (sizeof($getPlayerWarResult) > 0) {
+    if (is_array($getPlayerWarResult)) {
         $playerWarId = intval($getPlayerWarResult['player_war_id']);
         // Si le joueur a déjà été enregistré pour cette guerre, on update
         if ($warState == "collectionDay") {

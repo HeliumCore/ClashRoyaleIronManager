@@ -749,6 +749,7 @@ SELECT COUNT(player_war.id) as missed_war
 FROM player_war
 JOIN war ON player_war.war_id = war.id
 WHERE player_war.battle_played = 0
+AND player_war.collection_played > 0
 AND war.past_war > 0
 AND war.id > 24
 AND player_war.player_id = %d
