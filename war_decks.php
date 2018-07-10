@@ -60,7 +60,7 @@ function getDeckLink($deck)
             <li role="presentation" class="active"><a href="#current" data-toggle="tab"
                                                       class="tab-link">Guerre en cours</a></li>
         <? endif; ?>
-        <li role="presentation" <?php print 'class="active"'; ?>><a href="#allWar" data-toggle="tab" class="tab-link">Toutes
+        <li role="presentation" <?php if ($state != 'warDay'): print 'class="active"'; endif; ?>><a href="#allWar" data-toggle="tab" class="tab-link">Toutes
                 les guerres</a></li>
         <li role="presentation"><a href="#favCards" data-toggle="tab" class="tab-link">Cartes favorites</a></li>
     </ul>
