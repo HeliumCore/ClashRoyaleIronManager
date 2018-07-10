@@ -11,6 +11,7 @@ else return;
 
 include("../tools/api_conf.php");
 include("../tools/database.php");
+
 $player = getPlayerFromApi($api, $playerTag);
 updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
 $deck = $player['currentDeck'];
@@ -36,14 +37,11 @@ if ($deckId < 0) {
     enableOldDeck($db, $deckId);
 }
 
-$last = getLastUpdatedPlayer($db, $playerTag);
-if (is_array($last))
+if (is_array(getLastUpdatedPlayer($db, $playerTag)))
     setLastUpdatedPlayer($db, $playerTag);
 else
     insertLastUpdatedPlayer($db, $playerTag);
 
-// deck1 : deck provenant de l'API
-// deck 2 : deck provenant de la base
 function isSameDeck($db, $deck1, $deck2)
 {
     $list1 = [];

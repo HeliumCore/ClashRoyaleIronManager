@@ -293,8 +293,7 @@ function getPlayerByTag($db, $tag)
     $pattern = "
 SELECT players.id, players.tag
 FROM players
-WHERE players.in_clan = 1
-AND players.tag = \"%s\"
+WHERE players.tag = \"%s\"
 ";
     return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
 }
@@ -327,7 +326,8 @@ players.arena = %d,
 players.donations = %d,
 players.donations_received = %d,
 players.donations_delta = %d,
-players.donations_ratio= %f
+players.donations_ratio= %f,
+players.in_clan = 1
 WHERE players.tag = \"%s\"
 ";
     $query = utf8_decode(sprintf($pattern, $name, $rank, $trophies, getRoleIdByMachineName($db, $role), $expLevel,
@@ -809,7 +809,7 @@ function setLastUpdatedPlayer($db, $playerTag)
     $pattern = "
     UPDATE last_updated
     SET updated = NOW()
-    WHERE page_name = player
+    WHERE page_name = 'player'
     AND tag = \"%s\"
     ";
     execute_query($db, utf8_decode(sprintf($pattern, $playerTag)));
