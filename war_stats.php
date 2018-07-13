@@ -72,6 +72,8 @@ foreach ($allPlayers as $player) {
 }
 
 $lastUpdated = getLastUpdated($db, "war_stats");
+
+//TODO gerer les saisons de guerre
 ?>
 
 <!DOCTYPE html>
@@ -177,7 +179,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                     </tbody>
                 </table>
             </div>
-            <!-- TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur -->
             <div class="table-responsive">
                 <table class="table js-player-table" id="tableIndex">
                     <tbody>
