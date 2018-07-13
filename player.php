@@ -35,6 +35,7 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
 
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
+//TODO tableau 'guerre', soit que guerre terminée, soit diviser en deux (terminée et en cours)
 ?>
 <!DOCTYPE html>
 <html lang="en">

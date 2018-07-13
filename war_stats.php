@@ -11,19 +11,6 @@ include("tools/database.php");
 $allPlayers = getAllPlayersByRank($db);
 $firstWarDate = getFirstWarDate($db);
 
-global $allCollections;
-global $allCollectionsPlayed;
-global $allCollectionsWon;
-global $allCardsEarned;
-global $allWars;
-global $allBattlePlayed;
-global $allBattleWon;
-global $allMissedCollections;
-global $allMissedWar;
-global $missedConsecutiveCollection;
-global $missedConsecutiveWar;
-global $allBadStatus;
-
 $allCollections = 0;
 $allCollectionsPlayed = 0;
 $allCollectionsWon = 0;
@@ -35,6 +22,7 @@ $allMissedCollections = 0;
 $allMissedWar = 0;
 $allBadStatus = 0;
 $finalPlayerList = array();
+
 foreach ($allPlayers as $player) {
     $warStats = getWarStatsByPlayerId($db, $player['id']);
     $thisPlayer['rank'] = $player['rank'];
@@ -50,7 +38,7 @@ foreach ($allPlayers as $player) {
     $missedWar = countMissedWar($db, $player['id'])['missed_war'];
     $thisPlayer['missedWar'] = $missedWar == null ? 0 : $missedWar;
 
-    $totalCollection = $totalCollectionPlayed + $missedCollection;
+    $thisPlayer['totalCollection'] = $totalCollection = $totalCollectionPlayed + $missedCollection;
     $totalWar = $totalBattlesPlayed + $missedWar;
 
     $allCollections += $totalCollection;
@@ -63,8 +51,20 @@ foreach ($allPlayers as $player) {
     $allBattleWon += $totalBattlesWon;
     $allMissedWar += $missedWar;
 
-    $thisPlayer['warning'] = ($missedCollection + $missedWar) >= 2;
-    $thisPlayer['ban'] = ($missedCollection + $missedWar) >= 3;
+    $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id']);
+    if ($missedWar >= 2) {
+        $thisPlayer['ban'] = true;
+    } else if ($missedWar == 1) {
+        $thisPlayer['warning'] = true;
+    } else if ($eligibleWars > 10) {
+        $ratio = ($missedCollection / $eligibleWars);
+        $thisPlayer['warning'] = ($ratio >= 0.5 and $ratio < 0.75);
+        $thisPlayer['ban'] = $ratio >= 0.75;
+    } else {
+        $thisPlayer['warning'] = false;
+        $thisPlayer['ban'] = false;
+    }
+
     if ($thisPlayer['warning'] || $thisPlayer['ban']) {
         $allBadStatus++;
     }
@@ -165,7 +165,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </td>
                         <td class="whiteShadow text-center">Absences<br><?php echo $allMissedCollections; ?></td>
                         <td class="whiteShadow text-center">% présence<br>
-                            <?php echo ($allCollectionsPlayed != 0) ? round(($allCollections / $allCollectionsPlayed) * 100) : '--'; ?>
+                            <?php echo ($allCollections != 0) ? round(($allCollectionsPlayed / $allCollections) * 100) : '--'; ?>
                         </td>
                         <td class="whiteShadow text-center"><img src="images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $allCardsEarned; ?>
@@ -177,7 +177,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                     </tbody>
                 </table>
             </div>
-            <!--            TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur -->
+            <!-- TODO gerer les pourcentages (pas bon pour le % de presence, total et par joueur -->
             <div class="table-responsive">
                 <table class="table js-player-table" id="tableIndex">
                     <tbody>
@@ -197,7 +197,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                             <td class="whiteShadow  text-center">Absence<br><?php echo $player['missedCollection'] ?>
                             </td>
                             <td class="whiteShadow text-center">Présence<br>
-                                <?php echo ($player['totalCollectionPlayed'] != 0) ? round(($player['totalCollection'] / $player['totalCollectionPlayed']) * 100) : 0; ?>
+                                <?php echo ($player['totalCollection'] != 0) ? round(($player['totalCollectionPlayed'] / $player['totalCollection']) * 100) . '%' : '--'; ?>
                             </td>
                             <td class="whiteShadow"><img src="images/ui/deck.png"
                                                          height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
@@ -263,9 +263,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <?php echo ($player['totalBattlesPlayed'] != 0) ? round((($player['totalBattlesWon'] / $player['totalBattlesPlayed']) * 100)) . '%' : '-'; ?>
                             </td>
                             <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?></td>
-                            <td class="whiteShadow text-center">Présence<br>
-                                <?php echo ($player['totalBattlesPlayed'] != 0) ? round(($player['totalWar'] / $player['totalBattlesPlayed']) * 100) . "%" : '-'; ?>
-                            </td>
 
                             <!-- Status -->
                             <?php if ($player['ban']) : ?>

@@ -378,15 +378,16 @@ function getNumberOfPlayersInClan($db)
 function getNotEligiblePlayers($db)
 {
     $query = "
-SELECT DISTINCT players.id 
+SELECT players.id 
 FROM players 
 WHERE players.id NOT IN
 (
-  SELECT DISTINCT pw.player_id 
+  SELECT pw.player_id 
   FROM player_war pw 
   JOIN war ON pw.war_id = war.id 
   WHERE war.past_war = 0
 )
+AND players.in_clan = 1
 ";
     return fetch_all_query($db, $query);
 }
@@ -781,6 +782,18 @@ AND war.id > 24
 LIMIT 1
 ";
     return fetch_query($db, $query);
+}
+
+function getNumberOfEligibleWarByPlayerId($db, $playerId)
+{
+    $pattern = "
+SELECT COUNT(pw.id) as number_of_war
+FROM player_war pw
+JOIN war ON pw.war_id = war.id 
+WHERE war.past_war = 1
+AND pw.player_id = %d
+";
+    return intval(fetch_query($db, sprintf($pattern, $playerId))['number_of_war']);
 }
 
 // ----------------- LAST UPDATED ---------------

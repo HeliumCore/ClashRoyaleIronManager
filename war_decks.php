@@ -20,7 +20,7 @@ function getDeckLink($deck)
 }
 
 ?>
-
+<!--TODO faire une pagination, il y a trop de deck maintenant et la page fait 4km de long -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
