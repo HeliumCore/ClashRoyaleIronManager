@@ -142,7 +142,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     </div>
     <br><br>
     <h3 class="whiteShadow">Joueur</h3>
-    <div class="divInfoPlayer table-responsive">
+    <div class="table-responsive">
         <table class="table">
             <thead>
             <tr class="rowIndex">
@@ -172,7 +172,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         </table>
     </div>
     <h3 class="whiteShadow">Guerres</h3>
-    <div class="divInfoPlayer table-responsive">
+    <div class="table-responsive">
         <table class="table">
             <thead>
             <tr class="rowIndex">
@@ -196,7 +196,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         </table>
     </div>
     <h3 class="whiteShadow">Absences</h3>
-    <div class="divInfoPlayer table-responsive">
+    <div class="table-responsive">
         <table class="table">
             <thead>
             <tbody>

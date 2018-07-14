@@ -564,6 +564,10 @@ function getAllCurrentWarDecks($db, $warId)
 
 function getAllWarDecks($db, $current)
 {
+    return getAllWarDecksWithPagination($db, $current, 1);
+}
+
+function getAllWarDecksWithPagination($db, $current, $page) {
     $query = "
     SELECT c1.card_key as c1key, c2.card_key as c2key, c3.card_key as c3key, c4.card_key as c4key, c5.card_key as c5key,
     c6.card_key as c6key, c7.card_key as c7key, c8.card_key as c8key, c1.cr_id as crid1, c2.cr_id as crid2, 
@@ -584,6 +588,7 @@ function getAllWarDecks($db, $current)
     AND player_id = 610
     GROUP BY card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     ORDER BY played DESC, wins DESC, crowns DESC
+    LIMIT %d,10
     ";
 
     if ($current)
@@ -591,7 +596,27 @@ function getAllWarDecks($db, $current)
     else
         $pattern = "WHERE decks.war_id IS NOT NULL";
 
-    return fetch_all_query($db, sprintf($query, $pattern));
+    $offset = intval(($page - 1) * 10);
+    return fetch_all_query($db, sprintf($query, $pattern, $offset));
+}
+
+function getNumberOfPages($db, $current) {
+    $query = "
+    SELECT COUNT(decks.id) as d
+        FROM `decks`
+    JOIN deck_results ON deck_results.deck_id = decks.id
+    JOIN war ON decks.war_id = war.id
+    %s
+    AND player_id = 610
+    ";
+
+    if ($current)
+        $pattern = "WHERE war.past_war = 0";
+    else
+        $pattern = "WHERE decks.war_id IS NOT NULL";
+
+    $decks = intval(fetch_query($db, sprintf($query, $pattern))['d']);
+    return ceil($decks / 10);
 }
 
 function getPlayerDecks($db, $playerId)
