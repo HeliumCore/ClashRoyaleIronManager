@@ -28,7 +28,6 @@ if (isset($_GET['tab']) && !empty($_GET['tab'])) {
     $currentPageNumber = 1;
     $allWarsPageNumber = 1;
 }
-$allCards = [];
 $lastUpdated = getLastUpdated($db, "war_decks");
 $state = getWarStateFromApi($api);
 function getDeckLink($deck)
@@ -36,6 +35,16 @@ function getDeckLink($deck)
     $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
     return sprintf($pattern, $deck['crid1'], $deck['crid2'], $deck['crid3'], $deck['crid4'], $deck['crid5'],
         $deck['crid6'], $deck['crid7'], $deck['crid8']);
+}
+
+function getAllCards($db) {
+    $allCards = [];
+    foreach (getAllWarDecks($db) as $deck) {
+        for ($i = 1; $i <= 8; $i++) {
+            array_push($allCards, intval($deck['crid' . $i]));
+        }
+    }
+    return $allCards;
 }
 
 ?>
@@ -76,7 +85,7 @@ function getDeckLink($deck)
         <?php
         if ($state == 'warDay' && $currentTab == "current"):
             print '<li role="presentation" class="active"><a href="#current" data-toggle="tab" class="tab-link">Guerre en cours</a></li>';
-        else:
+        elseif ($state == 'warDay'):
             print '<li role="presentation"><a href="#current" data-toggle="tab" class="tab-link">Guerre en cours</a></li>';
         endif;
 
@@ -226,7 +235,6 @@ function getDeckLink($deck)
                     for ($i = 1;
                     $i <= 8;
                     $i++):
-                    array_push($allCards, intval($deck['crid' . $i]));
                     ?>
                     <div class="col-xs-3">
                         <div class="img-responsive">
@@ -265,7 +273,6 @@ function getDeckLink($deck)
                     for ($i = 1;
                     $i <= 8;
                     $i++):
-                    array_push($allCards, intval($deck['crid' . $i]));
                     ?>
                     <div class="col-xs-3">
                         <div class="img-responsive">
@@ -319,7 +326,7 @@ function getDeckLink($deck)
     </div>
     <div class="tab-pane <?php if($currentTab == "favCards"): print 'active'; endif;?>" id="favCards">
         <?php
-        $bestCards = array_count_values($allCards);
+        $bestCards = array_count_values(getAllCards($db));
         arsort($bestCards);
         $counter = 0;
         $pos = 0;
