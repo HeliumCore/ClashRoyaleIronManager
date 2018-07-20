@@ -589,7 +589,8 @@ function getAllWarDecks($db)
     return fetch_all_query($db, $query);
 }
 
-function getAllWarDecksWithPagination($db, $current, $page) {
+function getAllWarDecksWithPagination($db, $current, $page)
+{
     $query = "
     SELECT c1.card_key as c1key, c2.card_key as c2key, c3.card_key as c3key, c4.card_key as c4key, c5.card_key as c5key,
     c6.card_key as c6key, c7.card_key as c7key, c8.card_key as c8key, c1.cr_id as crid1, c2.cr_id as crid2, 
@@ -622,7 +623,8 @@ function getAllWarDecksWithPagination($db, $current, $page) {
     return fetch_all_query($db, sprintf($query, $pattern, $offset));
 }
 
-function getNumberOfPages($db, $current) {
+function getNumberOfPages($db, $current)
+{
     $query = "
     SELECT COUNT(decks.id) as d
         FROM `decks`

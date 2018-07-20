@@ -37,7 +37,8 @@ function getDeckLink($deck)
         $deck['crid6'], $deck['crid7'], $deck['crid8']);
 }
 
-function getAllCards($db) {
+function getAllCards($db)
+{
     $allCards = [];
     foreach (getAllWarDecks($db) as $deck) {
         for ($i = 1; $i <= 8; $i++) {
@@ -72,11 +73,11 @@ function getAllCards($db) {
 <?php include("header.html"); ?>
 <div class="container">
     <?php if ($lastUpdated['updated'] != null):
-    $time = strtotime($lastUpdated['updated']);
-    ?>
-    <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
     <?php else: ?>
-    <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
+        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
     <?php endif; ?>
     <h1 class="whiteShadow">Decks de guerre</h1><br>
     <h4 class="whiteShadow">Attention, actualiser ces informations peut prendre beaucoup de temps</h4>
@@ -106,11 +107,11 @@ function getAllCards($db) {
     <div class="tab-content">
         <?php
         if ($state == 'warDay'):
-            if ($currentTab == "current"):
-                print '<div class="tab-pane active" id="current">';
-            else:
-                print '<div class="tab-pane" id="current">';
-            endif;
+        if ($currentTab == "current"):
+            print '<div class="tab-pane active" id="current">';
+        else:
+            print '<div class="tab-pane" id="current">';
+        endif;
 
         $counter = 0;
         $pos = 1;
@@ -218,7 +219,7 @@ function getAllCards($db) {
         print '</div>';
         ?>
     </div>
-    <?php endif ?>
+<?php endif ?>
     <div class="tab-pane <?php if ($state != 'warDay' || $currentTab == "allWar"): print 'active';
     endif; ?>" id="allWar">
         <?php
@@ -227,83 +228,83 @@ function getAllCards($db) {
         $allDecks = getAllWarDecksWithPagination($db, false, $allWarsPageNumber);
         $size = sizeof($allDecks);
         foreach ($allDecks as $deck):
-        if ($counter == 0): ?>
-        <div class="row">
-            <div class="col-md-5">
+            if ($counter == 0): ?>
                 <div class="row">
-                    <?php
-                    for ($i = 1;
-                    $i <= 8;
-                    $i++):
-                    ?>
-                    <div class="col-xs-3">
-                        <div class="img-responsive">
-                            <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                 alt="failed to load img"
-                                 class="img-responsive"/>
+                <div class="col-md-5">
+                    <div class="row">
+                        <?php
+                        for ($i = 1;
+                             $i <= 8;
+                             $i++):
+                            ?>
+                            <div class="col-xs-3">
+                                <div class="img-responsive">
+                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                         alt="failed to load img"
+                                         class="img-responsive"/>
+                                </div>
+                            </div>
+                        <?php
+                        endfor; ?>
+                    </div>
+                    <div class="second-row">
+                        <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
+                                &nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <div id="deckLinkDiv" class="text-center pointerHand">
+                                <a href="<?php print $deckLink; ?>" class="text-center">
+                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <?php
-                    endfor; ?>
                 </div>
-                <div class="second-row">
-                    <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                        <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
-                        <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                            &nbsp; - &nbsp;</span>
-                        <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                        <div id="deckLinkDiv" class="text-center pointerHand">
-                            <a href="<?php print $deckLink; ?>" class="text-center">
-                                <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
-                                <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php
-            if ($pos == $size)
-            echo '</div>';
+                <?php
+                if ($pos == $size)
+                    echo '</div>';
 
-            $counter++;
+                $counter++;
             else: ?>
-            <div class="col-md-5 col-md-offset-2">
-                <div class="row">
-                    <?php
-                    for ($i = 1;
-                    $i <= 8;
-                    $i++):
-                    ?>
-                    <div class="col-xs-3">
-                        <div class="img-responsive">
-                            <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                 alt="failed to load img" class="img-responsive"/>
+                <div class="col-md-5 col-md-offset-2">
+                    <div class="row">
+                        <?php
+                        for ($i = 1;
+                             $i <= 8;
+                             $i++):
+                            ?>
+                            <div class="col-xs-3">
+                                <div class="img-responsive">
+                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                         alt="failed to load img" class="img-responsive"/>
+                                </div>
+                            </div>
+                        <?php
+                        endfor; ?>
+                    </div>
+                    <div class="second-row">
+                        <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
+                                &nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <div id="deckLinkDiv" class="text-center pointerHand">
+                                <a href="<?php print $deckLink; ?>" class="text-center">
+                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <?php
-                    endfor; ?>
                 </div>
-                <div class="second-row">
-                    <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                        <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
-                        <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                            &nbsp; - &nbsp;</span>
-                        <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
-                        <div id="deckLinkDiv" class="text-center pointerHand">
-                            <a href="<?php print $deckLink; ?>" class="text-center">
-                                <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
-                                <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </div>
-    <br><br>
-        <?php
-        $counter = 0;
-        endif;
-        $pos++;
+                <br><br>
+                <?php
+                $counter = 0;
+            endif;
+            $pos++;
         endforeach;
 
         $numberOfPages = getNumberOfPages($db, false);
@@ -311,61 +312,61 @@ function getAllCards($db) {
         print '<div class="col-md-12 text-center">';
         print '<ul class="pagination pagination-lg">';
         for ($i = 1;
-        $i <= $numberOfPages;
-        $i++):
-        if ($i == $allWarsPageNumber):
-        print '<li class="active"><a href="war_decks.php?tab=allWar&page='.$i.'">' . $i . '</a></li>';
-        else:
-        print '<li><a href="war_decks.php?tab=allWar&page='.$i.'">' . $i . '</a></li>';
-        endif;
+             $i <= $numberOfPages;
+             $i++):
+            if ($i == $allWarsPageNumber):
+                print '<li class="active"><a href="war_decks.php?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
+            else:
+                print '<li><a href="war_decks.php?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
+            endif;
         endfor;
         print '</ul>';
         print '</div>';
         print '</div>';
         ?>
     </div>
-    <div class="tab-pane <?php if($currentTab == "favCards"): print 'active'; endif;?>" id="favCards">
+    <div class="tab-pane <?php if ($currentTab == "favCards"): print 'active'; endif; ?>" id="favCards">
         <?php
         $bestCards = array_count_values(getAllCards($db));
         arsort($bestCards);
         $counter = 0;
         $pos = 0;
         foreach ($bestCards as $key => $bestCard):
-        if ($pos > 8):
-        break;
-        endif;
-        $cardKey = getCardByCrId($db, $key)['card_key'];
-        if ($counter == 0): ?>
-        <div class="row">
-            <div class="col-lg-4">
-                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                     class="img-responsive center-block"/>
-                <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                    decks</span>
-            </div>
-            <?php
-            $counter++;
+            if ($pos > 8):
+                break;
+            endif;
+            $cardKey = getCardByCrId($db, $key)['card_key'];
+            if ($counter == 0): ?>
+                <div class="row">
+                <div class="col-lg-4">
+                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                         class="img-responsive center-block"/>
+                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                        decks</span>
+                </div>
+                <?php
+                $counter++;
             elseif ($counter == 1): ?>
-            <div class="col-lg-4">
-                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                     class="img-responsive center-block"/>
-                <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                    decks</span>
-            </div>
-            <?php
-            $counter++;
+                <div class="col-lg-4">
+                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                         class="img-responsive center-block"/>
+                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                        decks</span>
+                </div>
+                <?php
+                $counter++;
             else: ?>
-            <div class="col-lg-4">
-                <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                     class="img-responsive center-block"/>
-                <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                    decks</span>
-            </div>
-        </div>
-        <?php
-        $counter = 0;
-        endif;
-        $pos++;
+                <div class="col-lg-4">
+                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                         class="img-responsive center-block"/>
+                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                        decks</span>
+                </div>
+                </div>
+                <?php
+                $counter = 0;
+            endif;
+            $pos++;
         endforeach; ?>
     </div>
 </div>

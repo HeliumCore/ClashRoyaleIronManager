@@ -141,8 +141,8 @@ $lastUpdated = getLastUpdated($db, "war");
         <h1 class="whiteShadow">Guerre en cours</h1>
         <span class="whiteShadow"><?php echo $stateName ?></span><br>
         <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
-        <?php if($state == 'warDay'):?>
-        <a href="war_decks.php" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
+        <?php if ($state == 'warDay'): ?>
+            <a href="war_decks.php" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
         <?php endif; ?>
     </div>
     <br><br>

@@ -133,10 +133,10 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                         </a>
                     </div>
                 <?php else: ?>
-                <div>
-                    <span class="whiteShadow text-center">Actualisez les informations pour voir votre deck</span>
-                </div>
-                <?php endif;?>
+                    <div>
+                        <span class="whiteShadow text-center">Actualisez les informations pour voir votre deck</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
