@@ -48,6 +48,7 @@ function getAllCards($db)
     return $allCards;
 }
 
+// TODO gérer la partie pagination, trop de page -> affichage dégueu
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,6 +62,7 @@ function getAllCards($db)
                 url: 'query/update_war_decks.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
+                    $('#navbar').collapse('hide');
                 },
                 success: function () {
                     window.location.reload(true);
@@ -139,10 +141,9 @@ function getAllCards($db)
                     </div>
                     <div class="second-row">
                         <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                                    <span class="whiteShadow">Joués : <?php print $deck['played']; ?>
-                                        &nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                &nbsp; - &nbsp;</span>
+                                - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
@@ -178,10 +179,9 @@ function getAllCards($db)
                     </div>
                     <div class="second-row">
                         <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                                    <span class="whiteShadow">Joués : <?php print $deck['played']; ?>
-                                        &nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                &nbsp; - &nbsp;</span>
+                                - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
@@ -249,9 +249,9 @@ function getAllCards($db)
                     </div>
                     <div class="second-row">
                         <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                &nbsp; - &nbsp;</span>
+                                - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
@@ -286,9 +286,9 @@ function getAllCards($db)
                     </div>
                     <div class="second-row">
                         <div id="resultsDiv" class="pointerHand text-center js-result-div">
-                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?>&nbsp; - &nbsp;</span>
+                            <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
-                                &nbsp; - &nbsp;</span>
+                                - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
@@ -310,7 +310,7 @@ function getAllCards($db)
         $numberOfPages = getNumberOfPages($db, false);
         print '<div class="row">';
         print '<div class="col-md-12 text-center">';
-        print '<ul class="pagination pagination-lg">';
+        print '<ul class="pagination pagination-md">';
         for ($i = 1;
              $i <= $numberOfPages;
              $i++):
@@ -339,28 +339,43 @@ function getAllCards($db)
             if ($counter == 0): ?>
                 <div class="row">
                 <div class="col-lg-4">
-                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                         class="img-responsive center-block"/>
-                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                        decks</span>
+                    <div class="row">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                    </div>
+                    <div class="row">
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
+                        <br>
+                    </div>
                 </div>
                 <?php
                 $counter++;
             elseif ($counter == 1): ?>
                 <div class="col-lg-4">
-                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                         class="img-responsive center-block"/>
-                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                        decks</span>
+                    <div class="row">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                    </div>
+                    <div class="row">
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
+                        <br>
+                    </div>
                 </div>
                 <?php
                 $counter++;
             else: ?>
                 <div class="col-lg-4">
-                    <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                         class="img-responsive center-block"/>
-                    <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                        decks</span>
+                    <div class="row">
+                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
+                             class="img-responsive center-block"/>
+                    </div>
+                    <div class="row">
+                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
+                            decks</span>
+                        <br>
+                    </div>
                 </div>
                 </div>
                 <?php

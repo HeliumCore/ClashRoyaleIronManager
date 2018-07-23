@@ -49,6 +49,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                 url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
+                    $('#navbar').collapse('hide');
                 },
                 success: function () {
                     $.ajax({

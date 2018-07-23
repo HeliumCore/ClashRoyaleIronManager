@@ -609,6 +609,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
     JOIN war ON decks.war_id = war.id
     %s
     AND player_id = 610
+    AND wins > 0
     GROUP BY card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     ORDER BY played DESC, wins DESC, crowns DESC
     LIMIT %d,10
@@ -626,12 +627,13 @@ function getAllWarDecksWithPagination($db, $current, $page)
 function getNumberOfPages($db, $current)
 {
     $query = "
-    SELECT COUNT(decks.id) as d
-        FROM `decks`
+    SELECT COUNT(decks.id) as d, sum(deck_results.wins) as wins
+    FROM `decks`
     JOIN deck_results ON deck_results.deck_id = decks.id
     JOIN war ON decks.war_id = war.id
     %s
     AND player_id = 610
+    AND wins > 0
     ";
 
     if ($current)

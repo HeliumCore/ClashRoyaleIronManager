@@ -101,6 +101,7 @@ $lastUpdated = getLastUpdated($db, "war");
                 url: 'query/update_clan.php',
                 beforeSend: function () {
                     $('#loaderDiv').show();
+                    $('#navbar').collapse('hide');
                 },
                 success: function () {
                     updateWarStats();
