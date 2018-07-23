@@ -8,6 +8,16 @@
 
 include("tools/database.php");
 
+if (isset($_GET['order']) && !empty($_GET['order'])) {
+    $order = $_GET['order'];
+    $selectValue = substr($order, -1);
+    $order = substr($order, 0, -1);
+    $warStatsByPlayer = getWarStats($db, $order);
+} else {
+    $selectValue = -1;
+    $warStatsByPlayer = getWarStats($db);
+}
+
 $allPlayers = getAllPlayersByRank($db);
 $firstWarDate = getFirstWarDate($db);
 
@@ -23,24 +33,41 @@ $allMissedWar = 0;
 $allBadStatus = 0;
 $finalPlayerList = array();
 
-foreach ($allPlayers as $player) {
-    $warStats = getWarStatsByPlayerId($db, $player['id']);
-    $thisPlayer['rank'] = $player['rank'];
-    $thisPlayer['tag'] = $player['tag'];
-    $thisPlayer['name'] = $player['name'];
-    $thisPlayer['totalCollectionPlayed'] = $totalCollectionPlayed = $warStats['total_collection_played'] != null ? $warStats['total_collection_played'] : 0;
-    $thisPlayer['totalCollectionWon'] = $totalCollectionWon = $warStats['total_collection_won'] != null ? $warStats['total_collection_won'] : 0;
-    $thisPlayer['totalCardsEarned'] = $totalCardsEarned = $warStats['total_cards_earned'] != null ? $warStats['total_cards_earned'] : 0;
-    $thisPlayer['totalBattlesPlayed'] = $totalBattlesPlayed = $warStats['total_battle_played'] != null ? $warStats['total_battle_played'] : 0;
-    $thisPlayer['totalBattlesWon'] = $totalBattlesWon = $warStats['total_battle_won'] != null ? $warStats['total_battle_won'] : 0;
+foreach ($warStatsByPlayer as $player) {
+    $playerInfo['rank'] = $player['rank'];
+    $playerInfo['tag'] = $player['tag'];
+    $playerInfo['name'] = $player['name'];
+    $playerInfo['totalCollectionPlayed'] = $totalCollectionPlayed = $player['total_collection_played'];
+    $playerInfo['totalCollectionWon'] = $totalCollectionWon = $player['total_collection_won'];
+    $playerInfo['totalCardsEarned'] = $totalCardsEarned = $player['total_cards_earned'];
+    $playerInfo['totalBattlesPlayed'] = $totalBattlesPlayed = $player['total_battle_played'];
+    $playerInfo['totalBattlesWon'] = $totalBattlesWon = $player['total_battle_won'];
     $missedCollection = countMissedCollection($db, $player['id'])['missed_collection'];
-    $thisPlayer['missedCollection'] = $missedCollection == null ? 0 : $missedCollection;
+    $playerInfo['missedCollection'] = $missedCollection == null ? 0 : $missedCollection;
     $missedWar = countMissedWar($db, $player['id'])['missed_war'];
-    $thisPlayer['missedWar'] = $missedWar == null ? 0 : $missedWar;
-
-    $thisPlayer['totalCollection'] = $totalCollection = $totalCollectionPlayed + $missedCollection;
+    $playerInfo['missedWar'] = $missedWar == null ? 0 : $missedWar;
+    $playerInfo['totalCollection'] = $totalCollection = $totalCollectionPlayed + $missedCollection;
     $totalWar = $totalBattlesPlayed + $missedWar;
+    $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id']);
+    if ($missedWar >= 2) {
+        $playerInfo['ban'] = true;
+    } else if ($missedWar == 1) {
+        $playerInfo['warning'] = true;
+    } else if ($eligibleWars > 10) {
+        $ratio = ($missedCollection / $eligibleWars);
+        $playerInfo['warning'] = ($ratio >= 0.5 and $ratio < 0.75);
+        $playerInfo['ban'] = $ratio >= 0.75;
+    } else {
+        $playerInfo['warning'] = false;
+        $playerInfo['ban'] = false;
+    }
 
+    if ($playerInfo['warning'] || $playerInfo['ban']) {
+        $allBadStatus++;
+    }
+    array_push($finalPlayerList, $playerInfo);
+
+    // Totaux pour tous les joueurs
     $allCollections += $totalCollection;
     $allCollectionsPlayed += $totalCollectionPlayed;
     $allCollectionsWon += $totalCollectionWon;
@@ -50,27 +77,7 @@ foreach ($allPlayers as $player) {
     $allBattlePlayed += $totalBattlesPlayed;
     $allBattleWon += $totalBattlesWon;
     $allMissedWar += $missedWar;
-
-    $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id']);
-    if ($missedWar >= 2) {
-        $thisPlayer['ban'] = true;
-    } else if ($missedWar == 1) {
-        $thisPlayer['warning'] = true;
-    } else if ($eligibleWars > 10) {
-        $ratio = ($missedCollection / $eligibleWars);
-        $thisPlayer['warning'] = ($ratio >= 0.5 and $ratio < 0.75);
-        $thisPlayer['ban'] = $ratio >= 0.75;
-    } else {
-        $thisPlayer['warning'] = false;
-        $thisPlayer['ban'] = false;
-    }
-
-    if ($thisPlayer['warning'] || $thisPlayer['ban']) {
-        $allBadStatus++;
-    }
-    $finalPlayerList[] = $thisPlayer;
 }
-
 $lastUpdated = getLastUpdated($db, "war_stats");
 
 //TODO gerer les saisons de guerre
@@ -126,6 +133,38 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         $(this).hide();
                 });
             });
+
+            let orderSelect = $('#orderSelect');
+            orderSelect.change(function () {
+                const val = $(this).val();
+                let url = "war_stats.php", order;
+                switch (val) {
+                    case '1':
+                        order = "?order=total_collection_played1";
+                        break;
+                    case '2':
+                        order = "?order=total_collection_won2";
+                        break;
+                    case '3':
+                        order = "?order=total_cards_earned3";
+                        break;
+                    case '4':
+                        order = "?order=total_battle_played4";
+                        break;
+                    case '5':
+                        order = "?order=total_battle_won5";
+                        break;
+                    default:
+                        order = "";
+                        break;
+                }
+                if (parseInt(val) >= 0) {
+                    url = url + order;
+                    window.location = url;
+                }
+            });
+
+            orderSelect.val($('#hd_selectValue').val());
         });
     </script>
 </head>
@@ -149,7 +188,17 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                                   class="tab-link">Collections</a></li>
         <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab" class="tab-link">Batailles</a>
         </li>
+        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
         <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
+        <select id="orderSelect" class="pull-right">
+            <option value="-1">Trier par colonne</option>
+            <option value="0">Rang</option>
+            <option value="1">Collections jouées</option>
+            <option value="2">Collections gagnées</option>
+            <option value="3">Cartes gagnées</option>
+            <option value="4">Batailles jouées</option>
+            <option value="5">Batailles gagnées</option>
+        </select>
     </ul>
 
     <!-- Tab panes -->

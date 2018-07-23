@@ -253,9 +253,8 @@ INNER JOIN role ON role.id = players.role_id
 WHERE war.past_war = 0
 %s
 ";
-    $defaultOrder = "ORDER BY players.rank ASC";
     if ($order == null)
-        $query = sprintf($pattern, $defaultOrder);
+        $query = sprintf($pattern, "ORDER BY players.rank ASC");
     else {
         $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
         $orderPattern = sprintf($customOrderPattern, $order);
@@ -609,7 +608,6 @@ function getAllWarDecksWithPagination($db, $current, $page)
     JOIN war ON decks.war_id = war.id
     %s
     AND player_id = 610
-    AND wins > 0
     GROUP BY card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
     ORDER BY played DESC, wins DESC, crowns DESC
     LIMIT %d,10
@@ -639,7 +637,8 @@ function getNumberOfPages($db, $current)
     if ($current)
         $pattern = "WHERE war.past_war = 0";
     else
-        $pattern = "WHERE decks.war_id IS NOT NULL";
+        $pattern = "WHERE decks.war_id IS NOT NULL
+            AND wins > 0";
 
     $decks = intval(fetch_query($db, sprintf($query, $pattern))['d']);
     return ceil($decks / 10);
@@ -792,6 +791,36 @@ AND war.id > 24
 ";
 
     return fetch_query($db, sprintf($pattern, $playerId));
+}
+
+function getWarStats($db, $order = null)
+{
+    $pattern = "
+SELECT players.id, players.name, players.rank, players.tag,
+SUM(IFNULL(cards_earned, 0)) as total_cards_earned, 
+SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+SUM(IFNULL(collection_won, 0)) as total_collection_won,
+SUM(IFNULL(battle_played, 0)) as total_battle_played,
+SUM(IFNULL(battle_won, 0)) as total_battle_won
+FROM player_war
+JOIN war ON player_war.war_id = war.id
+JOIN players ON player_war.player_id = players.id
+AND war.past_war > 0
+AND war.id > 24
+AND players.in_clan > 0
+GROUP BY player_war.player_id
+%s
+";
+
+    if ($order == null) {
+        $query = sprintf($pattern, "ORDER BY players.rank ASC");
+    } else {
+        $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
+        $orderPattern = sprintf($customOrderPattern, $order);
+        $query = sprintf($pattern, $orderPattern);
+    }
+
+    return fetch_all_query($db, $query);
 }
 
 function countMissedWar($db, $playerId)
