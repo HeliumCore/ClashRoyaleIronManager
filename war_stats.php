@@ -51,7 +51,9 @@ foreach ($warStatsByPlayer as $player) {
     $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id']);
     if ($missedWar >= 2) {
         $playerInfo['ban'] = true;
+        $playerInfo['warning'] = false;
     } else if ($missedWar == 1) {
+        $playerInfo['ban'] = false;
         $playerInfo['warning'] = true;
     } else if ($eligibleWars > 10) {
         $ratio = ($missedCollection / $eligibleWars);
