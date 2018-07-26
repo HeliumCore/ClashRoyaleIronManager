@@ -38,11 +38,12 @@ foreach ($battles as $battle) {
     $deckId = 0;
     $played = 0;
 
-    $allWarDecks = getAllCurrentWarDecks($db, $warId);
+    $allWarDecks = getAllCurrentWarDecksId($db, $warId);
     if (sizeof($allWarDecks) > 0) {
         foreach ($allWarDecks as $warDeck) {
-            if (isSameDeck($db, $deck, $warDeck)) {
-                $deckId = intval($warDeck['id']);
+            $warDeckId = intval($warDeck['id']);
+            if (isSameDeck($db, $deck, $warDeckId)) {
+                $deckId = $warDeckId;
                 break;
             }
         }
@@ -60,15 +61,11 @@ foreach ($battles as $battle) {
             insertDeckResults($db, $deckId, 1, $win, $crowns);
         }
     } else {
-        $card1 = getCardId($db, $deck, 0);
-        $card2 = getCardId($db, $deck, 1);
-        $card3 = getCardId($db, $deck, 2);
-        $card4 = getCardId($db, $deck, 3);
-        $card5 = getCardId($db, $deck, 4);
-        $card6 = getCardId($db, $deck, 5);
-        $card7 = getCardId($db, $deck, 6);
-        $card8 = getCardId($db, $deck, 7);
-        $deckId = getLastDeckId($db, 610, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $warId);
+        $deckId = createDeck($db, 610);
+        for ($i = 0; $i <= 7; $i++) {
+            insertCardDeck($db, getCardId($db, $deck, $i), $deckId);
+        }
+        insertDeckWar($db, $deckId, $warId);
         insertDeckResults($db, $deckId, 1, $win, $crowns);
     }
 }
@@ -82,23 +79,19 @@ function getCardId($db, $deck, $pos)
 }
 
 // deck1 : deck provenant de l'API
-// deck 2 : deck provenant de la base
+// deck 2 : id du deck de la base
 function isSameDeck($db, $deck1, $deck2)
 {
-    $list1 = [];
-    $list2 = [];
-    $pos = 0;
-    $crIds = getCrIdsByCards($db, $deck2['card_1'], $deck2['card_2'], $deck2['card_3'], $deck2['card_4'],
-        $deck2['card_5'], $deck2['card_6'], $deck2['card_7'], $deck2['card_8']);
-
-    while ($pos < 8) {
-        array_push($list1, $deck1[$pos]['id']);
-        array_push($list2, intval($crIds[$pos]['cr_id']));
-        $pos++;
+    $deck1Cards = [];
+    for ($i = 0; $i <= 7; $i++) {
+        array_push($deck1Cards, getCardByCrId($db, $deck1[$i]['id'])['id']);
     }
-    sort($list1);
-    sort($list2);
 
-    $diff = array_diff($list1, $list2);
-    return sizeof($diff) == 0;
+    $deckId = getDeckFromCards($db, $deck1Cards[0], $deck1Cards[1], $deck1Cards[2], $deck1Cards[3], $deck1Cards[4],
+        $deck1Cards[5], $deck1Cards[6], $deck1Cards[7])['deck_id'];
+
+    if ($deckId == null)
+        return false;
+
+    return $deckId == $deck2;
 }

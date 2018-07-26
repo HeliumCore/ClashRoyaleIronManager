@@ -462,17 +462,6 @@ function updateDeckResults($db, $deckId, $played, $win, $crowns)
     execute_query($db, sprintf($pattern, $played, $win, $crowns, $deckId));
 }
 
-function cleanDeckResults($db, $warId)
-{
-    $pattern = "
-    DELETE FROM deck_results
-USING deck_results, decks
-WHERE decks.id = deck_results.deck_id
-AND decks.war_id = %d
-    ";
-    execute_query($db, sprintf($pattern, $warId));
-}
-
 function getDeckResults($db, $id)
 {
     $pattern = "
@@ -503,21 +492,6 @@ WHERE decks.id = %d
     execute_query($db, sprintf($pattern, $deckId));
 }
 
-function getCurrentDeck($db, $deck)
-{
-    $pattern = "
-SELECT cards.id
-FROM cards
-WHERE cr_id = %d
-";
-    $currentDeck = [];
-    foreach ($deck as $card) {
-        $cardId = fetch_query($db, sprintf($pattern, $card['id']))['id'];
-        array_push($currentDeck, $cardId);
-    }
-    return $currentDeck;
-}
-
 function getExistingDeck($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $playerId)
 {
     $pattern = "
@@ -536,29 +510,6 @@ AND player_id =
 
     $query = sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8);
     return fetch_query($db, $query . $playerId);
-}
-
-function getDeckById($db, $id)
-{
-    $pattern = "
-    SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
-    FROM decks
-    WHERE id = %d
-    ";
-
-    return fetch_query($db, sprintf($pattern, $id));
-}
-
-function getAllCurrentWarDecks($db, $warId)
-{
-    $pattern = "
-    SELECT id, card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8
-    FROM decks
-    WHERE player_id = 610
-    AND war_id = %d
-    ";
-
-    return fetch_all_query($db, sprintf($pattern, $warId));
 }
 
 function getAllWarDecks($db)
@@ -925,4 +876,111 @@ function getLastUpdatedPlayer($db, $playerTag)
     WHERE tag = \"%s\"
     ";
     return fetch_query($db, utf8_decode(sprintf($pattern, $playerTag)));
+}
+
+// --------------- NEW DECKS -----------------
+function createDeck($db, $playerId)
+{
+    $pattern = "
+    INSERT INTO decks
+    VALUES ('', %d, 1)
+    ";
+
+    execute_query($db, sprintf($pattern, $playerId));
+    return $db->lastInsertId();
+}
+
+function insertCardDeck($db, $card, $deck)
+{
+    $pattern = "
+    INSERT INTO card_deck(card_id, deck_id)
+    VALUES (%d, %d)
+    ";
+    execute_query($db, sprintf($pattern, $card, $deck));
+}
+
+function insertDeckWar($db, $deck, $war)
+{
+    $pattern = "
+    INSERT INTO war_decks(deck_id, war_id)
+    VALUES (%d, %d)
+    ";
+    execute_query($db, sprintf($pattern, $deck, $war));
+}
+
+function getDeckFromCards($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8, $playerId = null)
+{
+    $pattern = "
+    SELECT deck_id
+    FROM card_deck
+    %s
+    WHERE card_id IN (%d, %d, %d, %d, %d, %d, %d, %d)
+    GROUP BY deck_id
+    HAVING COUNT(card_id) = 8
+    ";
+
+    if ($playerId == null) {
+        $join = sprintf("JOIN decks ON decks.id = card_deck.deck_id AND decks.player_id = %d", 610);
+        return fetch_query($db, sprintf($pattern, $join, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+    } else {
+        $join = sprintf("JOIN decks ON decks.id = card_deck.deck_id AND decks.player_id = %d", $playerId);
+        return fetch_query($db, sprintf($pattern, $join, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8));
+    }
+}
+
+/**
+ * @param $db
+ * @param $deck (array de 8 cr_id)
+ * @return array de 8 card_id
+ */
+function getCurrentDeck($db, $deck)
+{
+    $pattern = "
+SELECT cards.id
+FROM cards
+WHERE cr_id = %d
+";
+    $currentDeck = [];
+    foreach ($deck as $card) {
+        $cardId = fetch_query($db, sprintf($pattern, $card['id']))['id'];
+        array_push($currentDeck, $cardId);
+    }
+    return $currentDeck;
+}
+
+function cleanDeckResults($db, $warId)
+{
+    $pattern = "
+    DELETE dr FROM deck_results as dr 
+    INNER JOIN decks as d ON dr.deck_id = d.id
+    INNER JOIN war_decks as wd ON d.id = wd.deck_id
+    WHERE wd.war_id = %d
+    ";
+    execute_query($db, sprintf($pattern, $warId));
+}
+
+function getAllCurrentWarDecksId($db, $warId)
+{
+    $pattern = "
+    SELECT decks.id
+    FROM decks
+    JOIN war_decks ON decks.id = war_decks.deck_id
+    WHERE decks.player_id = 610
+    AND war_decks.war_id = %d
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $warId));
+}
+
+
+function getDeckById($db, $id)
+{
+    $pattern = "
+    SELECT card_id
+    FROM card_deck
+    JOIN decks ON card_deck.deck_id = decks.id
+    WHERE decks.id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $id));
 }
