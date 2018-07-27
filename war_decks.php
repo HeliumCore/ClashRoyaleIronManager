@@ -30,19 +30,21 @@ if (isset($_GET['tab']) && !empty($_GET['tab'])) {
 }
 $lastUpdated = getLastUpdated($db, "war_decks");
 $state = getWarStateFromApi($api);
+
 function getDeckLink($deck)
 {
     $pattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
-    return sprintf($pattern, $deck['crid1'], $deck['crid2'], $deck['crid3'], $deck['crid4'], $deck['crid5'],
-        $deck['crid6'], $deck['crid7'], $deck['crid8']);
+    $crIds = explode(",", $deck['cr_ids']);
+    return sprintf($pattern, $crIds[0], $crIds[1], $crIds[2], $crIds[3], $crIds[4], $crIds[5], $crIds[6], $crIds[7]);
 }
 
 function getAllCards($db)
 {
     $allCards = [];
     foreach (getAllWarDecks($db) as $deck) {
-        for ($i = 1; $i <= 8; $i++) {
-            array_push($allCards, intval($deck['crid' . $i]));
+        $crIds = explode(",", $deck['cr_ids']);
+        for ($i = 0; $i <= 7; $i++) {
+            array_push($allCards, intval($crIds[$i]));
         }
     }
     return $allCards;
@@ -120,18 +122,17 @@ function getAllCards($db)
         $allDecks = getAllWarDecksWithPagination($db, true, $currentPageNumber);
         $size = sizeof($allDecks);
         foreach ($allDecks as $deck):
+            $cardKeys = explode(",", $deck['card_keys']);
             $deckLink = getDeckLink($deck);
             if ($counter == 0): ?>
                 <div class="row">
                 <div class="col-md-5">
                     <div class="row">
                         <?php
-                        for ($i = 1;
-                             $i <= 8;
-                             $i++): ?>
+                        for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -164,12 +165,10 @@ function getAllCards($db)
                 <div class="col-md-5 col-md-offset-2">
                     <div class="row">
                         <?php
-                        for ($i = 1;
-                             $i <= 8;
-                             $i++): ?>
+                        for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -205,9 +204,7 @@ function getAllCards($db)
         print '<div class="row">';
         print '<div class="col-md-12 text-center">';
         print '<ul class="pagination pagination-lg">';
-        for ($i = 1;
-             $i <= $numberOfPages;
-             $i++):
+        for ($i = 1; $i <= $numberOfPages; $i++):
             if ($i == $currentPageNumber):
                 print '<li class="active"><a href="war_decks.php?tab=current&page=' . $i . '">' . $i . '</a></li>';
             else:
@@ -228,18 +225,17 @@ function getAllCards($db)
         $allDecks = getAllWarDecksWithPagination($db, false, $allWarsPageNumber);
         $size = sizeof($allDecks);
         foreach ($allDecks as $deck):
+            $cardKeys = explode(",", $deck['card_keys']);
+            $deckLink = getDeckLink($deck);
             if ($counter == 0): ?>
                 <div class="row">
                 <div class="col-md-5">
                     <div class="row">
                         <?php
-                        for ($i = 1;
-                             $i <= 8;
-                             $i++):
-                            ?>
+                        for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
+                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -271,14 +267,12 @@ function getAllCards($db)
                 <div class="col-md-5 col-md-offset-2">
                     <div class="row">
                         <?php
-                        for ($i = 1;
-                             $i <= 8;
-                             $i++):
-                            ?>
+                        for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $deck['c' . $i . 'key'] ?>.png"
-                                         alt="failed to load img" class="img-responsive"/>
+                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
+                                         alt="failed to load img"
+                                         class="img-responsive"/>
                                 </div>
                             </div>
                         <?php
@@ -311,9 +305,7 @@ function getAllCards($db)
         print '<div class="row">';
         print '<div class="col-md-12 text-center">';
         print '<ul class="pagination pagination-md">';
-        for ($i = 1;
-             $i <= $numberOfPages;
-             $i++):
+        for ($i = 1; $i <= $numberOfPages; $i++):
             if ($i == $allWarsPageNumber):
                 print '<li class="active"><a href="war_decks.php?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
             else:

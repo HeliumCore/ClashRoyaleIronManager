@@ -15,10 +15,13 @@ else header('Location: index.php');
 $player = getPlayersInfoByTag($db, $playerTag);
 $playerId = $player['playerId'];
 $totalWarPlayed = getTotalWarPlayedByPlayerId($db, $playerId);
-$currentDeck = getCardsInCurrentDeck($db, $playerId);
+$currentDeck = getDeckByPlayerId($db, $playerId);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
-$deckLink = sprintf($deckLinkPattern, $currentDeck['crid1'], $currentDeck['crid2'], $currentDeck['crid3'],
-    $currentDeck['crid4'], $currentDeck['crid5'], $currentDeck['crid6'], $currentDeck['crid7'], $currentDeck['crid8']);
+$deckLink = sprintf(
+        $deckLinkPattern, $currentDeck[0]['cr_id'], $currentDeck[1]['cr_id'], $currentDeck[2]['cr_id'],
+        $currentDeck[3]['cr_id'], $currentDeck[4]['cr_id'], $currentDeck[5]['cr_id'], $currentDeck[6]['cr_id'],
+        $currentDeck[7]['cr_id']
+);
 
 // CHESTS
 $chests = getPlayerChestsFromApi($api, $playerTag);
@@ -119,10 +122,10 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <div class="row">
                 <?php
                 if (is_array($currentDeck)):
-                    for ($i = 1; $i <= 8; $i++):?>
+                    for ($i = 0; $i <= 7; $i++):?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="images/cards/<?php print $currentDeck['c' . $i . 'key']; ?>.png"
+                                <img src="images/cards/<?php print $currentDeck[$i]['card_key']; ?>.png"
                                      alt="failed to load img" class="img-responsive cards"/>
                             </div>
                         </div>
