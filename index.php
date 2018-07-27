@@ -95,15 +95,15 @@ $lastUpdated = getLastUpdated($db, "index");
                     </td>
                     <td class=" whiteShadow"> <?php print $player['tag']; ?></td>
                     <td class=" whiteShadow">
-                        <?php print $player['trophies'] ?> <img src="res/trophy.png" height="20px">
+                        <?php print $player['trophies'] ?> <img src="images/ui/trophy.png" height="20px">
                     </td>
                     <td class="">
                         <?php if ($player['arena_id'] > 12): ?>
-                            <img src="res/arena/arena-<?php print $player['arena_id']; ?>.png"
+                            <img src="images/arenas/arena-<?php print $player['arena_id']; ?>.png"
                                  title="<?php print $player['arena']; ?>" height="50px">
                         <?php else : ?>
                             <div>
-                                <img src="res/arena/arena-.png" title="" height="50px">
+                                <img src="images/arenas/arena-.png" title="" height="50px">
                                 <span class="whiteShadow arenaNumber"><?php print $player['arena_id']; ?></span>
                             </div>
                         <?php endif; ?>
@@ -125,7 +125,7 @@ $lastUpdated = getLastUpdated($db, "index");
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="res/loader.gif"/>
+    <img id="loaderImg" src="images/loader.gif"/>
 </div>
 <?php include("footer.html"); ?>
 </body>

@@ -7,9 +7,8 @@
 }
 
 body {
-    font-family: "Supercell";
-    background-image: url('../res/background.png');
-    background-attachment: fixed;
+    font-family: "Supercell", serif;
+    background: url('../images/background.png') fixed;
     padding-top: 70px;
 }
 
