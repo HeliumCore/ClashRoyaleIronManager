@@ -121,7 +121,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <h3 class="whiteShadow">Deck du moment</h3>
             <div class="row">
                 <?php
-                if (is_array($currentDeck)):
+                if (sizeof($currentDeck) > 0):
                     for ($i = 0; $i <= 7; $i++):?>
                         <div class="col-xs-3">
                             <div class="img-responsive">

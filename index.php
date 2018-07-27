@@ -39,7 +39,7 @@ $lastUpdated = getLastUpdated($db, "index");
             $('#tx_search').on("keyup paste", function () {
                 let value = $(this).val().toLowerCase();
                 const playerLine = $('.playerTr');
-                if (value.length < 3) {
+                if (value.length === 0) {
                     playerLine.show();
                     return;
                 }
@@ -47,6 +47,8 @@ $lastUpdated = getLastUpdated($db, "index");
                 playerLine.each(function () {
                     if ($(this).next().val().toLowerCase().indexOf(value) < 0)
                         $(this).hide();
+                    else
+                        $(this).show();
                 });
             });
         });
