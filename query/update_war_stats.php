@@ -6,22 +6,21 @@
  * Time: 23:07
  */
 
-include(__DIR__."/../tools/database.php");
-include(__DIR__."/../tools/api_conf.php");
+include(__DIR__ . "/../tools/database.php");
+include(__DIR__ . "/../tools/api_conf.php");
 
-$wars = getWarLogFromApi($api);
 $allPlayers = getAllPlayersInClan($db);
-foreach ($wars as $war) {
-    if ($war['seasonNumber'] <= 5 || $war['createdDate'] == 1530223645
-        || $war['createdDate'] == 1530569765 || $war['createdDate'] == 1530396482) {
-        continue;
-    }
+
+foreach (getWarLogFromApi($api) as $war) {
     $created = $war['createdDate'];
+    $season = $war['seasonNumber'];
     $warId = getWarID(
         $db,
         getWar($db, $created),
         getCurrentWar($db),
-        $created);
+        $created,
+        $season
+    );
 
     foreach ($allPlayers as $player) {
         $cardsEarned = null;

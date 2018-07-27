@@ -6,8 +6,8 @@
  * Time: 15:49
  */
 
-include(__DIR__."/../tools/api_conf.php");
-include(__DIR__."/../tools/database.php");
+include(__DIR__ . "/../tools/api_conf.php");
+include(__DIR__ . "/../tools/database.php");
 
 $constants = getConstantsFromApi($api);
 

@@ -50,7 +50,6 @@ function getAllCards($db)
     return $allCards;
 }
 
-// TODO gérer la partie pagination, trop de page -> affichage dégueu
 ?>
 <!DOCTYPE html>
 <html lang="en">

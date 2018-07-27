@@ -39,7 +39,7 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 //TODO tableau 'guerre', soit que guerre terminée, soit diviser en deux (terminée et en cours)
-//TODO faire le design de l'affichage des cartes (elexir, niveau, couleur...)
+//TODO faire le design de l'affichage des cartes (elixir, niveau, couleur...)
 ?>
 <!DOCTYPE html>
 <html lang="en">

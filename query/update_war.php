@@ -6,8 +6,8 @@
  * Time: 10:08
  */
 
-include(__DIR__."/../tools/api_conf.php");
-include(__DIR__."/../tools/database.php");
+include(__DIR__ . "/../tools/api_conf.php");
+include(__DIR__ . "/../tools/database.php");
 
 $data = getWarFromApi($api);
 $numberOfCurrentPlayers = getNumberOfCurrentPlayersInWar($db);

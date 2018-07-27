@@ -9,8 +9,8 @@
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else return;
 
-include(__DIR__."/../tools/api_conf.php");
-include(__DIR__."/../tools/database.php");
+include(__DIR__ . "/../tools/api_conf.php");
+include(__DIR__ . "/../tools/database.php");
 
 $player = getPlayerFromApi($api, $playerTag);
 updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);

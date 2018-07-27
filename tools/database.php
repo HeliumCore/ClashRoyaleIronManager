@@ -66,17 +66,18 @@ AND war_id = %d
 }
 
 // ----------------- WAR -----------------
-function getWarId($db, $war, $currentWar, $created)
+function getWarId($db, $war, $currentWar, $created, $season = null)
 {
     $insertWarPattern = "
 INSERT INTO war
-VALUES ('', %d, %d)
+VALUES ('', %d, %d, 0)
 ";
 
     $updateCurrentWarPattern = "
 UPDATE war
 SET created = %d,
-past_war = 1
+past_war = 1,
+season = %d
 WHERE id = %d
 ";
     if (!is_array($war)) {
@@ -84,8 +85,8 @@ WHERE id = %d
             execute_query($db, sprintf($insertWarPattern, $created, 1));
             return $db->lastInsertId();
         } else {
-            execute_query($db, sprintf($updateCurrentWarPattern, $created, intval($currentWar['id'])));
-            return getWarID($db, getWar($db, $created), $currentWar, $created);
+            execute_query($db, sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])));
+            return getWarID($db, getWar($db, $created), $currentWar, $created, $season);
         }
     } else {
         return intval($war['id']);
@@ -273,6 +274,16 @@ AND war.past_war = 0
 ORDER BY battles_won DESC, crowns DESC 
 ";
     return fetch_all_query($db, $query);
+}
+
+function getLastSeason($db)
+{
+    $query = "
+    SELECT MAX(season) as number
+    FROM war
+    ";
+
+    return intval(fetch_query($db, $query)['number']);
 }
 
 // ----------------- PLAYERS -----------------
@@ -756,7 +767,7 @@ function getCardLevelByPlayer($db, $card, $playerId)
 }
 
 // ----------------- WAR STATS -----------------
-function getWarStats($db, $order = null)
+function getWarStats($db, $order = null, $season = null)
 {
     $pattern = "
 SELECT players.id, players.name, players.rank, players.tag,
@@ -766,7 +777,7 @@ SUM(IFNULL(collection_won, 0)) as total_collection_won,
 SUM(IFNULL(battle_played, 0)) as total_battle_played,
 SUM(IFNULL(battle_won, 0)) as total_battle_won
 FROM player_war
-JOIN war ON player_war.war_id = war.id
+JOIN war ON player_war.war_id = war.id %s
 JOIN players ON player_war.player_id = players.id
 AND war.past_war > 0
 AND war.id > 24
@@ -776,17 +787,24 @@ GROUP BY player_war.player_id
 ";
 
     if ($order == null) {
-        $query = sprintf($pattern, "ORDER BY players.rank ASC");
+        if ($season == null)
+            $query = sprintf($pattern, "", "ORDER BY players.rank ASC");
+        else
+            $query = sprintf($pattern, "AND war.season = " . $season, "ORDER BY players.rank ASC");
     } else {
         $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
         $orderPattern = sprintf($customOrderPattern, $order);
-        $query = sprintf($pattern, $orderPattern);
+        if ($season == null) {
+            $query = sprintf($pattern, "", $orderPattern);
+        } else {
+            $query = sprintf($pattern, "AND war.season = " . $season, $orderPattern);
+        }
     }
 
     return fetch_all_query($db, $query);
 }
 
-function countMissedWar($db, $playerId)
+function countMissedWar($db, $playerId, $season = null)
 {
     $pattern = "
 SELECT COUNT(player_war.id) as missed_war
@@ -797,11 +815,17 @@ AND player_war.collection_played > 0
 AND war.past_war > 0
 AND war.id > 24
 AND player_war.player_id = %d
+%s
 ";
-    return fetch_query($db, sprintf($pattern, $playerId));
+    if ($season === null)
+        $query = sprintf($pattern, $playerId, "");
+    else
+        $query = sprintf($pattern, $playerId, "AND war.season = " . $season);
+
+    return fetch_query($db, $query);
 }
 
-function countMissedCollection($db, $playerId)
+function countMissedCollection($db, $playerId, $season = null)
 {
     $pattern = "
 SELECT COUNT(player_war.id) as missed_collection
@@ -811,8 +835,14 @@ WHERE player_war.collection_played = 0
 AND war.past_war > 0
 AND war.id > 24
 AND player_war.player_id = %d
+%s
 ";
-    return fetch_query($db, sprintf($pattern, $playerId));
+    if ($season == null)
+        $query = sprintf($pattern, $playerId, "");
+    else
+        $query = sprintf($pattern, $playerId, "AND war.season = " . $season);
+
+    return fetch_query($db, $query);
 }
 
 function getFirstWarDate($db)
@@ -827,7 +857,7 @@ LIMIT 1
     return fetch_query($db, $query);
 }
 
-function getNumberOfEligibleWarByPlayerId($db, $playerId)
+function getNumberOfEligibleWarByPlayerId($db, $playerId, $season)
 {
     $pattern = "
 SELECT COUNT(pw.id) as number_of_war
@@ -835,8 +865,10 @@ FROM player_war pw
 JOIN war ON pw.war_id = war.id 
 WHERE war.past_war = 1
 AND pw.player_id = %d
+AND war.season = %d
 ";
-    return intval(fetch_query($db, sprintf($pattern, $playerId))['number_of_war']);
+
+    return intval(fetch_query($db, sprintf($pattern, $playerId, $season))['number_of_war']);
 }
 
 // ----------------- LAST UPDATED ---------------
