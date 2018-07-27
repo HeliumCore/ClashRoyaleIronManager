@@ -767,7 +767,7 @@ function getCardLevelByPlayer($db, $card, $playerId)
 }
 
 // ----------------- WAR STATS -----------------
-function getWarStats($db, $order = null, $season = null)
+function getWarStats($db, $season, $order = null)
 {
     $pattern = "
 SELECT players.id, players.name, players.rank, players.tag,
@@ -777,7 +777,7 @@ SUM(IFNULL(collection_won, 0)) as total_collection_won,
 SUM(IFNULL(battle_played, 0)) as total_battle_played,
 SUM(IFNULL(battle_won, 0)) as total_battle_won
 FROM player_war
-JOIN war ON player_war.war_id = war.id %s
+JOIN war ON player_war.war_id = war.id AND war.season = %d
 JOIN players ON player_war.player_id = players.id
 AND war.past_war > 0
 AND war.id > 24
@@ -787,18 +787,11 @@ GROUP BY player_war.player_id
 ";
 
     if ($order == null) {
-        if ($season == null)
-            $query = sprintf($pattern, "", "ORDER BY players.rank ASC");
-        else
-            $query = sprintf($pattern, "AND war.season = " . $season, "ORDER BY players.rank ASC");
+        $query = sprintf($pattern, $season, "ORDER BY players.rank ASC");
     } else {
         $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
         $orderPattern = sprintf($customOrderPattern, $order);
-        if ($season == null) {
-            $query = sprintf($pattern, "", $orderPattern);
-        } else {
-            $query = sprintf($pattern, "AND war.season = " . $season, $orderPattern);
-        }
+        $query = sprintf($pattern, $season, $orderPattern);
     }
 
     return fetch_all_query($db, $query);

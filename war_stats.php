@@ -16,14 +16,14 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
     $order = $_GET['order'];
     $selectValue = substr($order, -1);
     $order = substr($order, 0, -1);
-    $lastWarStatsByPlayer = getWarStats($db, $order, $lastSeason);
-    $previousWarStatsByPlayer = getWarStats($db, $order, $previousSeason);
-    $secondPreviousWarStatsByPlayer = getWarStats($db, $order, $secondPreviousSeason);
+    $lastWarStatsByPlayer = getWarStats($db, $lastSeason, $order);
+    $previousWarStatsByPlayer = getWarStats($db, $previousSeason, $order);
+    $secondPreviousWarStatsByPlayer = getWarStats($db, $secondPreviousSeason, $order);
 } else {
     $selectValue = -1;
-    $lastWarStatsByPlayer = getWarStats($db, null, $lastSeason);
-    $previousWarStatsByPlayer = getWarStats($db, null, $previousSeason);
-    $secondPreviousWarStatsByPlayer = getWarStats($db, null, $secondPreviousSeason);
+    $lastWarStatsByPlayer = getWarStats($db, $lastSeason);
+    $previousWarStatsByPlayer = getWarStats($db, $previousSeason);
+    $secondPreviousWarStatsByPlayer = getWarStats($db, $secondPreviousSeason);
 }
 
 $allPlayers = getAllPlayersByRank($db);
@@ -31,7 +31,6 @@ $firstWarDate = getFirstWarDate($db);
 
 // TODO faire un tableau d'en-tete qui regroupe toutes les guerres pour tous les joueurs
 // cumuler dans les trois foreach pour avoir les valeurs
-
 //$allCollections = 0;
 //$allCollectionsPlayed = 0;
 //$allCollectionsWon = 0;
@@ -225,8 +224,6 @@ foreach ($secondPreviousWarStatsByPlayer as $player) {
 }
 
 $lastUpdated = getLastUpdated($db, "war_stats");
-
-//TODO gerer les saisons de guerre
 ?>
 
 <!DOCTYPE html>
