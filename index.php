@@ -6,7 +6,7 @@
  * Time: 14:56
  */
 
-include("tools/database.php");
+include(__DIR__."/tools/database.php");
 $lastUpdated = getLastUpdated($db, "index");
 ?>
 <!DOCTYPE html>

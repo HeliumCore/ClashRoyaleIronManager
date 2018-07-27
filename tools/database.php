@@ -721,6 +721,40 @@ function getTotalWarPlayedByPlayerId($db, $id)
     return fetch_query($db, sprintf($pattern, $id));
 }
 
+function insertCardLevelByPlayer($db, $card, $playerId, $level)
+{
+    $pattern = "
+    INSERT INTO card_level(card_id, player_id, level)
+    VALUES (%d, %d, %d)
+    ";
+
+    execute_query($db, sprintf($pattern, $card, $playerId, $level));
+}
+
+function updateCardLevelByPlayer($db, $card, $playerId, $level)
+{
+    $pattern = "
+    UPDATE card_level
+    SET level = %d
+    WHERE card_id = %d
+    AND player_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $level, $card, $playerId));
+}
+
+function getCardLevelByPlayer($db, $card, $playerId)
+{
+    $pattern = "
+    SELECT level
+    FROM card_level
+    WHERE card_id = %d
+    AND player_id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $card, $playerId));
+}
+
 // ----------------- WAR STATS -----------------
 function getWarStats($db, $order = null)
 {

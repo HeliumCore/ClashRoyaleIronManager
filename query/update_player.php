@@ -9,8 +9,8 @@
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else return;
 
-include("../tools/api_conf.php");
-include("../tools/database.php");
+include(__DIR__."/../tools/api_conf.php");
+include(__DIR__."/../tools/database.php");
 
 $player = getPlayerFromApi($api, $playerTag);
 updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
@@ -30,6 +30,16 @@ if ($deckId == null) {
     }
 } else {
     enableOldDeck($db, $deckId);
+}
+
+foreach ($player['cards'] as $card) {
+    $cardId = intval(getCardByCrId($db, $card['id'])['id']);
+    $level = getCardLevelByPlayer($db, $cardId, $playerId);
+    if ($level) {
+        updateCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+    } else {
+        insertCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+    }
 }
 
 if (is_array(getLastUpdatedPlayer($db, $playerTag)))

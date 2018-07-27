@@ -6,8 +6,8 @@
  * Time: 11:20
  */
 
-include("../tools/api_conf.php");
-include("../tools/database.php");
+include(__DIR__."/../tools/api_conf.php");
+include(__DIR__."/../tools/database.php");
 
 foreach (getAllPlayersInClan($db) as $playerDB) {
     $playerTag = $playerDB['tag'];
@@ -21,7 +21,7 @@ foreach (getAllPlayersInClan($db) as $playerDB) {
     $deckId = getDeckFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
         $currentDeck[5], $currentDeck[6], $currentDeck[7], $playerId)['deck_id'];
 
-// Si le deck n'existe pas, on le crée, sinon on l'enable pour le joueur
+    // Si le deck n'existe pas, on le crée, sinon on l'enable pour le joueur
     if ($deckId == null) {
         $deckId = createDeck($db, $playerId);
         for ($i = 0; $i <= 7; $i++) {
@@ -29,6 +29,16 @@ foreach (getAllPlayersInClan($db) as $playerDB) {
         }
     } else {
         enableOldDeck($db, $deckId);
+    }
+
+    foreach ($player['cards'] as $card) {
+        $cardId = intval(getCardByCrId($db, $card['id'])['id']);
+        $level = getCardLevelByPlayer($db, $cardId, $playerId);
+        if ($level) {
+            updateCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+        } else {
+            insertCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+        }
     }
 
     if (is_array(getLastUpdatedPlayer($db, $playerTag)))

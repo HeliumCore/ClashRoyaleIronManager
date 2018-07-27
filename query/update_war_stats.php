@@ -6,8 +6,8 @@
  * Time: 23:07
  */
 
-include("../tools/database.php");
-include("../tools/api_conf.php");
+include(__DIR__."/../tools/database.php");
+include(__DIR__."/../tools/api_conf.php");
 
 $wars = getWarLogFromApi($api);
 $allPlayers = getAllPlayersInClan($db);

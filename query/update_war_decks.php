@@ -6,8 +6,8 @@
  * Time: 00:36
  */
 
-include("../tools/api_conf.php");
-include("../tools/database.php");
+include(__DIR__."/../tools/api_conf.php");
+include(__DIR__."/../tools/database.php");
 
 $battles = getWarBattlesFromApi($api);
 $currentWar = getWarFromApi($api);
@@ -19,8 +19,10 @@ $state = getWarStateFromApi($api);
 
 if ($state == "warDay")
     cleanDeckResults($db, $warId);
-else
+else {
+    setLastUpdated($db, "war_decks");
     return;
+}
 
 foreach ($battles as $battle) {
     if ($battle['type'] != 'clanWarWarDay')

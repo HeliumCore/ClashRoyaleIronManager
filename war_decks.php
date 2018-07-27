@@ -6,8 +6,8 @@
  * Time: 14:38
  */
 
-include("tools/database.php");
-include("tools/api_conf.php");
+include(__DIR__."/tools/database.php");
+include(__DIR__."/tools/api_conf.php");
 
 if (isset($_GET['tab']) && !empty($_GET['tab'])) {
     $currentTab = $_GET['tab'];
