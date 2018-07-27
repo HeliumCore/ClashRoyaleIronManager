@@ -368,15 +368,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $lastSeasonAllCollectionsPlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $lastSeasonAllCollectionsWon; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Jouées<br><?php echo $lastSeasonAllCollectionsPlayed; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Gagnées<br><?php echo $lastSeasonAllCollectionsWon; ?></td>
                                 <td class="whiteShadow text-center">
                                     % victoire<br>
                                     <?php echo ($lastSeasonAllCollectionsPlayed != 0) ? round((($lastSeasonAllCollectionsWon / $lastSeasonAllCollectionsPlayed) * 100)) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Absences<br><?php echo $lastSeasonAllMissedCollections; ?>
+                                <td class="whiteShadow text-center">
+                                    Absences<br><?php echo $lastSeasonAllMissedCollections; ?>
                                 </td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($lastSeasonAllCollections != 0) ? round(($lastSeasonAllCollectionsPlayed / $lastSeasonAllCollections) * 100) : '--'; ?>
@@ -439,15 +443,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $lastSeasonAllBattlePlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $lastSeasonAllBattleWon; ?></td>
+                                <td class="whiteShadow text-center">Jouées<br><?php echo $lastSeasonAllBattlePlayed; ?>
+                                </td>
+                                <td class="whiteShadow text-center">Gagnées<br><?php echo $lastSeasonAllBattleWon; ?>
+                                </td>
                                 <td class="whiteShadow text-center">% victoire<br>
                                     <?php if ($lastSeasonAllBattlePlayed != 0) echo round((($lastSeasonAllBattleWon / $lastSeasonAllBattlePlayed) * 100));
                                     else echo '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Abscences<br><?php echo $lastSeasonAllMissedWar; ?></td>
+                                <td class="whiteShadow text-center">Abscences<br><?php echo $lastSeasonAllMissedWar; ?>
+                                </td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php if ($lastSeasonAllWars != 0) echo '' . round(($lastSeasonAllBattlePlayed / $lastSeasonAllWars) * 100);
                                     else echo '--'; ?>
@@ -531,15 +539,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($previousSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($previousSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $previousSeasonAllCollectionsPlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $previousSeasonAllCollectionsWon; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Jouées<br><?php echo $previousSeasonAllCollectionsPlayed; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Gagnées<br><?php echo $previousSeasonAllCollectionsWon; ?></td>
                                 <td class="whiteShadow text-center">
                                     % victoire<br>
                                     <?php echo ($previousSeasonAllCollectionsPlayed != 0) ? round((($previousSeasonAllCollectionsWon / $previousSeasonAllCollectionsPlayed) * 100)) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Absences<br><?php echo $previousSeasonAllMissedCollections; ?>
+                                <td class="whiteShadow text-center">
+                                    Absences<br><?php echo $previousSeasonAllMissedCollections; ?>
                                 </td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($previousSeasonAllCollections != 0) ? round(($previousSeasonAllCollectionsPlayed / $previousSeasonAllCollections) * 100) : '--'; ?>
@@ -602,15 +614,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $previousSeasonAllBattlePlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $previousSeasonAllBattleWon; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Jouées<br><?php echo $previousSeasonAllBattlePlayed; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Gagnées<br><?php echo $previousSeasonAllBattleWon; ?></td>
                                 <td class="whiteShadow text-center">% victoire<br>
                                     <?php if ($previousSeasonAllBattlePlayed != 0) echo round((($previousSeasonAllBattleWon / $previousSeasonAllBattlePlayed) * 100));
                                     else echo '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Abscences<br><?php echo $previousSeasonAllMissedWar; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Abscences<br><?php echo $previousSeasonAllMissedWar; ?></td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php if ($previousSeasonAllWars != 0) echo '' . round(($previousSeasonAllBattlePlayed / $previousSeasonAllWars) * 100);
                                     else echo '--'; ?>
@@ -694,15 +710,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($secondPreviousSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($secondPreviousSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $secondPreviousSeasonAllCollectionsPlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $secondPreviousSeasonAllCollectionsWon; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Jouées<br><?php echo $secondPreviousSeasonAllCollectionsPlayed; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Gagnées<br><?php echo $secondPreviousSeasonAllCollectionsWon; ?></td>
                                 <td class="whiteShadow text-center">
                                     % victoire<br>
                                     <?php echo ($secondPreviousSeasonAllCollectionsPlayed != 0) ? round((($secondPreviousSeasonAllCollectionsWon / $secondPreviousSeasonAllCollectionsPlayed) * 100)) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Absences<br><?php echo $secondPreviousSeasonAllMissedCollections; ?>
+                                <td class="whiteShadow text-center">
+                                    Absences<br><?php echo $secondPreviousSeasonAllMissedCollections; ?>
                                 </td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($secondPreviousSeasonAllCollections != 0) ? round(($secondPreviousSeasonAllCollectionsPlayed / $secondPreviousSeasonAllCollections) * 100) : '--'; ?>
@@ -765,15 +785,19 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         <table class="table" id="tableIndex">
                             <tbody>
                             <tr>
-                                <td class="whiteShadow text-center">Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
+                                <td class="whiteShadow text-center">
+                                    Joueurs<br><?php echo sizeof($lastSeasonFinalPlayerList); ?>
                                 </td>
-                                <td class="whiteShadow text-center">Jouées<br><?php echo $secondPreviousSeasonAllBattlePlayed; ?></td>
-                                <td class="whiteShadow text-center">Gagnées<br><?php echo $secondPreviousSeasonAllBattleWon; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Jouées<br><?php echo $secondPreviousSeasonAllBattlePlayed; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Gagnées<br><?php echo $secondPreviousSeasonAllBattleWon; ?></td>
                                 <td class="whiteShadow text-center">% victoire<br>
                                     <?php if ($secondPreviousSeasonAllBattlePlayed != 0) echo round((($secondPreviousSeasonAllBattleWon / $secondPreviousSeasonAllBattlePlayed) * 100));
                                     else echo '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center">Abscences<br><?php echo $secondPreviousSeasonAllMissedWar; ?></td>
+                                <td class="whiteShadow text-center">
+                                    Abscences<br><?php echo $secondPreviousSeasonAllMissedWar; ?></td>
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php if ($secondPreviousSeasonAllWars != 0) echo '' . round(($secondPreviousSeasonAllBattlePlayed / $secondPreviousSeasonAllWars) * 100);
                                     else echo '--'; ?>
