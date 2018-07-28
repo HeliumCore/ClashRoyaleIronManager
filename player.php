@@ -206,11 +206,9 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <thead>
             <tbody>
             <?php
-
             echo '<tr>';
             echo '<td class="whiteShadow text-center">Collections<br>' . $missedCollections . '</td>';
             echo '<td class="whiteShadow text-center">Batailles<br>' . $missedWars . '</td>';
-            echo '<td class="whiteShadow text-center">Gagnées<br>' . ($missedCollections + $missedWars) . '</td>';
             echo '</tr>';
             ?>
             </tbody>

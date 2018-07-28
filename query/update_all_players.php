@@ -32,7 +32,7 @@ foreach (getAllPlayersInClan($db) as $playerDB) {
             insertCardDeck($db, $currentDeck[$i], $deckId);
             $totalElixir += getCardElixirCostById($db, $currentDeck[$i]);
         }
-        $elixirCost = round(($totalElixir / 8), 2);
+        $elixirCost = round(($totalElixir / 8), 1);
         createPlayerDeck($db, $deckId, $playerId);
         updateElixirCost($db, $deckId, $elixirCost);
     }
