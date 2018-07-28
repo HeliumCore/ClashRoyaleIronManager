@@ -24,8 +24,11 @@ foreach ($battles as $battle) {
     if ($combatTime < $lastEnd || $combatTime > $currentEnd)
         continue;
 
-    $winResult = $battle['winner'];
     $team = $battle['team'][0];
+    if ($team['clan']['tag'] != "9RGPL8PC")
+        continue;
+
+    $winResult = $battle['winner'];
     $deckLine = $team['deckLink'];
     $deck = $team['deck'];
     $tag = $team['tag'];

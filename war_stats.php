@@ -339,10 +339,10 @@ $lastUpdated = getLastUpdated($db, "war_stats");
         <div role="tabpanel" class="tab-pane active" id="season<?php print $lastSeason; ?>">
             <!-- Nav tabs -->
             <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab"
+                <li role="presentation" class="active"><a href="#lastSeasonCollect" aria-controls="lastSeasonCollect" role="tab"
                                                           data-toggle="tab"
                                                           class="tab-link">Collections</a></li>
-                <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab"
+                <li role="presentation"><a href="#lastSeasonWar" aria-controls="lastSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
                 <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
@@ -360,7 +360,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="collect">
+                <div role="tabpanel" class="tab-pane active" id="lastSeasonCollect">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
@@ -435,7 +435,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="war">
+                <div role="tabpanel" class="tab-pane" id="lastSeasonWar">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
@@ -510,10 +510,10 @@ $lastUpdated = getLastUpdated($db, "war_stats");
         <div role="tabpanel" class="tab-pane" id="season<?php print $previousSeason; ?>">
             <!-- Nav tabs -->
             <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab"
+                <li role="presentation" class="active"><a href="#previousSeasonCollect" aria-controls="previousSeasonCollect" role="tab"
                                                           data-toggle="tab"
                                                           class="tab-link">Collections</a></li>
-                <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab"
+                <li role="presentation"><a href="#previousSeasonWar" aria-controls="previousSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
                 <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
@@ -531,7 +531,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="collect">
+                <div role="tabpanel" class="tab-pane active" id="previousSeasonCollect">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
@@ -606,7 +606,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="war">
+                <div role="tabpanel" class="tab-pane" id="previousSeasonWar">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
@@ -681,10 +681,10 @@ $lastUpdated = getLastUpdated($db, "war_stats");
         <div role="tabpanel" class="tab-pane" id="season<?php print $secondPreviousSeason; ?>">
             <!-- Nav tabs -->
             <ul id="navUlWarStats" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#collect" aria-controls="collect" role="tab"
+                <li role="presentation" class="active"><a href="#secondPreviousSeasonCollect" aria-controls="secondPreviousSeasonCollect" role="tab"
                                                           data-toggle="tab"
                                                           class="tab-link">Collections</a></li>
-                <li role="presentation"><a href="#war" aria-controls="war" role="tab" data-toggle="tab"
+                <li role="presentation"><a href="#secondPreviousSeasonWar" aria-controls="secondPreviousSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
                 <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
@@ -702,7 +702,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="collect">
+                <div role="tabpanel" class="tab-pane active" id="secondPreviousSeasonCollect">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
@@ -777,7 +777,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="war">
+                <div role="tabpanel" class="tab-pane" id="secondPreviousSeasonWar">
                     <div class="table-responsive">
                         <table class="table" id="tableIndex">
                             <tbody>
