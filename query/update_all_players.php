@@ -18,17 +18,23 @@ foreach (getAllPlayersInClan($db) as $playerDB) {
     $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
 
     disableAllDeck($db, $playerId);
-    $deckId = getDeckFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
-        $currentDeck[5], $currentDeck[6], $currentDeck[7], $playerId)['deck_id'];
+    $deckId = getDeckIdFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
+        $currentDeck[5], $currentDeck[6], $currentDeck[7]);
 
-    // Si le deck n'existe pas, on le crée, sinon on l'enable pour le joueur
-    if ($deckId == null) {
-        $deckId = createDeck($db, $playerId);
+    if (getPlayerDeck($db, $deckId, $playerId) != null) {
+        enableOldDeck($db, $deckId, $playerId);
+    } else if ($deckId != null && $deckId > 0) {
+        createPlayerDeck($db, $deckId, $playerId);
+    } else {
+        $deckId = createDeck($db);
+        $totalElixir = 0;
         for ($i = 0; $i <= 7; $i++) {
             insertCardDeck($db, $currentDeck[$i], $deckId);
+            $totalElixir += getCardElixirCostById($db, $currentDeck[$i]);
         }
-    } else {
-        enableOldDeck($db, $deckId);
+        $elixirCost = round(($totalElixir / 8), 2);
+        createPlayerDeck($db, $deckId, $playerId);
+        updateElixirCost($db, $deckId, $elixirCost);
     }
 
     foreach ($player['cards'] as $card) {

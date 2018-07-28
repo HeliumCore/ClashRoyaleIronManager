@@ -144,7 +144,7 @@ function getAllCards($db)
                             <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
-                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
@@ -180,7 +180,7 @@ function getAllCards($db)
                             <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
-                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
@@ -247,7 +247,7 @@ function getAllCards($db)
                             <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
-                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
@@ -282,7 +282,7 @@ function getAllCards($db)
                             <span class="whiteShadow">Joués : <?php print $deck['played']; ?><br></span>
                             <span class="whiteShadow">Victoires : <?php print $deck['wins']; ?>
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
-                            <span class="whiteShadow">Couronnes : <?php print $deck['crowns']; ?></span><br><br>
+                            <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">

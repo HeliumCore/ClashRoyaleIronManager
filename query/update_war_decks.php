@@ -15,85 +15,48 @@ $lastWar = getLastWarEndDate($db);
 $currentEnd = $currentWar['warEndTime'];
 $lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
-$state = getWarStateFromApi($api);
-
-if ($state == "warDay")
-    cleanDeckResults($db, $warId);
-else {
-    setLastUpdated($db, "war_decks");
-    return;
-}
 
 foreach ($battles as $battle) {
     if ($battle['type'] != 'clanWarWarDay')
         continue;
 
-    if ($battle['utcTime'] < $lastEnd || $battle['utcTime'] > $currentEnd)
+    $combatTime = $battle['utcTime'];
+    if ($combatTime < $lastEnd || $combatTime > $currentEnd)
         continue;
 
     $winResult = $battle['winner'];
     $team = $battle['team'][0];
     $deckLine = $team['deckLink'];
     $deck = $team['deck'];
+    $tag = $team['tag'];
+    $playerId = intval(getPlayerByTag($db, $tag)['id']);
     $win = $winResult <= 0 ? 0 : 1;
     $crowns = $battle['teamCrowns'];
-    $deckId = 0;
-    $played = 0;
 
-    $allWarDecks = getAllCurrentWarDecksId($db, $warId);
-    if (sizeof($allWarDecks) > 0) {
-        foreach ($allWarDecks as $warDeck) {
-            $warDeckId = intval($warDeck['id']);
-            if (isSameDeck($db, $deck, $warDeckId)) {
-                $deckId = $warDeckId;
-                break;
+    $currentDeck = getCurrentDeck($db, $deck);
+    $deckId = getDeckIdFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
+        $currentDeck[5], $currentDeck[6], $currentDeck[7]);
+
+    if ($deckId != null && $deckId > 0) {
+        if (isDeckUsedInCurrentWar($db, $warId)) {
+            if (getDeckResultsByTime($db, $deckId) == false) {
+                insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
             }
-        }
-    }
-
-    if ($deckId > 0) {
-        $deckResults = getDeckResults($db, $deckId);
-        if ($deckResults) {
-            $played = intval($deckResults['played']);
-            $win += intval($deckResults['wins']);
-            $crowns += intval($deckResults['crowns']);
-            $played++;
-            updateDeckResults($db, $deckId, $played, $win, $crowns);
         } else {
-            insertDeckResults($db, $deckId, 1, $win, $crowns);
+            insertDeckWar($db, $deckId, $warId);
+            insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
         }
     } else {
-        $deckId = createDeck($db, 610);
+        $deckId = createDeck($db);
+        $totalElixir = 0;
         for ($i = 0; $i <= 7; $i++) {
-            insertCardDeck($db, getCardId($db, $deck, $i), $deckId);
+            insertCardDeck($db, $currentDeck[$i], $deckId);
+            $totalElixir += getCardElixirCostById($db, $currentDeck[$i]);
         }
+        $elixirCost = round(($totalElixir / 8), 2);
+        updateElixirCost($db, $deckId, $elixirCost);
         insertDeckWar($db, $deckId, $warId);
-        insertDeckResults($db, $deckId, 1, $win, $crowns);
+        insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
     }
 }
-
 setLastUpdated($db, "war_decks");
-
-function getCardId($db, $deck, $pos)
-{
-    $cardId = getCardByCrId($db, $deck[$pos]['id']);
-    return intval($cardId['id']);
-}
-
-// deck1 : deck provenant de l'API
-// deck 2 : id du deck de la base
-function isSameDeck($db, $deck1, $deck2)
-{
-    $deck1Cards = [];
-    for ($i = 0; $i <= 7; $i++) {
-        array_push($deck1Cards, getCardByCrId($db, $deck1[$i]['id'])['id']);
-    }
-
-    $deckId = getDeckFromCards($db, $deck1Cards[0], $deck1Cards[1], $deck1Cards[2], $deck1Cards[3], $deck1Cards[4],
-        $deck1Cards[5], $deck1Cards[6], $deck1Cards[7])['deck_id'];
-
-    if ($deckId == null)
-        return false;
-
-    return $deckId == $deck2;
-}
