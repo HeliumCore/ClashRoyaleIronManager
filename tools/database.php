@@ -70,7 +70,7 @@ function getWarId($db, $war, $currentWar, $created, $season = null)
 {
     $insertWarPattern = "
 INSERT INTO war
-VALUES ('', %d, %d, 0)
+VALUES ('', %d, 0, %d)
 ";
 
     $updateCurrentWarPattern = "
@@ -82,7 +82,7 @@ WHERE id = %d
 ";
     if (!is_array($war)) {
         if (!is_array($currentWar)) {
-            execute_query($db, sprintf($insertWarPattern, $created, 1));
+            execute_query($db, sprintf($insertWarPattern, $created, $season));
             return $db->lastInsertId();
         } else {
             execute_query($db, sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])));
@@ -130,7 +130,7 @@ function insertNewWar($db)
 {
     $query = "
 INSERT INTO war
-VALUES ('', 0, 0)
+VALUES ('', 0, 0, 0)
 ";
     execute_query($db, $query);
 }
