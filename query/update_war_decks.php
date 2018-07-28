@@ -38,8 +38,8 @@ foreach ($battles as $battle) {
         $currentDeck[5], $currentDeck[6], $currentDeck[7]);
 
     if ($deckId != null && $deckId > 0) {
-        if (isDeckUsedInCurrentWar($db, $warId)) {
-            if (getDeckResultsByTime($db, $deckId) == false) {
+        if (isDeckUsedInCurrentWar($db, $warId, $deckId)) {
+            if (getDeckResultsByTime($db, $combatTime) == false) {
                 insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
             }
         } else {

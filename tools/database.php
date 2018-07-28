@@ -841,14 +841,15 @@ WHERE cr_id = %d
     return $currentDeck;
 }
 
-function isDeckUsedInCurrentWar($db, $warId)
+function isDeckUsedInCurrentWar($db, $warId, $deckId)
 {
     $pattern = "
     SELECT id
     FROM war_decks
     WHERE war_id = %d
+    AND deck_id = %d
     ";
-    return fetch_query($db, sprintf($pattern, $warId)) != null;
+    return fetch_query($db, sprintf($pattern, $warId, $deckId)) != null;
 }
 
 function getDeckResults($db)
@@ -888,7 +889,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
     $start = intval(($page - 1) * 10);
     $end = $start + 10;
     $pos = 0;
-    foreach (getDeckResults($db)as $deckRes) {
+    foreach (getDeckResults($db) as $deckRes) {
         if ($pos >= $end || $pos < $start) {
             $pos++;
             continue;
@@ -924,7 +925,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
 function getAllWarDecks($db)
 {
     $results = array();
-    foreach (getDeckResults($db)as $deckRes) {
+    foreach (getDeckResults($db) as $deckRes) {
         $pattern = "
         SELECT GROUP_CONCAT(c.cr_id) as cr_ids
         FROM decks d
