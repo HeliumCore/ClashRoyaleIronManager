@@ -896,7 +896,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
         }
 
         $pattern = "
-        SELECT GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids
+        SELECT GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, d.elixir_cost
         FROM decks d
         LEFT JOIN card_deck cd ON d.id = cd.deck_id
         LEFT JOIN cards c ON cd.card_id = c.id
@@ -916,6 +916,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
         $result['played'] = $deckRes['played'];
         $result['wins'] = $deckRes['wins'];
         $result['total_crowns'] = $deckRes['total_crowns'];
+        $result['elixir_cost'] = $res['elixir_cost'];
         array_push($results, $result);
         $pos++;
     }
