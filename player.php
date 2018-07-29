@@ -38,7 +38,6 @@ $missedWars = countMissedWar($db, $playerId)['missed_war'];
 
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
-//TODO tableau 'guerre', soit que guerre terminée, soit diviser en deux (terminée et en cours)
 //TODO faire le design de l'affichage des cartes (elixir, niveau, couleur...)
 ?>
 <!DOCTYPE html>
@@ -70,13 +69,6 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <?php if ($lastUpdated['updated'] != null):
-        $time = strtotime($lastUpdated['updated']);
-        ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
-    <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
-    <?php endif; ?>
     <h1 class="whiteShadow">Détails du joueur</h1><br>
     <br>
     <div class="row">
@@ -218,6 +210,15 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
+</div>
+<div class="row text-center">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+    <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>
 </body>

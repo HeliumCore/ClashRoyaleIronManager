@@ -133,13 +133,6 @@ $lastUpdated = getLastUpdated($db, "war");
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <?php if ($lastUpdated['updated'] != null):
-        $time = strtotime($lastUpdated['updated']);
-        ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
-    <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
-    <?php endif; ?>
     <div>
         <h1 class="whiteShadow">Guerre en cours</h1>
         <span class="whiteShadow"><?php echo $stateName ?></span><br>
@@ -280,10 +273,19 @@ $lastUpdated = getLastUpdated($db, "war");
         <input type="hidden" id="hd_numberOfCollectionWon" value="<?php print $totalCollectionWon; ?>"/>
         <input type="hidden" id="hd_numberOfCardsEarned" value="<?php print $totalCardsEarned; ?>"/>
     <?php } ?>
-    <br><br>
+    <br>
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
+</div>
+<div class="row text-center">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+    <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>
 </body>

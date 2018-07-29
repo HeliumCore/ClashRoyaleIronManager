@@ -57,16 +57,9 @@ $lastUpdated = getLastUpdated($db, "index");
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <?php if ($lastUpdated['updated'] != null):
-        $time = strtotime($lastUpdated['updated']);
-        ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
-    <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
-    <?php endif; ?>
     <h1 class="whiteShadow">Liste des joueurs</h1>
     <span class="pageIndexSubtitle whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
-    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
+    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom" style="margin-left: 10px;"/>
     <br><br>
     <div class="table-responsive">
         <table id="tableIndex" class="table tableIndex">
@@ -126,6 +119,15 @@ $lastUpdated = getLastUpdated($db, "index");
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
+</div>
+<div class="row text-center">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+    <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>
 </body>

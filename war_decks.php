@@ -75,13 +75,6 @@ function getAllCards($db)
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <?php if ($lastUpdated['updated'] != null):
-        $time = strtotime($lastUpdated['updated']);
-        ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
-    <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
-    <?php endif; ?>
     <h1 class="whiteShadow">Decks de guerre</h1><br>
     <h4 class="whiteShadow">Attention, actualiser ces informations peut prendre beaucoup de temps</h4>
     <br><br>
@@ -383,6 +376,15 @@ function getAllCards($db)
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
+</div>
+<div class="row text-center">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+    <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>
 </body>

@@ -27,7 +27,6 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
 }
 
 $allPlayers = getAllPlayersByRank($db);
-$firstWarDate = getFirstWarDate($db);
 
 // TODO faire un tableau d'en-tete qui regroupe toutes les guerres pour tous les joueurs
 // cumuler dans les trois foreach pour avoir les valeurs
@@ -316,23 +315,25 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 <body>
 <?php include("header.html"); ?>
 <div class="container">
-    <?php if ($lastUpdated['updated'] != null):
-        $time = strtotime($lastUpdated['updated']);
-        ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
-    <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow pull-right">Nécessite une mise à jour</span>
-    <?php endif; ?>
     <h1 class="whiteShadow">Statistiques des guerres</h1>
-    <span class="whiteShadow">Première guerre : <b><?php echo '' . date('d/m/Y', $firstWarDate['created']) ?></b></span>
     <br>
-    <br><br>
     <ul id="navUlWarSeason" class="nav nav-tabs" role="tablist">
         <?php
         print '<li role="presentation" class="active"><a href="#season' . $lastSeason . '" aria-controls="season' . $lastSeason . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $lastSeason . '</a></li>';
         print '<li role="presentation"><a href="#season' . $previousSeason . '" aria-controls="season' . $previousSeason . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $previousSeason . '</a></li>';
         print '<li role="presentation"><a href="#season' . $secondPreviousSeason . '" aria-controls="season' . $secondPreviousSeason . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $secondPreviousSeason . '</a></li>';
         ?>
+        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+        <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom" style="margin-left: 10px;"/>
+        <select id="orderSelect" class="pull-right">
+            <option value="-1">Trier par colonne</option>
+            <option value="0">Rang</option>
+            <option value="1">Collections jouées</option>
+            <option value="2">Collections gagnées</option>
+            <option value="3">Cartes gagnées</option>
+            <option value="4">Batailles jouées</option>
+            <option value="5">Batailles gagnées</option>
+        </select>
     </ul>
     <br>
     <div class="tab-content">
@@ -345,17 +346,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                 <li role="presentation"><a href="#lastSeasonWar" aria-controls="lastSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
-                <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
-                <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
-                <select id="orderSelect" class="pull-right">
-                    <option value="-1">Trier par colonne</option>
-                    <option value="0">Rang</option>
-                    <option value="1">Collections jouées</option>
-                    <option value="2">Collections gagnées</option>
-                    <option value="3">Cartes gagnées</option>
-                    <option value="4">Batailles jouées</option>
-                    <option value="5">Batailles gagnées</option>
-                </select>
             </ul>
 
             <!-- Tab panes -->
@@ -516,17 +506,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                 <li role="presentation"><a href="#previousSeasonWar" aria-controls="previousSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
-                <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
-                <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
-                <select id="orderSelect" class="pull-right">
-                    <option value="-1">Trier par colonne</option>
-                    <option value="0">Rang</option>
-                    <option value="1">Collections jouées</option>
-                    <option value="2">Collections gagnées</option>
-                    <option value="3">Cartes gagnées</option>
-                    <option value="4">Batailles jouées</option>
-                    <option value="5">Batailles gagnées</option>
-                </select>
             </ul>
 
             <!-- Tab panes -->
@@ -687,17 +666,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                 <li role="presentation"><a href="#secondPreviousSeasonWar" aria-controls="secondPreviousSeasonWar" role="tab" data-toggle="tab"
                                            class="tab-link">Batailles</a>
                 </li>
-                <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
-                <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
-                <select id="orderSelect" class="pull-right">
-                    <option value="-1">Trier par colonne</option>
-                    <option value="0">Rang</option>
-                    <option value="1">Collections jouées</option>
-                    <option value="2">Collections gagnées</option>
-                    <option value="3">Cartes gagnées</option>
-                    <option value="4">Batailles jouées</option>
-                    <option value="5">Batailles gagnées</option>
-                </select>
             </ul>
 
             <!-- Tab panes -->
@@ -854,6 +822,15 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
+</div>
+<div class="row text-center">
+    <?php if ($lastUpdated['updated'] != null):
+        $time = strtotime($lastUpdated['updated']);
+        ?>
+        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+    <?php else: ?>
+        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+    <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>
 </body>
