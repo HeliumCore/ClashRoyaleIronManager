@@ -46,25 +46,6 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <meta charset="utf-8">
     <title>Détail du joueur</title>
     <?php include("head.php"); ?>
-    <script>
-        function update() {
-            $.ajax({
-                url: 'query/update_clan.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                    $('#navbar').collapse('hide');
-                },
-                success: function () {
-                    $.ajax({
-                        url: 'query/update_player.php?tag=' + $('input:hidden[name=playerTagHidden]').val(),
-                        success: function () {
-                            window.location.reload(true);
-                        }
-                    });
-                }
-            })
-        }
-    </script>
 </head>
 <body>
 <?php include("header.html"); ?>

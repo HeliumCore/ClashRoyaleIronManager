@@ -57,27 +57,11 @@ function getAllCards($db)
     <meta charset="utf-8">
     <title>Decks de guerre</title>
     <?php include("head.php"); ?>
-    <script>
-        function update() {
-            $.ajax({
-                url: 'query/update_war_decks.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                    $('#navbar').collapse('hide');
-                },
-                success: function () {
-                    window.location.reload(true);
-                }
-            })
-        }
-    </script>
 </head>
 <body>
 <?php include("header.html"); ?>
 <div class="container">
     <h1 class="whiteShadow">Decks de guerre</h1><br>
-    <h4 class="whiteShadow">Attention, actualiser ces informations peut prendre beaucoup de temps</h4>
-    <br><br>
     <ul class="nav nav-tabs">
         <?php
         if ($state == 'warDay' && $currentTab == "current"):

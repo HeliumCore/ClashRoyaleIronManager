@@ -232,28 +232,6 @@ $lastUpdated = getLastUpdated($db, "war_stats");
     <title>Historique des guerres</title>
     <?php include("head.php"); ?>
     <script>
-        function update() {
-            $.ajax({
-                url: 'query/update_clan.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                    $('#navbar').collapse('hide');
-                },
-                success: function () {
-                    updateWarStats();
-                }
-            })
-        }
-
-        function updateWarStats() {
-            $.ajax({
-                url: 'query/update_war_stats.php',
-                success: function () {
-                    window.location.reload(true);
-                }
-            });
-        }
-
         $(document).ready(function () {
             $('.js-player-table').each(function () {
                 $(this).on('click', 'tbody td', function () {

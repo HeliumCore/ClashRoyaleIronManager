@@ -97,37 +97,6 @@ $lastUpdated = getLastUpdated($db, "war");
 
             orderSelect.val($('#hd_selectValue').val());
         });
-
-        function update() {
-            $.ajax({
-                url: 'query/update_clan.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                    $('#navbar').collapse('hide');
-                },
-                success: function () {
-                    updateWarStats();
-                }
-            });
-        }
-
-        function updateWarStats() {
-            $.ajax({
-                url: 'query/update_war_stats.php',
-                success: function () {
-                    updateWar();
-                }
-            });
-        }
-
-        function updateWar() {
-            $.ajax({
-                url: 'query/update_war.php',
-                success: function () {
-                    window.location.reload(true);
-                }
-            });
-        }
     </script>
 </head>
 <body>

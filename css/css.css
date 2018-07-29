@@ -10,6 +10,8 @@ body {
     font-family: "Supercell", serif;
     background: url('../images/background.png') fixed;
     padding-top: 70px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .whiteShadow,

@@ -17,19 +17,6 @@ $lastUpdated = getLastUpdated($db, "index");
 
     <?php include("head.php"); ?>
     <script>
-        function update() {
-            $.ajax({
-                url: 'query/update_clan.php',
-                beforeSend: function () {
-                    $('#loaderDiv').show();
-                    $('#navbar').collapse('hide');
-                },
-                success: function () {
-                    window.location.reload(true);
-                }
-            })
-        }
-
         $(document).ready(function () {
             $('#tableIndex').on('click', 'tbody td', function () {
                 $("body").css("cursor", "wait");

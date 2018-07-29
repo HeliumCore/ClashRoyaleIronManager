@@ -30,6 +30,8 @@ if ($warState == 'warDay') {
                 $clan['wins'], $clan['crowns'], $clan['warTrophies'], $warId);
         }
     }
+} else if (($warState == 'collectionDay' && sizeof($data['participants']) <= 0) || $warState != 'collectionDay') {
+    return;
 }
 $counter = 0;
 foreach (getAllPlayersInClan($db) as $player) {
