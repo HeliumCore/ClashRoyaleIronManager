@@ -38,18 +38,6 @@ function getDeckLink($deck)
     return sprintf($pattern, $crIds[0], $crIds[1], $crIds[2], $crIds[3], $crIds[4], $crIds[5], $crIds[6], $crIds[7]);
 }
 
-function getAllCards($db)
-{
-    $allCards = [];
-    foreach (getAllWarDecks($db) as $deck) {
-        $crIds = explode(",", $deck['cr_ids']);
-        for ($i = 0; $i <= 7; $i++) {
-            array_push($allCards, intval($crIds[$i]));
-        }
-    }
-    return $allCards;
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

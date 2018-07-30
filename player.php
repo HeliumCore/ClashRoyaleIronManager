@@ -12,15 +12,14 @@ include("tools/api_conf.php");
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else header('Location: index.php');
 
-$player = getPlayersInfoByTag($db, $playerTag);
-$playerId = $player['playerId'];
-$totalWarPlayed = getTotalWarPlayedByPlayerId($db, $playerId);
-$currentDeck = getDeckByPlayerId($db, $playerId);
+$player = getPlayerInfos($db, $playerTag);
+//$player = getPlayersInfoByTag($db, $playerTag);
+$crIds = explode(",", $player['cr_ids']);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
 $deckLink = sprintf(
-        $deckLinkPattern, $currentDeck[0]['cr_id'], $currentDeck[1]['cr_id'], $currentDeck[2]['cr_id'],
-        $currentDeck[3]['cr_id'], $currentDeck[4]['cr_id'], $currentDeck[5]['cr_id'], $currentDeck[6]['cr_id'],
-        $currentDeck[7]['cr_id']
+        $deckLinkPattern, $crIds[0], $crIds[1], $crIds[2],
+        $crIds[3], $crIds[4], $crIds[5], $crIds[6],
+        $crIds[7]
 );
 
 // CHESTS
@@ -31,10 +30,6 @@ $fatChests = array(
     $chests["epic"] => "epic", $chests["giant"] => "giant"
 );
 ksort($fatChests);
-
-// Absences
-$missedCollections = countMissedCollection($db, $playerId)['missed_collection'];
-$missedWars = countMissedWar($db, $playerId)['missed_war'];
 
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
@@ -95,11 +90,12 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <h3 class="whiteShadow">Deck du moment</h3>
             <div class="row">
                 <?php
-                if (sizeof($currentDeck) > 0):
+                $cardKeys = explode(",", $player['card_keys']);
+                if (sizeof($cardKeys) > 0):
                     for ($i = 0; $i <= 7; $i++):?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="images/cards/<?php print $currentDeck[$i]['card_key']; ?>.png"
+                                <img src="images/cards/<?php print $cardKeys[$i]; ?>.png"
                                      alt="failed to load img" class="img-responsive cards"/>
                             </div>
                         </div>
@@ -162,7 +158,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <tbody>
             <?php
             echo '<tr>';
-            echo '<td class="whiteShadow">Jouées<br>' . $totalWarPlayed['total_war_played'] . '</td>';
+            echo '<td class="whiteShadow">Jouées<br>' . $player['total_war_played'] . '</td>';
             echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_collection_played'] . '</td>';
             echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
             echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
@@ -180,8 +176,8 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <tbody>
             <?php
             echo '<tr>';
-            echo '<td class="whiteShadow text-center">Collections<br>' . $missedCollections . '</td>';
-            echo '<td class="whiteShadow text-center">Batailles<br>' . $missedWars . '</td>';
+            echo '<td class="whiteShadow text-center">Collections<br>' . $player['missed_collection'] . '</td>';
+            echo '<td class="whiteShadow text-center">Batailles<br>' . $player['missed_war'] . '</td>';
             echo '</tr>';
             ?>
             </tbody>

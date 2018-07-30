@@ -425,6 +425,41 @@ function removePlayerFromClan($db, $tag)
     execute_query($db, utf8_decode(sprintf($pattern, $tag)));
 }
 
+function getPlayerInfos($db, $playerTag)
+{
+    $pattern = "
+    SELECT
+    GROUP_CONCAT(c.cr_id) cr_ids, GROUP_CONCAT(c.card_key) card_keys,
+    COUNT(DISTINCT war_played.id) total_war_played,
+    COUNT(DISTINCT war_collection.id) missed_collection,
+    COUNT(DISTINCT war_missed.id) missed_war,
+    players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
+    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
+    arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
+    SUM(player_war.cards_earned) as total_cards_earned,
+    SUM(player_war.collection_played) as total_collection_played, 
+    SUM(player_war.collection_won) as total_collection_won,
+    SUM(player_war.battle_played) as total_battle_played,
+    SUM(player_war.battle_won) as total_battle_won
+    FROM players
+    INNER JOIN arena ON arena.arena_id = players.arena
+    INNER JOIN role ON role.id = players.role_id
+    INNER JOIN player_war ON player_war.player_id = players.id
+    INNER JOIN war ON player_war.war_id = war.id
+    LEFT JOIN player_war war_played ON war_played.player_id = players.id AND war_played.collection_played > 0
+    LEFT JOIN player_war war_collection ON war_collection.player_id = players.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN player_war war_missed ON war_missed.player_id = players.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
+    JOIN player_deck pd ON pd.player_id = players.id AND pd.current = 1
+    JOIN card_deck cd ON cd.deck_id = pd.deck_id
+    JOIN cards c ON c.id = cd.card_id
+    WHERE tag = \"%s\"
+    AND war.id > 24
+    GROUP BY cd.deck_id
+    ";
+
+    return fetch_query($db, sprintf($pattern, $playerTag));
+}
+
 // ----------------- CARDS -----------------
 function insertCard($db, $key, $name, $elixir, $type, $rarity, $arena, $crId)
 {
@@ -471,40 +506,6 @@ WHERE cards.cr_id = %d
     return fetch_query($db, sprintf($pattern, $crId));
 }
 
-function getPlayersInfoByTag($db, $tag)
-{
-    $pattern = "
-SELECT players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
-arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
-SUM(player_war.cards_earned) as total_cards_earned,
-SUM(player_war.collection_played) as total_collection_played, 
-SUM(player_war.collection_won) as total_collection_won,
-SUM(player_war.battle_played) as total_battle_played,
-SUM(player_war.battle_won) as total_battle_won
-FROM players
-INNER JOIN arena ON arena.arena_id = players.arena
-INNER JOIN role ON role.id = players.role_id
-INNER JOIN player_war ON player_war.player_id = players.id
-INNER JOIN war ON player_war.war_id = war.id
-WHERE tag = \"%s\"
-AND war.id > 24
-";
-    return fetch_query($db, utf8_decode(sprintf($pattern, $tag)));
-}
-
-function getTotalWarPlayedByPlayerId($db, $id)
-{
-    $pattern = "
-    SELECT COUNT(player_war.id) as total_war_played
-    FROM player_war
-    WHERE collection_played > 0
-    AND player_id = %d
-    ";
-
-    return fetch_query($db, sprintf($pattern, $id));
-}
-
 function insertCardLevelByPlayer($db, $card, $playerId, $level)
 {
     $pattern = "
@@ -539,6 +540,7 @@ function getCardLevelByPlayer($db, $card, $playerId)
     return fetch_query($db, sprintf($pattern, $card, $playerId));
 }
 
+//TODO change elixir cost calcul
 function getCardElixirCostById($db, $cardId)
 {
     $pattern = "
@@ -618,18 +620,6 @@ AND player_war.player_id = %d
     else
         $query = sprintf($pattern, $playerId, "AND war.season = " . $season);
 
-    return fetch_query($db, $query);
-}
-
-function getFirstWarDate($db)
-{
-    $query = "
-SELECT created
-FROM war
-WHERE past_war > 0
-AND war.id > 24
-LIMIT 1
-";
     return fetch_query($db, $query);
 }
 
@@ -795,19 +785,6 @@ function updateElixirCost($db, $deckId, $elixirCost)
     execute_query($db, sprintf($pattern, $elixirCost, $deckId));
 }
 
-function getDeckByPlayerId($db, $playerId)
-{
-    $pattern = "
-    SELECT c.card_key, c.cr_id
-    FROM cards c
-    JOIN card_deck cd ON c.id = cd.card_id
-    JOIN decks d ON cd.deck_id = d.id
-    JOIN player_deck pd ON d.id = pd.deck_id AND pd.current = 1
-    JOIN players p ON pd.player_id = p.id AND p.id = %d
-    ";
-    return fetch_all_query($db, sprintf($pattern, $playerId));
-}
-
 function insertCardDeck($db, $card, $deck)
 {
     $pattern = "
@@ -850,24 +827,6 @@ function isDeckUsedInCurrentWar($db, $warId, $deckId)
     AND deck_id = %d
     ";
     return fetch_query($db, sprintf($pattern, $warId, $deckId)) != null;
-}
-
-function getDeckResults($db, $current)
-{
-    $query = "
-    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns
-    FROM deck_results dr
-    RIGHT JOIN war_decks wd ON dr.deck_id = wd.deck_id
-    %s
-    GROUP BY dr.deck_id
-    ORDER BY played DESC, wins DESC, crowns DESC
-    ";
-
-    $condition = "";
-    if ($current)
-        $condition = "JOIN war w ON wd.war_id = w.id AND w.past_war = 0";
-
-    return fetch_all_query($db, sprintf($query, $condition));
 }
 
 function getNumberOfPages($db, $current)
@@ -915,19 +874,8 @@ function getAllWarDecksWithPagination($db, $current, $page)
     return fetch_all_query($db, sprintf($pattern, $condition, $offset));
 }
 
-function getAllWarDecks($db)
+function getFavCards($db)
 {
-    $query = "
-    SELECT GROUP_CONCAT(c.cr_id) as cr_ids
-    FROM war_decks wd
-    JOIN card_deck cd ON wd.deck_id = wd.deck_id
-    JOIN cards c ON c.id = cd.card_id
-    GROUP BY wd.deck_id
-    ";
-    return fetch_all_query($db, $query);
-}
-
-function getFavCards($db) {
     $query = "
     SELECT COUNT(c.id) as occurence, c.card_key
     FROM card_deck cd
@@ -939,38 +887,4 @@ function getFavCards($db) {
 
 
     return fetch_all_query($db, $query);
-}
-
-// TODO utiliser ca pour charger la page de joueur individuelle
-function getPlayersInfo($db, $playerTag) {
-    $pattern = "
-    SELECT
-    GROUP_CONCAT(c.cr_id) cr_ids, GROUP_CONCAT(c.card_key) card_keys,
-    COUNT(DISTINCT war_played.id) total_war_played,
-    COUNT(DISTINCT war_collection.id) missed_collection,
-    COUNT(DISTINCT war_missed.id) missed_war,
-    players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
-    arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
-    SUM(player_war.cards_earned) as total_cards_earned,
-    SUM(player_war.collection_played) as total_collection_played, 
-    SUM(player_war.collection_won) as total_collection_won,
-    SUM(player_war.battle_played) as total_battle_played,
-    SUM(player_war.battle_won) as total_battle_won
-    FROM players
-    INNER JOIN arena ON arena.arena_id = players.arena
-    INNER JOIN role ON role.id = players.role_id
-    INNER JOIN player_war ON player_war.player_id = players.id
-    INNER JOIN war ON player_war.war_id = war.id
-    LEFT JOIN player_war war_played ON war_played.player_id = players.id AND war_played.collection_played > 0
-    LEFT JOIN player_war war_collection ON war_collection.player_id = players.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
-    LEFT JOIN player_war war_missed ON war_missed.player_id = players.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
-    JOIN player_deck pd ON pd.player_id = players.id AND pd.current = 1
-    JOIN card_deck cd ON cd.deck_id = pd.deck_id
-    JOIN cards c ON c.id = cd.card_id
-    WHERE tag = \"%s\"
-    AND war.id > 24
-    ";
-
-    return fetch_query($db, sprintf($pattern, $playerTag));
 }
