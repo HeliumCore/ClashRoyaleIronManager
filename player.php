@@ -196,9 +196,9 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <?php if ($lastUpdated['updated'] != null):
         $time = strtotime($lastUpdated['updated']);
         ?>
-        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+        <span class="whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
     <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+        <span class="whiteShadow">Nécessite une mise à jour</span>
     <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>

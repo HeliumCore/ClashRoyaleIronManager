@@ -45,7 +45,4 @@
             }
         });
     }
-
-    function updateWarDecks() {
-    }
 </script>

@@ -890,61 +890,53 @@ function getNumberOfPages($db, $current)
 
 function getAllWarDecksWithPagination($db, $current, $page)
 {
-    $results = array();
-    $start = intval(($page - 1) * 10);
-    $end = $start + 10;
-    $pos = 0;
-    foreach (getDeckResults($db, $current) as $deckRes) {
-        if ($pos >= $end || $pos < $start) {
-            $pos++;
-            continue;
-        }
+    $pattern = "
+    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns, d.elixir_cost, subQuery.card_keys, subQuery.cr_ids
+    FROM war_decks wd
+    LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
+    LEFT JOIN decks d ON d.id = wd.deck_id
+    LEFT JOIN war w ON w.id = wd.war_id %s
+    LEFT JOIN 
+    (
+        SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids
+        FROM card_deck cd
+        LEFT JOIN cards c ON c.id = cd.card_id
+        GROUP BY cd.deck_id
+    ) subQuery ON subQuery.deck_id = d.id
+    GROUP BY wd.deck_id
+    ORDER BY played DESC, wins DESC, crowns DESC
+    LIMIT %d, 10
+    ";
+    $offset = intval(($page - 1) * 10);
+    $condition = "";
+    if ($current)
+        $condition = "AND w.past_war = 0";
 
-        $pattern = "
-        SELECT GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, d.elixir_cost
-        FROM decks d
-        LEFT JOIN card_deck cd ON d.id = cd.deck_id
-        LEFT JOIN cards c ON cd.card_id = c.id
-        RIGHT JOIN war_decks wd ON d.id = wd.deck_id
-        LEFT JOIN war w ON wd.war_id = w.id
-        %s d.id = %d
-        ";
-
-        if ($current)
-            $condition = "WHERE w.past_war = 0 AND";
-        else
-            $condition = "WHERE";
-
-        $res = fetch_query($db, sprintf($pattern, $condition, $deckRes['deck_id']));
-        $result['card_keys'] = $res['card_keys'];
-        $result['cr_ids'] = $res['cr_ids'];
-        $result['played'] = $deckRes['played'];
-        $result['wins'] = $deckRes['wins'];
-        $result['total_crowns'] = $deckRes['total_crowns'];
-        $result['elixir_cost'] = $res['elixir_cost'];
-        array_push($results, $result);
-        $pos++;
-    }
-    return $results;
+    return fetch_all_query($db, sprintf($pattern, $condition, $offset));
 }
 
 function getAllWarDecks($db)
 {
-    $results = array();
-    foreach (getDeckResults($db, false) as $deckRes) {
-        $pattern = "
-        SELECT GROUP_CONCAT(c.cr_id) as cr_ids
-        FROM decks d
-        LEFT JOIN card_deck cd ON d.id = cd.deck_id
-        LEFT JOIN cards c ON cd.card_id = c.id
-        RIGHT JOIN war_decks wd ON d.id = wd.deck_id
-        LEFT JOIN war w ON wd.war_id = w.id
-        WHERE d.id = %d
-        ";
+    $query = "
+    SELECT GROUP_CONCAT(c.cr_id) as cr_ids
+    FROM war_decks wd
+    JOIN card_deck cd ON wd.deck_id = wd.deck_id
+    JOIN cards c ON c.id = cd.card_id
+    GROUP BY wd.deck_id
+    ";
+    return fetch_all_query($db, $query);
+}
 
-        $res = fetch_query($db, sprintf($pattern, $deckRes['deck_id']));
-        $result['cr_ids'] = $res['cr_ids'];
-        array_push($results, $result);
-    }
-    return $results;
+function getFavCards($db) {
+    $query = "
+    SELECT COUNT(c.id) as occurence, c.card_key
+    FROM card_deck cd
+    JOIN `cards` c ON c.id = cd.card_id
+    GROUP BY c.cr_id
+    ORDER BY occurence DESC
+    LIMIT 9
+    ";
+
+
+    return fetch_all_query($db, $query);
 }

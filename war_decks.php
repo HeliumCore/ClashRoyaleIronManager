@@ -6,8 +6,8 @@
  * Time: 14:38
  */
 
-include(__DIR__."/tools/database.php");
-include(__DIR__."/tools/api_conf.php");
+include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/tools/api_conf.php");
 
 if (isset($_GET['tab']) && !empty($_GET['tab'])) {
     $currentTab = $_GET['tab'];
@@ -194,7 +194,7 @@ function getAllCards($db)
         print '</div>';
         ?>
     </div>
-<?php endif ?>
+    <?php endif ?>
     <div class="tab-pane <?php if ($state != 'warDay' || $currentTab == "allWar"): print 'active';
     endif; ?>" id="allWar">
         <?php
@@ -299,75 +299,45 @@ function getAllCards($db)
     </div>
     <div class="tab-pane <?php if ($currentTab == "favCards"): print 'active'; endif; ?>" id="favCards">
         <?php
-        $bestCards = array_count_values(getAllCards($db));
-        arsort($bestCards);
         $counter = 0;
-        $pos = 0;
-        foreach ($bestCards as $key => $bestCard):
-            if ($pos > 8):
-                break;
+        foreach (getFavCards($db) as $card):
+            if ($counter == 0):
+                print '<div class="row">';
             endif;
-            $cardKey = getCardByCrId($db, $key)['card_key'];
-            if ($counter == 0): ?>
+            ?>
+            <div class="col-lg-4">
                 <div class="row">
-                <div class="col-lg-4">
-                    <div class="row">
-                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                             class="img-responsive center-block"/>
-                    </div>
-                    <div class="row">
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                            decks</span>
-                        <br>
-                    </div>
+                    <img src="images/cards/<?php print $card['card_key']; ?>.png" alt="cardImage"
+                         class="img-responsive center-block"/>
                 </div>
-                <?php
-                $counter++;
-            elseif ($counter == 1): ?>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                             class="img-responsive center-block"/>
-                    </div>
-                    <div class="row">
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                            decks</span>
-                        <br>
-                    </div>
+                <div class="row">
+                    <span class="whiteShadow text-center center-block">Présente dans <?php print $card['occurence']; ?>
+                        decks</span>
+                    <br>
                 </div>
-                <?php
-                $counter++;
-            else: ?>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <img src="images/cards/<?php print $cardKey; ?>.png" alt="cardImage"
-                             class="img-responsive center-block"/>
-                    </div>
-                    <div class="row">
-                        <span class="whiteShadow text-center center-block">Présente dans <?php print $bestCard; ?>
-                            decks</span>
-                        <br>
-                    </div>
-                </div>
-                </div>
-                <?php
+            </div>
+            <?php
+            if ($counter == 2):
+                print '</div>';
                 $counter = 0;
+            else:
+                $counter++;
             endif;
-            $pos++;
         endforeach; ?>
     </div>
 </div>
-</div>
+</div> <!-- DIV qui ferme le container, bug d'IDE a cause des php print-->
 <div id="loaderDiv">
     <img id="loaderImg" src="images/loader.gif"/>
 </div>
+<br>
 <div class="row text-center">
     <?php if ($lastUpdated['updated'] != null):
         $time = strtotime($lastUpdated['updated']);
         ?>
-        <span class="pageIndexSubtitle whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
+        <span class="whiteShadow">Dernière mise à jour le : <b><?php echo '' . date('d/m/Y', $time) ?></b> à <b><?php echo '' . date('H:i', $time) ?></span>
     <?php else: ?>
-        <span class="pageIndexSubtitle whiteShadow">Nécessite une mise à jour</span>
+        <span class="whiteShadow">Nécessite une mise à jour</span>
     <?php endif; ?>
 </div>
 <?php include("footer.html"); ?>

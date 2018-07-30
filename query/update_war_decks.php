@@ -9,14 +9,13 @@
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");
 
-$battles = getWarBattlesFromApi($api);
 $currentWar = getWarFromApi($api);
 $lastWar = getLastWarEndDate($db);
 $currentEnd = $currentWar['warEndTime'];
 $lastEnd = intval($lastWar['created']);
 $warId = getCurrentWar($db)['id'];
 
-foreach ($battles as $battle) {
+foreach (getWarBattlesFromApi($api) as $battle) {
     if ($battle['type'] != 'clanWarWarDay')
         continue;
 
@@ -31,6 +30,7 @@ foreach ($battles as $battle) {
     $winResult = $battle['winner'];
     $deckLine = $team['deckLink'];
     $deck = $team['deck'];
+    saveCards($deck);
     $tag = $team['tag'];
     $playerId = intval(getPlayerByTag($db, $tag)['id']);
     $win = $winResult <= 0 ? 0 : 1;
@@ -63,3 +63,13 @@ foreach ($battles as $battle) {
     }
 }
 setLastUpdated($db, "war_decks");
+
+function saveCards($deck) {
+    foreach ($deck as $card) {
+        $name = __DIR__."/../images/new_cards/".$card['key'].".png";
+        if (!file_exists($name)) {
+            $url = $card['icon'];
+            file_put_contents($name, file_get_contents($url));
+        }
+    }
+}
