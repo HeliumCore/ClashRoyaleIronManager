@@ -818,29 +818,18 @@ function isDeckUsedInCurrentWar($db, $warId, $deckId)
     return fetch_query($db, sprintf($pattern, $warId, $deckId)) != null;
 }
 
-function getNumberOfPages($db, $current)
-{
-    $pattern = "
-    SELECT COUNT(d.id) as did 
-    FROM decks d
-    RIGHT JOIN war_decks wd ON d.id = wd.deck_id
-    JOIN war w ON wd.war_id = w.id 
-    %s
-    ";
-
-    $condition = "";
-    if ($current)
-        $condition = "WHERE w.past_war = 0";
-
-    $decks = intval(fetch_query($db, sprintf($pattern, $condition))['did']);
-    return ceil($decks / 10);
-}
-
 function getAllWarDecksWithPagination($db, $current, $page)
 {
     $pattern = "
     SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns, 
-    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids
+    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids, 
+    (
+        SELECT CEIL(COUNT(d.id) / 10)
+        FROM decks d
+        RIGHT JOIN war_decks wd ON d.id = wd.deck_id
+        JOIN war w ON wd.war_id = w.id
+        %
+    ) as number_of_pages
     FROM war_decks wd
     LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
     LEFT JOIN decks d ON d.id = wd.deck_id
@@ -858,10 +847,13 @@ function getAllWarDecksWithPagination($db, $current, $page)
     ";
     $offset = intval(($page - 1) * 10);
     $condition = "";
-    if ($current)
-        $condition = "AND w.past_war = 0";
+    $secondCondition = "";
+    if ($current) {
+        $condition = "WHERE w.past_war = 0";
+        $secondCondition = "AND w.past_war = 0";
+    }
 
-    return fetch_all_query($db, sprintf($pattern, $condition, $offset));
+    return fetch_all_query($db, sprintf($pattern, $condition, $secondCondition, $offset));
 }
 
 function getFavCards($db)

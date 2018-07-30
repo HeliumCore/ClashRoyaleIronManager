@@ -166,7 +166,7 @@ function getDeckLink($deck)
             $pos++;
         endforeach;
 
-        $numberOfPages = getNumberOfPages($db, true);
+        $numberOfPages = intval($allDecks[0]['number_of_pages']);
         print '<div class="row">';
         print '<div class="col-md-12 text-center">';
         print '<ul class="pagination pagination-lg">';
@@ -269,7 +269,7 @@ function getDeckLink($deck)
             $pos++;
         endforeach;
 
-        $numberOfPages = getNumberOfPages($db, false);
+        $numberOfPages = intval($allDecks[0]['number_of_pages']);
         print '<div class="row">';
         print '<div class="col-md-12 text-center">';
         print '<ul class="pagination pagination-md">';

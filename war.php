@@ -18,6 +18,9 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
     $selectValue = -1;
     $warPlayers = getWarPlayers($db);
 }
+$lastUpdated = getLastUpdated($db, "war");
+
+// API
 $state = getWarStateFromApi($api);
 if ($state == "collectionDay") {
     $stateName = "Jour de collection";
@@ -27,8 +30,6 @@ if ($state == "collectionDay") {
     $standings = getAllStandings($db);
     $endTime = getWarFromApi($api)['warEndTime'];
 }
-$lastUpdated = getLastUpdated($db, "war");
-
 ?>
 
 <!DOCTYPE html>
