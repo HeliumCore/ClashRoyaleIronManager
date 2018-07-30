@@ -745,8 +745,8 @@ function insertDeckResults($db, $deckId, $win, $crowns, $combatTime)
 function createDeck($db)
 {
     $query = "
-    INSERT INTO decks (elixir_cost)
-    VALUES (0)
+    INSERT INTO decks (id)
+    VALUES ('')
     ";
     execute_query($db, sprintf($query));
     return $db->lastInsertId();
@@ -772,17 +772,6 @@ function getPlayerDeck($db, $deckId, $playerId)
     ";
 
     return fetch_query($db, sprintf($pattern, $deckId, $playerId));
-}
-
-function updateElixirCost($db, $deckId, $elixirCost)
-{
-    $pattern = "
-    UPDATE decks
-    SET elixir_cost = %f
-    WHERE id = %d
-    ";
-
-    execute_query($db, sprintf($pattern, $elixirCost, $deckId));
 }
 
 function insertCardDeck($db, $card, $deck)
@@ -850,18 +839,19 @@ function getNumberOfPages($db, $current)
 function getAllWarDecksWithPagination($db, $current, $page)
 {
     $pattern = "
-    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns, d.elixir_cost, subQuery.card_keys, subQuery.cr_ids
+    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns, 
+    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids
     FROM war_decks wd
     LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
     LEFT JOIN decks d ON d.id = wd.deck_id
     LEFT JOIN war w ON w.id = wd.war_id %s
     LEFT JOIN 
-    (
-        SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids
-        FROM card_deck cd
-        LEFT JOIN cards c ON c.id = cd.card_id
-        GROUP BY cd.deck_id
-    ) subQuery ON subQuery.deck_id = d.id
+        (
+            SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, ROUND(AVG(c.elixir), 1) as elixir_cost
+            FROM card_deck cd
+            LEFT JOIN cards c ON c.id = cd.card_id
+            GROUP BY cd.deck_id
+        ) subQuery ON subQuery.deck_id = d.id
     GROUP BY wd.deck_id
     ORDER BY played DESC, wins DESC, crowns DESC
     LIMIT %d, 10

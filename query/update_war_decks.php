@@ -51,22 +51,19 @@ foreach (getWarBattlesFromApi($api) as $battle) {
         }
     } else {
         $deckId = createDeck($db);
-        $totalElixir = 0;
         for ($i = 0; $i <= 7; $i++) {
             insertCardDeck($db, $currentDeck[$i], $deckId);
-            $totalElixir += getCardElixirCostById($db, $currentDeck[$i]);
         }
-        $elixirCost = round(($totalElixir / 8), 1);
-        updateElixirCost($db, $deckId, $elixirCost);
         insertDeckWar($db, $deckId, $warId);
         insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
     }
 }
 setLastUpdated($db, "war_decks");
 
-function saveCards($deck) {
+function saveCards($deck)
+{
     foreach ($deck as $card) {
-        $name = __DIR__."/../images/new_cards/".$card['key'].".png";
+        $name = __DIR__ . "/../images/new_cards/" . $card['key'] . ".png";
         if (!file_exists($name)) {
             $url = $card['icon'];
             file_put_contents($name, file_get_contents($url));
