@@ -852,17 +852,22 @@ function isDeckUsedInCurrentWar($db, $warId, $deckId)
     return fetch_query($db, sprintf($pattern, $warId, $deckId)) != null;
 }
 
-function getDeckResults($db)
+function getDeckResults($db, $current)
 {
     $query = "
     SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns
     FROM deck_results dr
     RIGHT JOIN war_decks wd ON dr.deck_id = wd.deck_id
+    %s
     GROUP BY dr.deck_id
     ORDER BY played DESC, wins DESC, crowns DESC
     ";
 
-    return fetch_all_query($db, sprintf($query));
+    $condition = "";
+    if ($current)
+        $condition = "JOIN war w ON wd.war_id = w.id AND w.past_war = 0";
+
+    return fetch_all_query($db, sprintf($query, $condition));
 }
 
 function getNumberOfPages($db, $current)
@@ -889,7 +894,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
     $start = intval(($page - 1) * 10);
     $end = $start + 10;
     $pos = 0;
-    foreach (getDeckResults($db) as $deckRes) {
+    foreach (getDeckResults($db, $current) as $deckRes) {
         if ($pos >= $end || $pos < $start) {
             $pos++;
             continue;
@@ -926,7 +931,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
 function getAllWarDecks($db)
 {
     $results = array();
-    foreach (getDeckResults($db) as $deckRes) {
+    foreach (getDeckResults($db, false) as $deckRes) {
         $pattern = "
         SELECT GROUP_CONCAT(c.cr_id) as cr_ids
         FROM decks d

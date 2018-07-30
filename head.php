@@ -6,3 +6,46 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function update() {
+        let source = window.location.pathname.substr(1);
+        source = source.slice(0, -4);
+        let url;
+
+        switch (source) {
+            case 'war_decks':
+                url = "query/update_war_decks.php";
+                break;
+
+            case 'player':
+                url = "query/update_player.php?tag=".concat($('input:hidden[name=playerTagHidden]').val());
+                break;
+
+            case 'war':
+                url = "query/update_war.php";
+                break;
+
+            case 'war_stats':
+                url = "query/update_war_stats.php";
+                break;
+
+            case 'index':
+                url = "query/update_clan.php";
+                break;
+        }
+
+        $.ajax({
+            url: url,
+            beforeSend: function () {
+                $('#loaderDiv').show();
+                $('#navbar').collapse('hide');
+            },
+            success: function () {
+                window.location.reload(true);
+            }
+        });
+    }
+
+    function updateWarDecks() {
+    }
+</script>
