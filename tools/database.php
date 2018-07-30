@@ -765,6 +765,38 @@ GROUP BY player_war.player_id
     return fetch_all_query($db, $query);
 }
 
+//TODO finish this
+function getAllWarStats($db, $order = null) {
+    $pattern = "
+    SELECT players.id, players.name, players.rank, players.tag,
+	SUM(IFNULL(cards_earned, 0)) as total_cards_earned, 
+	SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+	SUM(IFNULL(collection_won, 0)) as total_collection_won,
+	SUM(IFNULL(battle_played, 0)) as total_battle_played,
+	SUM(IFNULL(battle_won, 0)) as total_battle_won,
+	war.season
+	FROM player_war
+	JOIN (
+		SELECT DISTINCT season, id, past_war FROM war GROUP BY season ORDER BY season DESC LIMIT 3
+	) as war ON player_war.war_id = war.id
+	JOIN players ON player_war.player_id = players.id
+	AND war.past_war > 0
+	AND war.id > 24
+	AND players.in_clan > 0
+	GROUP BY player_war.player_id, war.season
+	ORDER BY season DESC,%s players.rank ASC
+    ";
+
+    $condition = "";
+    if ($order != null) {
+        $condition = sprintf("%s ,", $order);
+    }
+
+    $query = sprintf($pattern, $condition);
+
+    return fetch_all_query($db, $query);
+}
+
 function countMissedWar($db, $playerId, $season = null)
 {
     $pattern = "

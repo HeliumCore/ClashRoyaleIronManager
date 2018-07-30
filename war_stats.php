@@ -16,11 +16,13 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
     $order = $_GET['order'];
     $selectValue = substr($order, -1);
     $order = substr($order, 0, -1);
+//    $allWarStats = getAllWarStats($db, $order);
     $lastWarStatsByPlayer = getWarStats($db, $lastSeason, $order);
     $previousWarStatsByPlayer = getWarStats($db, $previousSeason, $order);
     $secondPreviousWarStatsByPlayer = getWarStats($db, $secondPreviousSeason, $order);
 } else {
     $selectValue = -1;
+//    $allWarStats = getAllWarStats($db);
     $lastWarStatsByPlayer = getWarStats($db, $lastSeason);
     $previousWarStatsByPlayer = getWarStats($db, $previousSeason);
     $secondPreviousWarStatsByPlayer = getWarStats($db, $secondPreviousSeason);
@@ -223,6 +225,92 @@ foreach ($secondPreviousWarStatsByPlayer as $player) {
     $secondPreviousSeasonAllBattleWon += $totalBattlesWon;
     $secondPreviousSeasonAllMissedWar += $missedWar;
 }
+//
+//$lastSeason = 999999;
+//$counter = 0;
+//foreach ($allWarStats as $player) {
+//    if ($lastSeason > $player['season']) {
+//        $counter++;
+//        $lastSeason = $player['season'];
+//    }
+//
+//    $playerInfo = array();
+//    $playerInfo['rank'] = $player['rank'];
+//    $playerInfo['tag'] = $player['tag'];
+//    $playerInfo['name'] = $player['name'];
+//    $playerInfo['totalCollectionPlayed'] = $totalCollectionPlayed = $player['total_collection_played'];
+//    $playerInfo['totalCollectionWon'] = $totalCollectionWon = $player['total_collection_won'];
+//    $playerInfo['totalCardsEarned'] = $totalCardsEarned = $player['total_cards_earned'];
+//    $playerInfo['totalBattlesPlayed'] = $totalBattlesPlayed = $player['total_battle_played'];
+//    $playerInfo['totalBattlesWon'] = $totalBattlesWon = $player['total_battle_won'];
+//    $missedCollection = countMissedCollection($db, $player['id'], $secondPreviousSeason)['missed_collection'];
+//    $playerInfo['missedCollection'] = $missedCollection == null ? 0 : $missedCollection;
+//    $missedWar = countMissedWar($db, $player['id'], $secondPreviousSeason)['missed_war'];
+//    $playerInfo['missedWar'] = $missedWar == null ? 0 : $missedWar;
+//    $playerInfo['totalCollection'] = $totalCollection = $totalCollectionPlayed + $missedCollection;
+//    $totalWar = $totalBattlesPlayed + $missedWar;
+//    $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id'], $secondPreviousSeason);
+//
+//    if ($missedWar >= 2) {
+//        $playerInfo['ban'] = true;
+//        $playerInfo['warning'] = false;
+//    } else if ($missedWar == 1) {
+//        $playerInfo['ban'] = false;
+//        $playerInfo['warning'] = true;
+//    } else if ($eligibleWars > 10) {
+//        $ratio = ($missedCollection / $eligibleWars);
+//        $playerInfo['warning'] = ($ratio >= 0.5 and $ratio < 0.75);
+//        $playerInfo['ban'] = $ratio >= 0.75;
+//    } else {
+//        $playerInfo['warning'] = false;
+//        $playerInfo['ban'] = false;
+//    }
+//
+//
+//    if ($counter == 1) {
+//        if ($playerInfo['warning'] || $playerInfo['ban'])
+//            $lastSeasonAllBadStatus++;
+//
+//        $lastSeasonAllCollections += $totalCollection;
+//        $lastSeasonAllCollectionsPlayed += $totalCollectionPlayed;
+//        $lastSeasonAllCollectionsWon += $totalCollectionWon;
+//        $lastSeasonAllMissedCollections += $missedCollection;
+//        $lastSeasonAllCardsEarned += $totalCardsEarned;
+//        $lastSeasonAllWars += $totalWar;
+//        $lastSeasonAllBattlePlayed += $totalBattlesPlayed;
+//        $lastSeasonAllBattleWon += $totalBattlesWon;
+//        $lastSeasonAllMissedWar += $missedWar;
+//        array_push($lastSeasonFinalPlayerList, $playerInfo);
+//    } else if ($counter == 2) {
+//        if ($playerInfo['warning'] || $playerInfo['ban'])
+//            $previousSeasonAllBadStatus++;
+//
+//        $previousSeasonAllCollections += $totalCollection;
+//        $previousSeasonAllCollectionsPlayed += $totalCollectionPlayed;
+//        $previousSeasonAllCollectionsWon += $totalCollectionWon;
+//        $previousSeasonAllMissedCollections += $missedCollection;
+//        $previousSeasonAllCardsEarned += $totalCardsEarned;
+//        $previousSeasonAllWars += $totalWar;
+//        $previousSeasonAllBattlePlayed += $totalBattlesPlayed;
+//        $previousSeasonAllBattleWon += $totalBattlesWon;
+//        $previousSeasonAllMissedWar += $missedWar;
+//        array_push($previousSeasonFinalPlayerList, $playerInfo);
+//    } else if ($counter == 3) {
+//        if ($playerInfo['warning'] || $playerInfo['ban'])
+//            $secondPreviousSeasonAllBadStatus++;
+//
+//        $secondPreviousSeasonAllCollections += $totalCollection;
+//        $secondPreviousSeasonAllCollectionsPlayed += $totalCollectionPlayed;
+//        $secondPreviousSeasonAllCollectionsWon += $totalCollectionWon;
+//        $secondPreviousSeasonAllMissedCollections += $missedCollection;
+//        $secondPreviousSeasonAllCardsEarned += $totalCardsEarned;
+//        $secondPreviousSeasonAllWars += $totalWar;
+//        $secondPreviousSeasonAllBattlePlayed += $totalBattlesPlayed;
+//        $secondPreviousSeasonAllBattleWon += $totalBattlesWon;
+//        $secondPreviousSeasonAllMissedWar += $missedWar;
+//        array_push($secondPreviousSeasonFinalPlayerList, $playerInfo);
+//    }
+//}
 
 $lastUpdated = getLastUpdated($db, "war_stats");
 ?>
