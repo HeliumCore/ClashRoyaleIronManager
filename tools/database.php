@@ -98,7 +98,7 @@ function getPlayerInfos($db, $playerTag)
 {
     $pattern = "
     SELECT
-    GROUP_CONCAT(c.cr_id) cr_ids, GROUP_CONCAT(c.card_key) card_keys,
+    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
@@ -123,7 +123,6 @@ function getPlayerInfos($db, $playerTag)
     JOIN cards c ON c.id = cd.card_id
     WHERE tag = \"%s\"
     AND war.id > 24
-    GROUP BY cd.deck_id
     ";
 
     return fetch_query($db, sprintf($pattern, $playerTag));
@@ -278,12 +277,12 @@ function getAllWarDecksWithPagination($db, $current, $page)
         FROM decks d
         RIGHT JOIN war_decks wd ON d.id = wd.deck_id
         JOIN war w ON wd.war_id = w.id
-        %
+        %s
     ) as number_of_pages
     FROM war_decks wd
     LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
     LEFT JOIN decks d ON d.id = wd.deck_id
-    LEFT JOIN war w ON w.id = wd.war_id %s
+    LEFT JOIN war w ON w.id = wd.war_id
     LEFT JOIN 
         (
             SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, ROUND(AVG(c.elixir), 1) as elixir_cost
@@ -291,19 +290,18 @@ function getAllWarDecksWithPagination($db, $current, $page)
             LEFT JOIN cards c ON c.id = cd.card_id
             GROUP BY cd.deck_id
         ) subQuery ON subQuery.deck_id = d.id
+    %s
     GROUP BY wd.deck_id
     ORDER BY played DESC, wins DESC, crowns DESC
     LIMIT %d, 10
     ";
     $offset = intval(($page - 1) * 10);
     $condition = "";
-    $secondCondition = "";
     if ($current) {
         $condition = "WHERE w.past_war = 0";
-        $secondCondition = "AND w.past_war = 0";
     }
 
-    return fetch_all_query($db, sprintf($pattern, $condition, $secondCondition, $offset));
+    return fetch_all_query($db, sprintf($pattern, $condition, $condition, $offset));
 }
 
 function getDeckIdFromCards($db, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8)
