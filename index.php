@@ -12,6 +12,10 @@ $lastUpdated = getLastUpdated($db, "index");
 //TODO remplacer l'index par une page de choix : permet de choisir qui on est, le place en cookie, et redirect si cookie != null
 
 //TODO refaire les images d'arènes 1-12
+
+//TODO créer la partie Compte. Compte non obligatoire, id = tag ?, mdp = a la création, lié à un joueur.
+// utilité de la création de compte :
+// --  
 ?>
 <!DOCTYPE html>
 <html lang="en">
