@@ -21,9 +21,9 @@
     <br>
     <hr/>
     <h3 class="whiteShadow">Promotions</h3>
-    <p class="whiteShadow">Pour devenir Ainé, il faut participer à au moins <b>3 guerres</b>.</p>
+    <p class="whiteShadow">Pour devenir Ainé, il faut participer à au moins 3 guerres.</p>
     <br>
-    <p class="whiteShadow">Pour devenir Chef Adjoint, il faut avoir recruté au moins <b>5 joueurs qui sont devenus Ainés</b>.</p>
+    <p class="whiteShadow">Pour devenir Chef Adjoint, il faut avoir recruté au moins 5 joueurs qui sont devenus Ainés.</p>
     <br>
     <hr/>
     <h3 class="whiteShadow">Rétrogradations et Exlusions</h3>
