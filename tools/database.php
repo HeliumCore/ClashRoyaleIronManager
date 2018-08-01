@@ -131,7 +131,7 @@ function getPlayerInfos($db, $playerTag)
 function getAllPlayersInClan($db)
 {
     $query = "
-SELECT players.id, players.tag
+SELECT players.id, players.tag, players.name
 FROM players
 WHERE in_clan > 0
 ";
@@ -146,6 +146,7 @@ SELECT players.id, players.tag
 FROM players
 WHERE players.tag = \"%s\"
 ";
+    var_dump(sprintf($pattern, utf8_decode($tag)));
     return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
 }
 

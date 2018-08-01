@@ -13,7 +13,6 @@ if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else header('Location: index.php');
 
 $player = getPlayerInfos($db, $playerTag);
-//$player = getPlayersInfoByTag($db, $playerTag);
 $crIds = explode(",", $player['cr_ids']);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
 $deckLink = sprintf(
