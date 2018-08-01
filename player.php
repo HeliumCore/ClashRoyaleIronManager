@@ -10,7 +10,7 @@ include("tools/database.php");
 include("tools/api_conf.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-else header('Location: index.php');
+else header('Location: clan.php');
 
 $player = getPlayerInfos($db, $playerTag);
 $crIds = explode(",", $player['cr_ids']);

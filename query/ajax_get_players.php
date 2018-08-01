@@ -11,7 +11,7 @@ include(__DIR__ . "/../tools/database.php");
 $players = getAllPlayersInClan($db);
 $availablePlayers = array();
 foreach ($players as $player) {
-    array_push($availablePlayers, $player['tag'] . ' - ' . $player['name']);
+    array_push($availablePlayers, utf8_decode($player['tag']) . ' - ' . utf8_decode($player['name']));
 }
 
 echo json_encode($availablePlayers);

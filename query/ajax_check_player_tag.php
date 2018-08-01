@@ -9,11 +9,12 @@
 include(__DIR__ . "/../tools/database.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-else echo json_encode(array("exists" => false));
+else {
+    echo 'false';
+    return;
+}
 
-$player = getPlayerByTag($db, $playerTag);
-
-if ($player == null)
-    echo json_encode(array("exists" => false));
+if (getPlayerByTag($db, $playerTag) == null)
+    echo 'false';
 else
-    echo json_encode(array("exists" => true));
+    echo 'true';
