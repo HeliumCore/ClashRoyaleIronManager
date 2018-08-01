@@ -8,6 +8,10 @@
 
 include(__DIR__."/tools/database.php");
 $lastUpdated = getLastUpdated($db, "index");
+
+//TODO remplacer l'index par une page de choix : permet de choisir qui on est, le place en cookie, et redirect si cookie != null
+
+//TODO refaire les images d'arènes 1-12
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +82,7 @@ $lastUpdated = getLastUpdated($db, "index");
                         <?php print $player['trophies'] ?> <img src="images/ui/trophy.png" height="20px">
                     </td>
                     <td class="">
-                        <?php if ($player['arena_id'] > 12): ?>
+                        <?php if ($player['arena_id'] > 9): ?>
                             <img src="images/arenas/arena-<?php print $player['arena_id']; ?>.png"
                                  title="<?php print $player['arena']; ?>" height="50px">
                         <?php else : ?>

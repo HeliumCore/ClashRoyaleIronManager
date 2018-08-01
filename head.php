@@ -33,17 +33,23 @@
             case 'index':
                 url = "query/update_clan.php";
                 break;
+
+            default:
+                url = "";
+                break;
         }
 
-        $.ajax({
-            url: url,
-            beforeSend: function () {
-                $('#loaderDiv').show();
-                $('#navbar').collapse('hide');
-            },
-            success: function () {
-                window.location.reload(true);
-            }
-        });
+        if (url !== "") {
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $('#loaderDiv').show();
+                    $('#navbar').collapse('hide');
+                },
+                success: function () {
+                    window.location.reload(true);
+                }
+            });
+        }
     }
 </script>

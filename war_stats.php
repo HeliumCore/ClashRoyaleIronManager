@@ -73,7 +73,13 @@ foreach ($lastWarStatsByPlayer as $player) {
     $playerInfo['totalCollection'] = $totalCollection = $totalCollectionPlayed + $missedCollection;
     $totalWar = $totalBattlesPlayed + $missedWar;
     $eligibleWars = getNumberOfEligibleWarByPlayerId($db, $player['id'], $lastSeason);
-    if ($missedWar >= 2) {
+    if ($missedCollection >= 5) {
+        $playerInfo['ban'] = true;
+        $playerInfo['warning'] = false;
+    } else if ($missedCollection >= 2) {
+        $playerInfo['ban'] = false;
+        $playerInfo['warning'] = true;
+    } else if ($missedWar >= 2) {
         $playerInfo['ban'] = true;
         $playerInfo['warning'] = false;
     } else if ($missedWar == 1) {

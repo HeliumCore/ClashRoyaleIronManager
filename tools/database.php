@@ -764,7 +764,8 @@ GROUP BY player_war.player_id
 }
 
 //TODO finish this
-function getAllWarStats($db, $order = null) {
+function getAllWarStats($db, $order = null)
+{
     $pattern = "
     SELECT players.id, players.name, players.rank, players.tag,
 	SUM(IFNULL(cards_earned, 0)) as total_cards_earned, 
@@ -819,10 +820,10 @@ AND player_war.player_id = %d
 function countMissedCollection($db, $playerId, $season = null)
 {
     $pattern = "
-SELECT COUNT(player_war.id) as missed_collection
+SELECT ((COUNT(player_war.id) * 3) - SUM(player_war.collection_played)) as missed_collection
 FROM player_war
 JOIN war ON player_war.war_id = war.id
-WHERE player_war.collection_played = 0
+WHERE player_war.collection_played > 0
 AND war.past_war > 0
 AND war.id > 24
 AND player_war.player_id = %d
