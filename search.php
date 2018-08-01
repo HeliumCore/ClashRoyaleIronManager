@@ -54,11 +54,15 @@ $lastUpdated = getLastUpdated($db, "index");
                     valueSearched = valueSearched.substring(1);
                 }
 
-                var date = new Date();
-                date.setTime(+ date + (365 * 86400000));
-                document.cookie = "playerTag=" + valueSearched + ";expires=" + date.toUTCString();
-
-                window.location.replace("player.php?tag=" + valueSearched);
+                ajax.({
+                    url: "query/ajax_check_player.php?tag="+valueSearched,
+                    success: function () {
+                        var date = new Date();
+                        date.setTime(+ date + (365 * 86400000));
+                        document.cookie = "playerTag=" + valueSearched + ";expires=" + date.toUTCString();
+                        window.location.replace("player.php?tag=" + valueSearched);
+                    }
+                });
             }
         }
     </script>
