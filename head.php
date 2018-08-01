@@ -32,12 +32,13 @@
                 url = "query/update_war_stats.php";
                 break;
 
-            case 'index':
+            case 'clan':
                 url = "query/update_clan.php";
                 break;
 
             default:
                 url = "";
+                $('#navbar').collapse('hide');
                 break;
         }
 

@@ -5,8 +5,7 @@
  * Date: 01/08/2018
  * Time: 20:06
  */
-
-if (isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
+if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
     header('Location: player.php?tag='.$_COOKIE["playerTag"]);
 ?>
 <!DOCTYPE html>
@@ -72,7 +71,7 @@ if (isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
         <input type="text" placeholder="Tag" id="search">
         <button name="btLaunchSearch" onclick="launchSearch()">Valider</button>
         <br><br>
-        <span class="whiteShadow"><a href="index.php">Ou cliquez ici pour accéder au clan.<a></a></span>
+        <span class="whiteShadow"><a href="clan.php">Ou cliquez ici pour accéder au clan.<a></a></span>
     </div>
 
     <br>
