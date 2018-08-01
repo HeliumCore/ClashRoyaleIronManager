@@ -96,6 +96,13 @@ WHERE players.tag = \"%s\"
 // -----------------   GET  -----------------
 function getPlayerInfos($db, $playerTag)
 {
+    $query = "
+    SELECT pw.id
+    FROM player_war pw
+    JOIN players p ON pw.player_id = p.id
+    WHERE p.tag = \"%s\"
+    ";
+
     $pattern = "
     SELECT
     GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
@@ -125,7 +132,25 @@ function getPlayerInfos($db, $playerTag)
     AND war.id > 24
     ";
 
-    return fetch_query($db, sprintf($pattern, $playerTag));
+    $secondPattern = "
+    SELECT
+    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
+    players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
+    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
+    arena.trophy_limit, arena.arena_id
+    FROM players
+    INNER JOIN arena ON arena.arena_id = players.arena
+    INNER JOIN role ON role.id = players.role_id
+    JOIN player_deck pd ON pd.player_id = players.id AND pd.current = 1
+    JOIN card_deck cd ON cd.deck_id = pd.deck_id
+    JOIN cards c ON c.id = cd.card_id
+    WHERE tag = \"%s\"
+    ";
+
+    if (!is_array(fetch_query($db, sprintf($query, $playerTag))))
+        return fetch_query($db, sprintf($secondPattern, $playerTag));
+    else
+        return fetch_query($db, sprintf($pattern, $playerTag));
 }
 
 function getAllPlayersInClan($db)
