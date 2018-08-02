@@ -29,7 +29,7 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
 }
 
 $allPlayers = getAllPlayersByRank($db);
-
+// TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
 // TODO faire une seul requete qui choppe absolument tout - derniere page
 
 // TODO faire un tableau d'en-tete qui regroupe toutes les guerres pour tous les joueurs
