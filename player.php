@@ -16,9 +16,9 @@ $player = getPlayerInfos($db, $playerTag);
 $crIds = explode(",", $player['cr_ids']);
 $deckLinkPattern = "https://link.clashroyale.com/deck/fr?deck=%d;%d;%d;%d;%d;%d;%d;%d";
 $deckLink = sprintf(
-        $deckLinkPattern, $crIds[0], $crIds[1], $crIds[2],
-        $crIds[3], $crIds[4], $crIds[5], $crIds[6],
-        $crIds[7]
+    $deckLinkPattern, $crIds[0], $crIds[1], $crIds[2],
+    $crIds[3], $crIds[4], $crIds[5], $crIds[6],
+    $crIds[7]
 );
 
 // CHESTS
@@ -44,6 +44,16 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <body>
 <?php include("header.html"); ?>
 <div class="container">
+<!--    TODO refaire le design de la page (ci dessous, le bandeau du nom du joueur/trophées) -->
+<!--    <div class="row">-->
+<!--        <div class="col-md-5 player-badge">-->
+<!--            <h3 class="pull-left whiteShadow"><img src="images/coin.png" height="40px"/>&nbsp;--><?php //print $player['playerName']; ?><!--</h3>-->
+<!--            <div class="pull-right whiteShadow trophy-div">-->
+<!--                <img src="images/ui/trophy.png" height="30px" class="trophy-img"/>&nbsp;--><?php //print $player['trophies']; ?>
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <br>
     <h1 class="whiteShadow">Détails du joueur</h1><br>
     <br>
     <div class="row">

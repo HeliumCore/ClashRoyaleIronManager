@@ -138,3 +138,17 @@ tbody tr:nth-child(5) .rank span {
 .second-row {
     margin-top: 2%;
 }
+
+.player-badge {
+    border: 1px groove #84afd3;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.trophy-div {
+    background-color: #000000;
+}
+
+.trophy-img {
+    margin-left: -15px;
+}

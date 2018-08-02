@@ -67,13 +67,13 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
 <div class="container">
     <h1 class="whiteShadow">Recherche de joueur</h1><br>
     <div>
-        <span class="whiteShadow">Entrez le tag, le nom ou le grade du joueur pour accéder à la page personnalisée correspondante.</span><br><br>
+        <span class="whiteShadow">Entrez le tag ou le nom du joueur pour personnaliser votre page d'accueil.</span><br><br>
         <input type="text" placeholder="Tag" id="search">
         <button name="btLaunchSearch" onclick="launchSearch()">Valider</button>
         <br><br>
         <span class="whiteShadow"><a href="clan.php">Ou cliquez ici pour accéder au clan.<a></a></span>
     </div>
-
+    <br>
     <br>
 </div>
 <?php include("footer.html"); ?>
