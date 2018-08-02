@@ -944,3 +944,33 @@ function getLastUpdatedPlayer($db, $playerTag)
     return fetch_query($db, utf8_decode(sprintf($pattern, $playerTag)));
 }
 // ==========================================
+
+// ================= ACCOUNTS ===============
+// ----------------- INSERT -----------------
+function createAccount($db, $playerId, $password) {
+    $pattern = "
+    INSERT INTO account(player_id, password)
+    VALUES (%d, \"%s\")
+    ";
+    execute_query($db, sprintf($pattern, $playerId, $password));
+}
+// ----------------- UPDATE -----------------
+function updatePassword($db, $playerId, $password) {
+    $pattern = "
+    UPDATE account
+    SET password = \"%s\"
+    WHERE player_id = %d
+    ";
+    execute_query($db, sprintf($pattern, $playerId, $password));
+}
+// -----------------   GET  -----------------
+function getHashedPassword($db, $playerdId) {
+    $pattern = "
+    SELECT password
+    FROM account
+    WHERE player_id = %d
+    ";
+    return fetch_query($db, sprintf($pattern, $playerdId));
+}
+// ==========================================
+
