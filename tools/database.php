@@ -210,18 +210,6 @@ function getNumberOfPlayersInClan($db)
     return sizeof(getAllPlayersInClan($db));
 }
 
-function getAllPlayersByRank($db)
-{
-    $query = "
-SELECT players.id, players.name, players.rank, players.tag
-FROM players
-WHERE in_clan > 0
-ORDER BY rank ASC
-";
-
-    return fetch_all_query($db, $query);
-}
-
 // ==========================================
 
 
@@ -736,16 +724,6 @@ ORDER BY battles_won DESC, crowns DESC
     return fetch_all_query($db, $query);
 }
 
-function getLastSeason($db)
-{
-    $query = "
-    SELECT MAX(season) as number
-    FROM war
-    ";
-
-    return intval(fetch_query($db, $query)['number']);
-}
-
 function getNotEligiblePlayers($db)
 {
     $query = "
@@ -763,66 +741,45 @@ AND players.in_clan = 1
     return fetch_all_query($db, $query);
 }
 
-function getWarStats($db, $season, $order = null)
+function getAllWarStats($db)
 {
-    $pattern = "
-SELECT players.id, players.name, players.rank, players.tag,
-SUM(IFNULL(cards_earned, 0)) as total_cards_earned, 
-SUM(IFNULL(collection_played, 0)) as total_collection_played, 
-SUM(IFNULL(collection_won, 0)) as total_collection_won,
-SUM(IFNULL(battle_played, 0)) as total_battle_played,
-SUM(IFNULL(battle_won, 0)) as total_battle_won
-FROM player_war
-JOIN war ON player_war.war_id = war.id AND war.season = %d
-JOIN players ON player_war.player_id = players.id
-AND war.past_war > 0
-AND war.id > 24
-AND players.in_clan > 0
-GROUP BY player_war.player_id
-%s
+    $query = "
+    SELECT *
+    FROM (
+        (
+            SELECT
+            p.id, p.name, p.rank, p.tag,
+            SUM(IFNULL(cards_earned, 0)) as total_cards_earned,
+            SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+            SUM(IFNULL(collection_won, 0)) as total_collection_won,
+            SUM(IFNULL(battle_played, 0)) as total_battle_played,
+            SUM(IFNULL(battle_won, 0)) as total_battle_won,
+            w.season
+            FROM player_war pw
+            JOIN players p ON pw.player_id = p.id AND p.in_clan = 1
+            JOIN war w ON pw.war_id = w.id
+            WHERE w.season != 0
+            GROUP BY pw.player_id, w.season
+            ORDER BY p.rank ASC, w.season DESC
+        )
+        UNION
+        (
+            SELECT
+            p.id, p.name, p.rank, p.tag,
+            SUM(IFNULL(cards_earned, 0)) as total_cards_earned,
+            SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+            SUM(IFNULL(collection_won, 0)) as total_collection_won,
+            SUM(IFNULL(battle_played, 0)) as total_battle_played,
+            SUM(IFNULL(battle_won, 0)) as total_battle_won, 0
+            FROM player_war pw
+            JOIN players p ON pw.player_id = p.id AND p.in_clan = 1
+            JOIN war w ON pw.war_id = w.id
+            WHERE w.season != 0
+            GROUP BY pw.player_id
+        )    
+    ) sub
+    ORDER BY sub.rank ASC
 ";
-
-    if ($order == null) {
-        $query = sprintf($pattern, $season, "ORDER BY players.rank ASC");
-    } else {
-        $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
-        $orderPattern = sprintf($customOrderPattern, $order);
-        $query = sprintf($pattern, $season, $orderPattern);
-    }
-
-    return fetch_all_query($db, $query);
-}
-
-//TODO finish this
-function getAllWarStats($db, $order = null)
-{
-    $pattern = "
-    SELECT players.id, players.name, players.rank, players.tag,
-	SUM(IFNULL(cards_earned, 0)) as total_cards_earned, 
-	SUM(IFNULL(collection_played, 0)) as total_collection_played, 
-	SUM(IFNULL(collection_won, 0)) as total_collection_won,
-	SUM(IFNULL(battle_played, 0)) as total_battle_played,
-	SUM(IFNULL(battle_won, 0)) as total_battle_won,
-	war.season
-	FROM player_war
-	JOIN (
-		SELECT DISTINCT season, id, past_war FROM war GROUP BY season ORDER BY season DESC LIMIT 3
-	) as war ON player_war.war_id = war.id
-	JOIN players ON player_war.player_id = players.id
-	AND war.past_war > 0
-	AND war.id > 24
-	AND players.in_clan > 0
-	GROUP BY player_war.player_id, war.season
-	ORDER BY season DESC,%s players.rank ASC
-    ";
-
-    $condition = "";
-    if ($order != null) {
-        $condition = sprintf("%s ,", $order);
-    }
-
-    $query = sprintf($pattern, $condition);
-
     return fetch_all_query($db, $query);
 }
 
@@ -948,11 +905,13 @@ function getLastUpdatedPlayer($db, $playerTag)
     ";
     return fetch_query($db, utf8_decode(sprintf($pattern, $playerTag)));
 }
+
 // ==========================================
 
 // ================= ACCOUNTS ===============
 // ----------------- INSERT -----------------
-function createAccount($db, $playerId, $password) {
+function createAccount($db, $playerId, $password)
+{
     $pattern = "
     INSERT INTO account(player_id, password)
     VALUES (%d, \"%s\")
@@ -960,8 +919,10 @@ function createAccount($db, $playerId, $password) {
     execute_query($db, sprintf($pattern, $playerId, $password));
     return $db->lastInsertId();
 }
+
 // ----------------- UPDATE -----------------
-function updatePassword($db, $playerId, $password) {
+function updatePassword($db, $playerId, $password)
+{
     $pattern = "
     UPDATE account
     SET password = \"%s\"
@@ -969,8 +930,10 @@ function updatePassword($db, $playerId, $password) {
     ";
     execute_query($db, sprintf($pattern, $playerId, $password));
 }
+
 // -----------------   GET  -----------------
-function getHashedPassword($db, $playerdId) {
+function getHashedPassword($db, $playerdId)
+{
     $pattern = "
     SELECT password
     FROM account
