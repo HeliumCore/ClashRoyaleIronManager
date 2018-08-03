@@ -6,7 +6,7 @@
  * Time: 18:49
  */
 
-include(__DIR__ . "/../tools/database.php");
+include(__DIR__ . "/../../tools/database.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else {

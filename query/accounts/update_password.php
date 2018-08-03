@@ -6,8 +6,7 @@
  * Time: 16:59
  */
 
-include(__DIR__ . "/../tools/accounts.php");
-include(__DIR__ . "/../tools/database.php");
+include(__DIR__ . "/../../tools/accounts.php");
 
 if (
     isset($_GET['password']) && !empty($_GET['password'])

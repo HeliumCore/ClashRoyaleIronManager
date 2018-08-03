@@ -104,28 +104,33 @@ function getPlayerInfos($db, $playerTag)
     ";
 
     $pattern = "
-    SELECT
+    SELECT 
     GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
-    players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
-    arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned,
-    SUM(player_war.cards_earned) as total_cards_earned,
-    SUM(player_war.collection_played) as total_collection_played, 
-    SUM(player_war.collection_won) as total_collection_won,
-    SUM(player_war.battle_played) as total_battle_played,
-    SUM(player_war.battle_won) as total_battle_won
-    FROM players
-    INNER JOIN arena ON arena.arena_id = players.arena
-    INNER JOIN role ON role.id = players.role_id
-    INNER JOIN player_war ON player_war.player_id = players.id
+    p.id as playerId, p.tag, p.name as playerName, p.rank, p.trophies, p.max_trophies, role.name as playerRole, p.exp_level as level,
+    p.donations_delta as delta, p.donations_ratio as ratio, arena.arena as arena, p.donations, p.donations_received as received,
+    arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned, pw1.total_cards_earned, pw1.total_collection_played, pw1.total_collection_won, pw1.total_battle_played, pw1.total_battle_won
+    FROM players p
+    INNER JOIN arena ON arena.arena_id = p.arena
+    INNER JOIN role ON role.id = p.role_id
+    INNER JOIN player_war ON player_war.player_id = p.id
     INNER JOIN war ON player_war.war_id = war.id
-    LEFT JOIN player_war war_played ON war_played.player_id = players.id AND war_played.collection_played > 0
-    LEFT JOIN player_war war_collection ON war_collection.player_id = players.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
-    LEFT JOIN player_war war_missed ON war_missed.player_id = players.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
-    JOIN player_deck pd ON pd.player_id = players.id AND pd.current = 1
+    LEFT JOIN player_war war_played ON war_played.player_id = p.id AND war_played.collection_played > 0
+    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN player_war war_missed ON war_missed.player_id = p.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN (
+    	SELECT player_id, 
+        SUM(cards_earned) as total_cards_earned,
+        SUM(collection_played) as total_collection_played,
+        SUM(collection_won) as total_collection_won,
+        SUM(battle_played) as total_battle_played,
+        SUM(battle_won) as total_battle_won
+        FROM player_war
+        GROUP BY player_id
+    ) pw1 ON p.id = pw1.player_id
+    JOIN player_deck pd ON pd.player_id = p.id AND pd.current = 1
     JOIN card_deck cd ON cd.deck_id = pd.deck_id
     JOIN cards c ON c.id = cd.card_id
     WHERE tag = \"%s\"
@@ -953,6 +958,7 @@ function createAccount($db, $playerId, $password) {
     VALUES (%d, \"%s\")
     ";
     execute_query($db, sprintf($pattern, $playerId, $password));
+    return $db->lastInsertId();
 }
 // ----------------- UPDATE -----------------
 function updatePassword($db, $playerId, $password) {

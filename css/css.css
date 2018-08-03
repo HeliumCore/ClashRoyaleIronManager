@@ -166,3 +166,7 @@ tbody tr:nth-child(5) .rank span {
 .dropdown-li {
     color: #777;
 }
+
+#passwordChangeFailed, #passwordChangeSuccess, #loginFailed{
+    display: none;
+}

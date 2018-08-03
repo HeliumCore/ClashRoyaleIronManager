@@ -23,7 +23,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
             });
 
             $.ajax({
-                url: "query/ajax_get_players.php",
+                url: "query/accounts/ajax_get_players.php",
                 success(data) {
                     let availableTags = JSON.parse(data);
                     $('#search').autocomplete({
@@ -48,7 +48,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
                 search = search.substr(1);
 
             $.ajax({
-                url: "query/ajax_check_player_tag.php?tag=".concat(search),
+                url: "query/accounts/ajax_check_player_tag.php?tag=".concat(search),
                 success: function (data) {
                     if (data === 'false')
                         return;

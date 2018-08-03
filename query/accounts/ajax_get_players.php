@@ -6,7 +6,7 @@
  * Time: 18:44
  */
 
-include(__DIR__ . "/../tools/database.php");
+include(__DIR__ . "/../../tools/database.php");
 
 $players = getAllPlayersInClan($db);
 $availablePlayers = array();
