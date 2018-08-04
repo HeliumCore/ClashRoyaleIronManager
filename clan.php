@@ -72,7 +72,7 @@ $lastUpdated = getLastUpdated($db, "index");
                 <tr class="pointerHand playerTr">
                     <td class="rank text-center"><span> <?php echo $player['rank']; ?></span></td>
                     <td class="whiteShadow">
-                        <a class="linkToPlayer" href="player.php?tag=<?php print $player['tag']; ?>">
+                        <a class="linkToPlayer" href="/player/<?php print $player['tag']; ?>">
                             <?php print utf8_encode($player['playerName']); ?>
                         </a>
                         <br>

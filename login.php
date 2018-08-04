@@ -17,7 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
-    header('Location: account_manager.php');
+    header('Location: index.php');
 
 ?>
 <!DOCTYPE html>
@@ -112,7 +112,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                         let date = new Date();
                         date.setTime(+date + (365 * 86400000));
                         document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                        window.location.replace("player.php?tag=".concat(search));
+                        window.location.replace("player/".concat(search));
                     }
                 }
             })
@@ -131,7 +131,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                         let date = new Date();
                         date.setTime(+date + (365 * 86400000));
                         document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                        window.location.replace("player.php?tag=".concat(search));
+                        window.location.replace("player/".concat(search));
                     } else if (data === 'exists') {
                         $('#playerExists').show();
                         $('#loginFailed').hide();

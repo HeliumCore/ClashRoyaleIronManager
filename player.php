@@ -8,9 +8,10 @@
 
 include("tools/database.php");
 include("tools/api_conf.php");
-
-if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-else header('Location: clan.php');
+$playerTag = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
+if (empty($playerTag)) {
+    header('Location: https://ironmanager.fr/clan.php');
+}
 
 $player = getPlayerInfos($db, $playerTag);
 $crIds = explode(",", $player['cr_ids']);
@@ -69,7 +70,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                     if ($counter <= $needed) { ?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
+                                <img src="/images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive little-chest chests"/>
                                 <span class="chestNumber whiteShadow">+<?php print $counter; ?></span>
                             </div>
@@ -82,7 +83,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                     if ($key > 3) { ?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
+                                <img src="/images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
                                      class="img-responsive big-chest chests"/>
                                 <span class="chestNumber whiteShadow">+<?php print $chests[$chest]; ?></span>
                             </div>
@@ -102,14 +103,14 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                     for ($i = 0; $i <= 7; $i++):?>
                         <div class="col-xs-3">
                             <div class="img-responsive">
-                                <img src="images/cards/<?php print $cardKeys[$i]; ?>.png"
+                                <img src="/images/cards/<?php print $cardKeys[$i]; ?>.png"
                                      alt="failed to load img" class="img-responsive cards"/>
                             </div>
                         </div>
                     <?php endfor; ?>
                     <div id="deckLinkDiv" class="text-center pointerHand">
                         <a href="<?php print $deckLink; ?>" class="text-center">
-                            <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                            <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                             <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
                         </a>
                     </div>
@@ -168,7 +169,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             echo '<td class="whiteShadow">Jouées<br>' . $player['total_war_played'] . '</td>';
             echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_collection_played'] . '</td>';
             echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_collection_won'] . '</td>';
-            echo '<td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
+            echo '<td class="whiteShadow text-center"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['total_cards_earned'] . '</td>';
             echo '<td class="whiteShadow text-center table-border-left">Jouées<br>' . $player['total_battle_played'] . '</td>';
             echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['total_battle_won'] . '</td>';
             echo '</tr>';
@@ -193,7 +194,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <div class="row text-center">
     <?php if ($lastUpdated['updated'] != null):

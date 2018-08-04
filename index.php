@@ -15,7 +15,7 @@ if (isset($_GET['logout'])) {
 
 // TODO retirer si plus d'utilité de reset le cookie avec l'arrivée des compte. Inutilisé pour le moment
 if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
-    header('Location: player.php?tag='.$_COOKIE["playerTag"]);
+    header('Location: player/'.$_COOKIE["playerTag"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +65,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
                     let date = new Date();
                     date.setTime(+date + (365 * 86400000));
                     document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                    window.location.replace("player.php?tag=".concat(search));
+                    window.location.replace("player/".concat(search));
                 }
             });
         }
@@ -80,7 +80,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
         <input type="text" placeholder="Tag" id="search">
         <button name="btLaunchSearch" onclick="launchSearch()">Valider</button>
         <br><br>
-        <span class="whiteShadow"><a href="clan.php">Ou cliquez ici pour accéder au clan.<a></a></span>
+        <span class="whiteShadow"><a href="https://ironmanager.fr/clan.php">Ou cliquez ici pour accéder au clan.<a></a></span>
     </div>
     <br>
     <br>
