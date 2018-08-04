@@ -40,7 +40,7 @@
                         </ul>
                     </li>
                 <?php else: ?>
-                    <li><a href="login.php">Se connecter</a></li>
+                    <li><a href="https://ironmanager.fr/login.php">Se connecter</a></li>
                 <?php endif; ?>
                 <li>
                     <a class="pointerHand" onclick="update()">

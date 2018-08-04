@@ -6,6 +6,13 @@
  * Time: 17:09
  */
 
+if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off"){
+    $redirect = 'https://ironmanager.fr/login';
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $redirect);
+    exit();
+}
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
