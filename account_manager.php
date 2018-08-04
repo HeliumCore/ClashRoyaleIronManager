@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
-    header('Location: login.php');
+    header('Location: https://ironmanager.fr/login.php');
 
 ?>
 
@@ -72,7 +72,9 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
                         <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
                         <input type="password" id="newPass" class="pull-right">
                     </div>
-                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">Envoyer</button>
+                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">
+                        Envoyer
+                    </button>
                 </div>
             </div>
         </div>

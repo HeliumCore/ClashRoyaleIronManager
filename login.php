@@ -6,10 +6,9 @@
  * Time: 17:09
  */
 
-if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off"){
-    $redirect = 'https://ironmanager.fr/login';
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
     header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . $redirect);
+    header('Location: https://ironmanager.fr/login');
     exit();
 }
 
@@ -17,7 +16,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
-    header('Location: index.php');
+    header('Location: https://ironmanager.fr/index.php');
 
 ?>
 <!DOCTYPE html>
@@ -185,7 +184,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
     <br><br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <?php include("footer.html"); ?>
 </body>

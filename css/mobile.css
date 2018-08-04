@@ -1,9 +1,10 @@
-@media screen and (max-width: 1024px){
-	body{
-		font-size: 10px;
-	}
-	h1,
-	.h1{
-		font-size: 1.8em;
-	}
+@media screen and (max-width: 1024px) {
+    body {
+        font-size: 10px;
+    }
+
+    h1,
+    .h1 {
+        font-size: 1.8em;
+    }
 }

@@ -45,15 +45,16 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <body>
 <?php include("header.php"); ?>
 <div class="container">
-<!--    TODO refaire le design de la page (ci dessous, le bandeau du nom du joueur/trophées) -->
-<!--    <div class="row">-->
-<!--        <div class="col-md-5 player-badge">-->
-<!--            <h3 class="pull-left whiteShadow"><img src="images/coin.png" height="40px"/>&nbsp;--><?php //print $player['playerName']; ?><!--</h3>-->
-<!--            <div class="pull-right whiteShadow trophy-div">-->
-<!--                <img src="images/ui/trophy.png" height="30px" class="trophy-img"/>&nbsp;--><?php //print $player['trophies']; ?>
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    TODO refaire le design de la page (ci dessous, le bandeau du nom du joueur/trophées) -->
+    <!--    <div class="row">-->
+    <!--        <div class="col-md-5 player-badge">-->
+    <!--            <h3 class="pull-left whiteShadow"><img src="images/coin.png" height="40px"/>&nbsp;-->
+    <?php //print $player['playerName']; ?><!--</h3>-->
+    <!--            <div class="pull-right whiteShadow trophy-div">-->
+    <!--                <img src="images/ui/trophy.png" height="30px" class="trophy-img"/>&nbsp;--><?php //print $player['trophies']; ?>
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <br>
     <div class="row">
         <div class="col-md-5">

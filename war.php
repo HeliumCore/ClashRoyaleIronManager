@@ -174,7 +174,7 @@ if ($state == "collectionDay") {
                     <td class="whiteShadow text-center">Absents<br><span id="numberOfMissing"></span></td>
                     <td class="whiteShadow text-center">Jouées<br><span id="numberOfCollectionPlayed"></span></td>
                     <td class="whiteShadow text-center">Gagnées<br><span id="numberOfCollectionWon"></span></td>
-                    <td class="whiteShadow text-center"><img src="images/ui/deck.png" height="35px"/>&nbsp;<span
+                    <td class="whiteShadow text-center"><img src="/images/ui/deck.png" height="35px"/>&nbsp;<span
                                 id="numberOfCardsEarned"></span></td>
                 </tr>
                 </tbody>
@@ -235,7 +235,7 @@ if ($state == "collectionDay") {
                 echo '<td class="whiteShadow"><a class="linkToPlayer" href="player/' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
-                echo '<td class="whiteShadow"><img src="images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
+                echo '<td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
                 echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
                 echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
                 echo '</tr>';
@@ -256,7 +256,7 @@ if ($state == "collectionDay") {
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <div class="row text-center">
     <?php if ($lastUpdated['updated'] != null):

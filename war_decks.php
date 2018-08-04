@@ -96,7 +96,7 @@ function getDeckLink($deck)
                         for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
+                                    <img src="/images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -113,7 +113,7 @@ function getDeckLink($deck)
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
-                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink"
                                           class="whiteShadow text-center">Copier le deck</span>
                                 </a>
@@ -133,7 +133,7 @@ function getDeckLink($deck)
                         for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
+                                    <img src="/images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -150,7 +150,7 @@ function getDeckLink($deck)
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
-                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink"
                                           class="whiteShadow text-center">Copier le deck</span>
                                 </a>
@@ -201,7 +201,7 @@ function getDeckLink($deck)
                         for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
+                                    <img src="/images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -218,7 +218,7 @@ function getDeckLink($deck)
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
-                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
                                 </a>
                             </div>
@@ -237,7 +237,7 @@ function getDeckLink($deck)
                         for ($i = 0; $i <= 7; $i++): ?>
                             <div class="col-xs-3">
                                 <div class="img-responsive">
-                                    <img src="images/cards/<?php print $cardKeys[$i] ?>.png"
+                                    <img src="/images/cards/<?php print $cardKeys[$i] ?>.png"
                                          alt="failed to load img"
                                          class="img-responsive"/>
                                 </div>
@@ -254,7 +254,7 @@ function getDeckLink($deck)
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
                             <div id="deckLinkDiv" class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
-                                    <img src="images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
                                 </a>
                             </div>
@@ -295,7 +295,7 @@ function getDeckLink($deck)
             ?>
             <div class="col-lg-4">
                 <div class="row">
-                    <img src="images/cards/<?php print $card['card_key']; ?>.png" alt="cardImage"
+                    <img src="/images/cards/<?php print $card['card_key']; ?>.png" alt="cardImage"
                          class="img-responsive center-block"/>
                 </div>
                 <div class="row">
@@ -316,7 +316,7 @@ function getDeckLink($deck)
 </div>
 </div> <!-- DIV qui ferme le container, bug d'IDE a cause des php print-->
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <br>
 <div class="row text-center">

@@ -6,7 +6,7 @@
  * Time: 14:56
  */
 
-include(__DIR__."/tools/database.php");
+include(__DIR__ . "/tools/database.php");
 $lastUpdated = getLastUpdated($db, "index");
 
 //TODO refaire les images d'arènes 1-12
@@ -52,7 +52,8 @@ $lastUpdated = getLastUpdated($db, "index");
             <span class="whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
         </div>
         <div class="col-md-3">
-            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom" style="margin-left: 10px;"/><br><br>
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom"
+                   style="margin-left: 10px;"/><br><br>
         </div>
     </div>
     <div class="table-responsive">
@@ -82,15 +83,15 @@ $lastUpdated = getLastUpdated($db, "index");
                     </td>
                     <td class=" whiteShadow hidden-xs"> <?php print $player['tag']; ?></td>
                     <td class=" whiteShadow">
-                        <?php print $player['trophies'] ?> <img src="images/ui/trophy.png" height="20px">
+                        <?php print $player['trophies'] ?> <img src="/images/ui/trophy.png" height="20px">
                     </td>
                     <td class="">
                         <?php if ($player['arena_id'] > 9): ?>
-                            <img src="images/arenas/arena-<?php print $player['arena_id']; ?>.png"
+                            <img src="/images/arenas/arena-<?php print $player['arena_id']; ?>.png"
                                  title="<?php print $player['arena']; ?>" height="50px">
                         <?php else : ?>
                             <div>
-                                <img src="images/arenas/arena-.png" title="" height="50px">
+                                <img src="/images/arenas/arena-.png" title="" height="50px">
                                 <span class="whiteShadow arenaNumber"><?php print $player['arena_id']; ?></span>
                             </div>
                         <?php endif; ?>
@@ -112,7 +113,7 @@ $lastUpdated = getLastUpdated($db, "index");
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <div class="row text-center">
     <?php if ($lastUpdated['updated'] != null):

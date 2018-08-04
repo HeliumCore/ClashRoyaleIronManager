@@ -10,6 +10,8 @@ include("tools/database.php");
 
 // TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
 
+// TODO tableaux absences avec data du manager
+
 $allWarStats = getAllWarStats($db);
 $seasons = array_unique(array_column($allWarStats, "season"));
 rsort($seasons);
@@ -225,7 +227,8 @@ $lastUpdated = getLastUpdated($db, "war_stats");
             </ul>
         </div>
         <div class="col-md-3">
-            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom" style="margin-left: 10px;"/>
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom"
+                   style="margin-left: 10px;"/>
         </div>
     </div>
     <br>
@@ -267,7 +270,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($lsAllCollections != 0) ? round(($lsAllCollectionsPlayed / $lsAllCollections) * 100) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center"><img src="images/ui/deck.png"
+                                <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $lsAllCardsEarned; ?>
                                 </td>
                                 <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
@@ -298,18 +301,18 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Présence<br>
                                         <?php echo ($player['totalCollection'] != 0) ? round(($player['totalCollectionPlayed'] / $player['totalCollection']) * 100) . '%' : '--'; ?>
                                     </td>
-                                    <td class="whiteShadow"><img src="images/ui/deck.png"
+                                    <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -373,13 +376,13 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -429,7 +432,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($psAllCollections != 0) ? round(($psAllCollectionsPlayed / $psAllCollections) * 100) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center"><img src="images/ui/deck.png"
+                                <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $psAllCardsEarned; ?>
                                 </td>
                                 <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
@@ -460,18 +463,18 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Présence<br>
                                         <?php echo ($player['totalCollection'] != 0) ? round(($player['totalCollectionPlayed'] / $player['totalCollection']) * 100) . '%' : '--'; ?>
                                     </td>
-                                    <td class="whiteShadow"><img src="images/ui/deck.png"
+                                    <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -535,13 +538,13 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -591,7 +594,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($spsAllCollections != 0) ? round(($spsAllCollectionsPlayed / $spsAllCollections) * 100) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center"><img src="images/ui/deck.png"
+                                <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $spsAllCardsEarned; ?>
                                 </td>
                                 <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
@@ -622,18 +625,18 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Présence<br>
                                         <?php echo ($player['totalCollection'] != 0) ? round(($player['totalCollectionPlayed'] / $player['totalCollection']) * 100) . '%' : '--'; ?>
                                     </td>
-                                    <td class="whiteShadow"><img src="images/ui/deck.png"
+                                    <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -697,13 +700,13 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -753,7 +756,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center">% présence<br>
                                     <?php echo ($allCollections != 0) ? round(($allCollectionsPlayed / $allCollections) * 100) : '--'; ?>
                                 </td>
-                                <td class="whiteShadow text-center"><img src="images/ui/deck.png"
+                                <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $allCardsEarned; ?>
                                 </td>
                                 <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
@@ -784,18 +787,18 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Présence<br>
                                         <?php echo ($player['totalCollection'] != 0) ? round(($player['totalCollectionPlayed'] / $player['totalCollection']) * 100) . '%' : '--'; ?>
                                     </td>
-                                    <td class="whiteShadow"><img src="images/ui/deck.png"
+                                    <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -859,13 +862,13 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 
                                     <!-- Status -->
                                     <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="images/ui/no-cancel.png"
+                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
                                                                                        height="35px"/></td>
                                     <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="images/ui/watch.png"
+                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
                                                                                        height="35px"/></td>
                                     <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="images/ui/yes-confirm.png"
+                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
                                                                                        height="35px"/></td>
                                     <?php endif; ?>
                                 </tr>
@@ -882,7 +885,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
     <br>
 </div>
 <div id="loaderDiv">
-    <img id="loaderImg" src="images/loader.gif"/>
+    <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <div class="row text-center">
     <?php if ($lastUpdated['updated'] != null):

@@ -5,7 +5,8 @@
  * Date: 01/08/2018
  * Time: 20:06
  */
-if (isset($_GET['logout'])) {
+$logout = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
+if ($logout == "logout") {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -15,7 +16,7 @@ if (isset($_GET['logout'])) {
 
 // TODO retirer si plus d'utilité de reset le cookie avec l'arrivée des compte. Inutilisé pour le moment
 if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
-    header('Location: player/'.$_COOKIE["playerTag"]);
+    header('Location: https://ironmanager.fr/player/' . $_COOKIE["playerTag"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +66,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
                     let date = new Date();
                     date.setTime(+date + (365 * 86400000));
                     document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                    window.location.replace("player/".concat(search));
+                    window.location.replace("https://ironmanager.fr/player/".concat(search));
                 }
             });
         }
