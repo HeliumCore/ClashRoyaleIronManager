@@ -17,9 +17,16 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
 }
 
 $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-$passwordHashed = generate_hash($password);
-$accountId = createAccount($db, $playerId, $passwordHashed);
+$passInfos = getHashedPassword($db, $playerId);
+if (is_array($passInfos)) {
+    echo 'exists';
+} else {
+    $passwordHashed = generate_hash($password);
+    $accountId = createAccount($db, $playerId, $passwordHashed);
 // Début de la session
-session_start();
-$_SESSION['accountId'] = $accountId;
-echo 'true';
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION['accountId'] = $accountId;
+    echo 'true';
+}

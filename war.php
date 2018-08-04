@@ -36,7 +36,7 @@ if ($state == "collectionDay") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Guerre en cours</title>
+    <title>Iron - Guerre en cours</title>
     <?php include("head.php"); ?>
     <script>
         $(document).ready(function () {
@@ -101,7 +101,7 @@ if ($state == "collectionDay") {
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <div>
         <h1 class="whiteShadow">Guerre en cours</h1>

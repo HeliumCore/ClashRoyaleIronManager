@@ -6,6 +6,9 @@
  * Time: 10:22
  */
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     header('Location: login.php');
 
@@ -15,7 +18,7 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Mon compte</title>
+    <title>Iron - Gestion du compte</title>
     <?php include("head.php"); ?>
     <script>
         function changePassword() {
@@ -47,10 +50,10 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
-    <h1 class="whiteShadow">Informations du compte</h1><br>
-    <h3>Changer de mot de passe</h3>
+    <h1 class="whiteShadow">Gestion du compte</h1><br>
+    <h3 class="whiteShadow">Changer de mot de passe</h3>
     <div>
         <div id="passwordChangeForm">
             <label class="whiteShadow" for="oldPass">
@@ -70,6 +73,7 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     </div>
     <br>
     <br>
+    <!--                <li class="dropdown-li"><a href="index.php?reset">Changer de TAG</a></li>-->
 </div>
 <?php include("footer.html"); ?>
 </body>

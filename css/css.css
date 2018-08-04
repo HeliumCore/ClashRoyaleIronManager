@@ -167,6 +167,19 @@ tbody tr:nth-child(5) .rank span {
     color: #777;
 }
 
-#passwordChangeFailed, #passwordChangeSuccess, #loginFailed{
+#passwordChangeFailed, #passwordChangeSuccess, #loginFailed, #playerExists, #registerFailed {
     display: none;
+}
+
+.error-message {
+    color: #FF4C4C;
+}
+
+.navbar-collapse {
+    margin-left:5px;
+    width:100%;
+}
+
+.reload-image {
+    height: 20px;
 }

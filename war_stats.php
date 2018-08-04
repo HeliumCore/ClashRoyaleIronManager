@@ -179,7 +179,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Historique des guerres</title>
+    <title>Iron - Historique des guerres</title>
     <?php include("head.php"); ?>
     <script>
         $(document).ready(function () {
@@ -209,7 +209,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Statistiques des guerres</h1>
     <br>

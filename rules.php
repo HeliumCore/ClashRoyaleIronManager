@@ -11,11 +11,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Réglement</title>
+    <title>Iron - Réglement</title>
     <?php include("head.php"); ?>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Réglement</h1>
     <br>

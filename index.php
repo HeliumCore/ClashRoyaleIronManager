@@ -5,6 +5,14 @@
  * Date: 01/08/2018
  * Time: 20:06
  */
+if (isset($_GET['logout'])) {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_unset();
+    session_destroy();
+}
+
 if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
     header('Location: player.php?tag='.$_COOKIE["playerTag"]);
 ?>
@@ -63,7 +71,7 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Recherche de joueur</h1><br>
     <div>

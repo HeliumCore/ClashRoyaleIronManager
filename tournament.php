@@ -6,7 +6,7 @@
  * Time: 15:46
  */
 
-// TODO si pas de cookie -> redirect vers la page de choix du joueur
+// TODO si pas de cookie -> redirect vers la page de choix du joueur - voir si on oblige pas a avoir un compte
 
 
 ?>
@@ -14,11 +14,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tournoi</title>
+    <title>Iron - Tournoi</title>
     <?php include("head.php"); ?>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Tournoi</h1>
 

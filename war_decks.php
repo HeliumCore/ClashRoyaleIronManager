@@ -43,11 +43,11 @@ function getDeckLink($deck)
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Decks de guerre</title>
+    <title>Iron - Decks de guerre</title>
     <?php include("head.php"); ?>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Decks de guerre</h1><br>
     <ul class="nav nav-tabs">

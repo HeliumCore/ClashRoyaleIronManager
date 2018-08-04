@@ -9,19 +9,15 @@
 include(__DIR__."/tools/database.php");
 $lastUpdated = getLastUpdated($db, "index");
 
-//TODO remplacer l'index par une page de choix : permet de choisir qui on est, le place en cookie, et redirect si cookie != null
-
 //TODO refaire les images d'arènes 1-12
 
 //TODO créer la partie Compte. Compte non obligatoire, id = tag ?, mdp = a la création, lié à un joueur.
-// utilité de la création de compte :
-// --  
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Iron</title>
+    <title>Iron - Clan</title>
 
     <?php include("head.php"); ?>
     <script>
@@ -50,7 +46,7 @@ $lastUpdated = getLastUpdated($db, "index");
     </script>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Liste des joueurs</h1>
     <span class="whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>

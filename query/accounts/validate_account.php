@@ -17,12 +17,14 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
 }
 
 $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-$passwordHashed = generate_hash($password);
-var_dump($password);
-var_dump($passwordHashed);
+$passInfos = getHashedPassword($db, $playerId);
+$passwordHashed = $passInfos['password'];
+
 if (validate_pw($password, $passwordHashed)) {
-    session_start();
-    $_SESSION['accountId'] = $accountId;
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION['accountId'] = $passInfos['id'];
     echo 'true';
 } else {
     session_destroy();

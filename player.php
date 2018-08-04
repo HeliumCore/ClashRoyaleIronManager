@@ -38,11 +38,11 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Détail du joueur</title>
+    <title>Iron - Détail du joueur</title>
     <?php include("head.php"); ?>
 </head>
 <body>
-<?php include("header.html"); ?>
+<?php include("header.php"); ?>
 <div class="container">
 <!--    TODO refaire le design de la page (ci dessous, le bandeau du nom du joueur/trophées) -->
 <!--    <div class="row">-->
@@ -53,8 +53,6 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-    <br>
-    <h1 class="whiteShadow">Détails du joueur</h1><br>
     <br>
     <div class="row">
         <div class="col-md-5">

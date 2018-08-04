@@ -935,7 +935,7 @@ function updatePassword($db, $playerId, $password)
 function getHashedPassword($db, $playerdId)
 {
     $pattern = "
-    SELECT password
+    SELECT password, id
     FROM account
     WHERE player_id = %d
     ";
