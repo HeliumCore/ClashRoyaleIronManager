@@ -10,8 +10,6 @@ include(__DIR__."/tools/database.php");
 $lastUpdated = getLastUpdated($db, "index");
 
 //TODO refaire les images d'arènes 1-12
-
-//TODO créer la partie Compte. Compte non obligatoire, id = tag ?, mdp = a la création, lié à un joueur.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,9 +47,14 @@ $lastUpdated = getLastUpdated($db, "index");
 <?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Liste des joueurs</h1>
-    <span class="whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
-    <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom" style="margin-left: 10px;"/>
-    <br><br>
+    <div class="row">
+        <div class="col-md-9">
+            <span class="whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom" style="margin-left: 10px;"/><br><br>
+        </div>
+    </div>
     <div class="table-responsive">
         <table id="tableIndex" class="table tableIndex">
             <thead>

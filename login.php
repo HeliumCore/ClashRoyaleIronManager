@@ -166,10 +166,8 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                     <input type="password" id="password" class="pull-right">
                 </div>
                 <br><br>
-                <div class="buttons">
-                    <button id="btn-register">S'enregistrer</button>
-                    <button id="btn-login">Se connecter</button>
-                </div>
+                <button id="btn-register" class="btn btn-warning">S'enregistrer</button>
+                <button id="btn-login" class="btn btn-success pull-right">Se connecter</button>
             </div>
         </div>
         <div class="col-md-3">

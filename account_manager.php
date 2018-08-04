@@ -36,13 +36,13 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
                     new: newPass
                 },
                 success: function (data) {
-                    let form = $('#passwordChangeForm');
+                    $('#passwordChangeForm').hide();
                     if (data === 'false') {
-                        form.hide();
                         $('#passwordChangeFailed').show();
+                        $('#passwordChangeSuccess').hide();
                     } else {
-                        form.hide();
                         $('#passwordChangeSuccess').show();
+                        $('#passwordChangeFailed').hide();
                     }
                 }
             });
@@ -53,27 +53,34 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
 <?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Gestion du compte</h1><br>
-    <h3 class="whiteShadow">Changer de mot de passe</h3>
-    <div>
-        <div id="passwordChangeForm">
-            <label class="whiteShadow" for="oldPass">
-                <input type="password" id="oldPass">
-            </label><br>
-            <label class="whiteShadow" for="newPass">
-                <input type="password" id="newPass">
-            </label><br>
-            <button name="btn-change-password" onclick="changePassword()">Envoyer</button>
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="whiteShadow">Changer de mot de passe</h3><br>
+            <div>
+                <div id="passwordChangeSuccess">
+                    <span class="whiteShadow">Votre mot de passe a bien été modifié</span><br><br>
+                </div>
+                <div id="passwordChangeFailed">
+                    <span class="whiteShadow error-message">Une erreur est survenue lors de la modification de votre mot de passe, veuillez réessayer plus tard</span><br><br>
+                </div>
+                <div id="passwordChangeForm">
+                    <div class="form-group">
+                        <label class="whiteShadow" for="oldPass">Ancien mot de passe :</label>
+                        <input type="password" id="oldPass" class="pull-right">
+                    </div>
+                    <div class="form-group">
+                        <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
+                        <input type="password" id="newPass" class="pull-right">
+                    </div>
+                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">Envoyer</button>
+                </div>
+            </div>
         </div>
-        <div id="passwordChangeSuccess">
-            <span class="whiteShadow">Votre mot de passe a bien été modifié</span>
-        </div>
-        <div id="passwordChangeFailed">
-            <span class="whiteShadow">Une erreur est survenue lors de la modification de votre mot de passe, veuillez reessayer plus tard</span>
+        <div class="col-md-6">
         </div>
     </div>
     <br>
     <br>
-    <!--                <li class="dropdown-li"><a href="index.php?reset">Changer de TAG</a></li>-->
 </div>
 <?php include("footer.html"); ?>
 </body>

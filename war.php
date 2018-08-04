@@ -103,27 +103,33 @@ if ($state == "collectionDay") {
 <body>
 <?php include("header.php"); ?>
 <div class="container">
-    <div>
-        <h1 class="whiteShadow">Guerre en cours</h1>
-        <span class="whiteShadow"><?php echo $stateName ?></span><br>
-        <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
-        <?php if ($state == 'warDay'): ?>
-            <a href="war_decks.php" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
-        <?php endif; ?>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="whiteShadow">Guerre en cours</h1>
+            <span class="whiteShadow"><?php echo $stateName ?></span><br>
+            <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
+            <?php if ($state == 'warDay'): ?>
+                <a href="war_decks.php" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
+            <?php endif; ?>
+        </div>
     </div>
     <br><br>
-    <div>
-        <span class="pageSubtitle whiteShadow">Résultats du clan</span>
-        <select id="orderSelect" class="pull-right">
-            <option value="-1">Trier par colonne</option>
-            <option value="0">Rang</option>
-            <option value="1">Collections jouées</option>
-            <option value="2">Collections gagnées</option>
-            <option value="3">Cartes gagnées</option>
-            <option value="4">Batailles jouées</option>
-            <option value="5">Batailles gagnées</option>
-        </select>
-        <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+    <div class="row">
+        <div class="col-md-8">
+            <span class="pageSubtitle whiteShadow">Résultats du clan</span>
+        </div>
+        <div class="col-md-4">
+            <select id="orderSelect" class="form-control pull-right">
+                <option value="-1">Trier par colonne</option>
+                <option value="0">Rang</option>
+                <option value="1">Collections jouées</option>
+                <option value="2">Collections gagnées</option>
+                <option value="3">Cartes gagnées</option>
+                <option value="4">Batailles jouées</option>
+                <option value="5">Batailles gagnées</option>
+            </select>
+            <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
+        </div>
     </div>
     <br>
     <?php
@@ -176,9 +182,13 @@ if ($state == "collectionDay") {
         </div>
     <?php } ?>
     <br>
-    <div>
-        <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
-        <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom"/>
+    <div class="row">
+        <div class="col-md-8">
+            <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom"/>
+        </div>
     </div>
     <br>
     <div class="divCurrentWar table-responsive">

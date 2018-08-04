@@ -213,15 +213,21 @@ $lastUpdated = getLastUpdated($db, "war_stats");
 <div class="container">
     <h1 class="whiteShadow">Statistiques des guerres</h1>
     <br>
-    <ul id="navUlWarSeason" class="nav nav-tabs" role="tablist">
-        <?php
-        print '<li role="presentation" class="active"><a href="#season' . $seasons[0] . '" aria-controls="season' . $seasons[0] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[0] . '</a></li>';
-        print '<li role="presentation"><a href="#season' . $seasons[1] . '" aria-controls="season' . $seasons[1] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[1] . '</a></li>';
-        print '<li role="presentation"><a href="#season' . $seasons[2] . '" aria-controls="season' . $seasons[2] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[2] . '</a></li>';
-        print '<li role="presentation"><a href="#allSeasons" aria-controls="allSeasons" role="tab" data-toggle="tab" class="tab-link">Toutes les guerres</a></li>';
-        ?>
-        <input type="text" id="tx_search" class="pull-right" placeholder="Trier par nom" style="margin-left: 10px;"/>
-    </ul>
+    <div class="row">
+        <div class="col-md-9">
+            <ul id="navUlWarSeason" class="nav nav-tabs" role="tablist">
+                <?php
+                print '<li role="presentation" class="active"><a href="#season' . $seasons[0] . '" aria-controls="season' . $seasons[0] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[0] . '</a></li>';
+                print '<li role="presentation"><a href="#season' . $seasons[1] . '" aria-controls="season' . $seasons[1] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[1] . '</a></li>';
+                print '<li role="presentation"><a href="#season' . $seasons[2] . '" aria-controls="season' . $seasons[2] . '" role="tab" data-toggle="tab" class="tab-link">Saison ' . $seasons[2] . '</a></li>';
+                print '<li role="presentation"><a href="#allSeasons" aria-controls="allSeasons" role="tab" data-toggle="tab" class="tab-link">Toutes les guerres</a></li>';
+                ?>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom" style="margin-left: 10px;"/>
+        </div>
+    </div>
     <br>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="season<?php print $seasons[0]; ?>">

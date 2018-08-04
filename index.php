@@ -13,6 +13,7 @@ if (isset($_GET['logout'])) {
     session_destroy();
 }
 
+// TODO retirer si plus d'utilité de reset le cookie avec l'arrivée des compte. Inutilisé pour le moment
 if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
     header('Location: player.php?tag='.$_COOKIE["playerTag"]);
 ?>
