@@ -176,9 +176,6 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                 <button id="btn-login" class="btn btn-success pull-right">Se connecter</button>
             </div>
         </div>
-        <div class="col-md-3">
-
-        </div>
     </div>
 
     <br><br>

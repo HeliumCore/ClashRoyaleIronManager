@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/index.php">Iron</a>
+            <a class="navbar-brand" href="/index">Iron</a>
         </div>
         <?php
         $BASE = "https://ironmanager.fr";

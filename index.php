@@ -76,12 +76,23 @@ if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["p
 <?php include("header.php"); ?>
 <div class="container">
     <h1 class="whiteShadow">Recherche de joueur</h1><br>
-    <div>
-        <span class="whiteShadow">Entrez le tag ou le nom du joueur pour personnaliser votre page d'accueil.</span><br><br>
-        <input type="text" placeholder="Tag" id="search">
-        <button name="btLaunchSearch" onclick="launchSearch()">Valider</button>
-        <br><br>
-        <span class="whiteShadow"><a href="https://ironmanager.fr/clan.php">Ou cliquez ici pour accéder au clan.<a></a></span>
+    <div class="row">
+        <div class="col-md-5">
+            <span class="whiteShadow">Entrez le tag ou le nom du joueur pour personnaliser votre page d'accueil.</span>
+            <br><br>
+            <div>
+                <div class="form-group">
+                    <label for="search" class="whiteShadow">Votre tag :</label>
+                    <input type="text" id="search" class="pull-right">
+                </div>
+                <button name="btLaunchSearch" onclick="launchSearch()" class="btn btn-success pull-right">Valider</button>
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-2">
+            <span class="whiteShadow"><a href="https://ironmanager.fr/clan">Cliquez ici pour accéder au clan.</a></span>
+            <br><br>
+            <span class="whiteShadow"><a href="https://ironmanager.fr/login">Cliquez ici pour vous connecter à votre compte</a></span>
+        </div>
     </div>
     <br>
     <br>
