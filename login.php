@@ -180,7 +180,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                 </div>
                 <br>
                 <div class="form-check pull-right">
-                    <label for="rememberMe" class="whiteShadow">Resté connecté :</label>
+                    <label for="rememberMe" class="whiteShadow">Rester connecté :</label>
                     <input type="checkbox" id="rememberMe" class="form-check-input" checked>
                 </div>
                 <br><br>

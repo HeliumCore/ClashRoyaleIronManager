@@ -28,24 +28,7 @@
                 <li><a href="<?php print $BASE; ?>/rules">Réglement</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right pointerHand">
-
                 <?php
-                if (session_status() == PHP_SESSION_NONE) {
-                    session_start();
-                }
-                if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])): ?>
-                    <li class="dropdown pointerHand">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/account_manager">Compte<span
-                                    class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/account_manager">Gestion du
-                                    compte</a></li>
-                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/index/logout">Se deconnecter</a></li>
-                        </ul>
-                    </li>
-                <?php else: ?>
-                    <li><a href="<?php print $BASE; ?>/login">Se connecter</a></li>
-                <?php endif;
                 $uri = $_SERVER['REQUEST_URI'];
                 if (strpos($uri, 'player') !== false) {
                     $path = explode("/", substr($uri, 1))[0];
@@ -61,7 +44,24 @@
                             Mise à jour&nbsp;<img src="/images/ui/reload.png" class="reload-image">
                         </a>
                     </li>
-                <?php endif; ?>
+                <?php endif;
+
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
+                if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])): ?>
+                    <li class="dropdown pointerHand">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/account_manager">Compte<span
+                                    class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/account_manager">Gestion du
+                                    compte</a></li>
+                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/index/logout">Se deconnecter</a></li>
+                        </ul>
+                    </li>
+                <?php else: ?>
+                    <li><a href="<?php print $BASE; ?>/login">Se connecter</a></li>
+                <?php endif;?>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

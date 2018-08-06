@@ -44,11 +44,11 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                     tag: playerTag
                 },
                 success(data) {
-                    if (data === 'false') {
-                        $('#loadingChests').show();
-                    } else {
-                        $('#loadingChests').hide();
-                        $('#chestsDiv').html(data);
+                    if (data !== 'false') {
+                        $('#chestsDiv').fadeOut(function () {
+                            $(this).html(data);
+                            $(this).fadeIn();
+                        });
                     }
                 }
             });
@@ -71,19 +71,16 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <div class="row">
         <div class="col-md-5">
             <h3 class="whiteShadow">Coffres à venir</h3>
-            <div class="row" id="chestsDiv"></div>
-            <div class="row text-center" id="loadingChests">
+            <div class="row text-center" id="chestsDiv">
                 <?php for ($i = 0; $i <= 7; $i++): ?>
-                <div class="col-xs-3">
-                    <div class="img-responsive chests-placeholder">
-                        <img src="/images/chests/legendary-chest.png" alt="failed to load img"
-                             class="img-responsive chests"/>
-                        <span class="chestNumber whiteShadow">+</span>
+                    <div class="col-xs-3">
+                        <div class="img-responsive chests-placeholder">
+                            <img src="/images/chests/legendary-chest.png" alt="failed to load img"
+                                 class="img-responsive chests"/>
+                            <span class="chestNumber whiteShadow">+</span>
+                        </div>
                     </div>
-                </div>
                 <?php endfor; ?>
-<!--                <br>-->
-<!--                <span class="whiteShadow">Chargement des coffres ...</span>-->
             </div>
         </div>
         <div class="col-md-5 col-md-offset-2">
