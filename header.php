@@ -40,9 +40,9 @@
                     </li>
                 <?php endif;
 
-                if (session_status() == PHP_SESSION_NONE) {
+                if (session_status() == PHP_SESSION_NONE)
                     session_start();
-                }
+
                 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])): ?>
                     <li class="dropdown pointerHand">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/account_manager">Compte<span

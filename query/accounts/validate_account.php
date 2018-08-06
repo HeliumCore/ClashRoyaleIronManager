@@ -16,13 +16,16 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
     return;
 }
 
-$passInfos = getHashedPassword($db, $playerTag);
+$passInfos = getAccountInfos($db, $playerTag);
 $passwordHashed = $passInfos['password'];
 
 if (validate_pw($password, $passwordHashed)) {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
+    $date = new DateTime();
+    $time = $date->getTimestamp();
+    setLastVisit($db, $passInfos['id'], $time);
     $_SESSION['accountId'] = $passInfos['id'];
     echo 'true';
 } else {

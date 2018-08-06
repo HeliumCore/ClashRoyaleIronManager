@@ -910,13 +910,13 @@ function getLastUpdatedPlayer($db, $playerTag)
 
 // ================= ACCOUNTS ===============
 // ----------------- INSERT -----------------
-function createAccount($db, $playerId, $password)
+function createAccount($db, $playerId, $password, $time)
 {
     $pattern = "
-    INSERT INTO account(player_id, password)
-    VALUES (%d, \"%s\")
+    INSERT INTO account(player_id, password, last_visit)
+    VALUES (%d, \"%s\", %d)
     ";
-    execute_query($db, sprintf($pattern, $playerId, $password));
+    execute_query($db, sprintf($pattern, $playerId, $password, $time));
     return $db->lastInsertId();
 }
 
@@ -931,16 +931,89 @@ function updatePassword($db, $playerId, $password)
     execute_query($db, sprintf($pattern, $playerId, $password));
 }
 
-// -----------------   GET  -----------------
-function getHashedPassword($db, $playerdTag)
+function setLastVisit($db, $accountId, $time)
 {
     $pattern = "
-    SELECT a.password, a.id
+    UPDATE account
+    SET last_visit = %d
+    WHERE id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $time, $accountId));
+}
+
+// -----------------   GET  -----------------
+function getAccountInfos($db, $playerdTag)
+{
+    $pattern = "
+    SELECT a.password, a.id, a.last_visit
     FROM account a
     JOIN players p ON a.player_id = p.id
     WHERE p.tag = \"%s\"
     ";
     return fetch_query($db, sprintf($pattern, $playerdTag));
+}
+
+function getPlayerInfoByAccountId($db, $accountId)
+{
+    $pattern = "
+    SELECT p.id, p.tag
+    FROM players p
+    JOIN account a ON p.id = a.player_id
+    WHERE a.id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $accountId));
+}
+
+// ==========================================
+
+
+// ================= ACCOUNTS ===============
+// ----------------- INSERT -----------------
+function insertPause($db, $accountId, $dates)
+{
+    $pattern = "
+    INSERT INTO player_pause(account_id, pause)
+    VALUES %s
+    ";
+
+//    TODO finish this
+    $secondPattern = "";
+    var_dump($dates);
+    if (sizeof($dates) > 1) {
+        foreach ($dates as $date) {
+            $firstPattern = "(%d, %s),";
+            $firstQuery = sprintf($firstPattern, $accountId, $date);
+            $secondPattern .= $firstQuery;
+        }
+
+        $secondPattern = substr($secondPattern, 0, -1);
+    } else if (sizeof($dates) == 1) {
+        $firstPattern = "(%d, %s)";
+        $firstQuery = sprintf($firstPattern, $accountId, $dates[0]);
+        $secondPattern .= $firstQuery;
+    } else {
+        return;
+    }
+
+    $query = sprintf($pattern, $secondPattern);
+    var_dump($query);
+    execute_query($db, $query);
+}
+
+// ----------------- UPDATE -----------------
+
+// -----------------   GET  -----------------
+function getAllPauseByAccount($db, $accountId)
+{
+    $pattern = "
+    SELECT pause
+    FROM player_pause
+    WHERE account_id = %d
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $accountId));
 }
 // ==========================================
 

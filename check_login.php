@@ -18,8 +18,11 @@ if ((!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     $remember = $_COOKIE['remember'];
 
     if ($playerTag == $remember) {
-        $_SESSION['accountId'] = getHashedPassword($db, $playerTag)['id'];
-        $url = "https://ironmanager.fr" . $_SERVER['REQUEST_URI'];
-        header('Location: '.$url);
+        $accountId = getAccountInfos($db, $playerTag)['id'];
+        $date = new DateTime();
+        $time = $date->getTimestamp();
+        setLastVisit($db, $accountId, $time);
+        $_SESSION['accountId'] = $accountId;
+        header("Location: https://ironmanager.fr" . $_SERVER['REQUEST_URI']);
     }
 }

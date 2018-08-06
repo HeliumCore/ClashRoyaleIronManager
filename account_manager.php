@@ -12,10 +12,10 @@ if (session_status() == PHP_SESSION_NONE)
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     header('Location: https://ironmanager.fr/login.php');
 
+include(__DIR__ . "/tools/database.php");
+$playerTag = getPlayerInfoByAccountId($db, $_SESSION['accountId']);
+
 // TODO faire le calendrier des absences
-
-// TODO recup une derniere date de co
-
 
 ?>
 
@@ -26,6 +26,49 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     <title>Iron - Gestion du compte</title>
     <?php include("head.php"); ?>
     <script>
+        let dates = [];
+
+        function addOrRemoveDate(date) {
+            let index = jQuery.inArray(date, dates);
+            if (index >= 0)
+                dates.splice(index, 1);
+            else {
+                if (jQuery.inArray(date, dates) < 0)
+                    dates.push(date);
+            }
+        }
+
+        jQuery(function () {
+            jQuery("#datepicker").datepicker({
+                dateFormat: "@",
+                onSelect: function (dateText, inst) {
+                    addOrRemoveDate(dateText);
+                },
+                beforeShowDay: function (date) {
+                    let gotDate = $.inArray($.datepicker.formatDate($(this).datepicker('option', 'dateFormat'), date), dates);
+                    if (gotDate >= 0) {
+                        return [true, "ui-state-highlight"];
+                    }
+                    return [true, ""];
+                }
+            });
+        });
+
+        function selectDates() {
+            console.log(dates);
+            $.ajax({
+                type: "POST",
+                url: "/query/insertPlayerPause.php",
+                data: {
+                    dates: dates
+                },
+                success(data) {
+                    //TODO do shit
+                    console.log(data);
+                }
+            })
+        }
+
         function changePassword() {
             let oldPass = $('#oldPass').val();
             let newPass = $('#newPass').val();
@@ -38,7 +81,8 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
                 url: "query/accounts/update_password.php",
                 data: {
                     old: oldPass,
-                    new: newPass
+                    new: newPass,
+                    tag: $('#playerTag').val()
                 },
                 success: function (data) {
                     $('#passwordChangeForm').hide();
@@ -56,6 +100,7 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
 </head>
 <body>
 <?php include("header.php"); ?>
+<input type="hidden" id="playerTag" value="<?php print $playerTag; ?>"/>
 <div class="container">
     <h1 class="whiteShadow">Gestion du compte</h1><br>
     <div class="row">
@@ -77,8 +122,22 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
                         <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
                         <input type="password" id="newPass" class="pull-right">
                     </div>
-                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">Envoyer</button>
+                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">
+                        Envoyer
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-md-offset-2">
+            <h3 class="whiteShadow">Absences</h3><br>
+            <div>
+                <div class="form-group">
+                    <label class="whiteShadow" for="datepicker">Choisir des dates :</label>
+                    <!--                    TODO refaire le design du calendrier -->
+                    <div id="datepicker"></div>
+                </div>
+                <button name="btn-date" onclick="selectDates()" class="btn btn-success">Envoyer</button>
             </div>
         </div>
     </div>

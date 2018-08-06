@@ -9,16 +9,16 @@
 include(__DIR__ . "/../../tools/accounts.php");
 
 if (
-    isset($_GET['password']) && !empty($_GET['password'])
-    && isset($_GET['old_password']) && !empty($_GET['old_password'])
-    && isset($_GET['tag']) && !empty($_GET['tag'])
+    isset($_POST['password']) && !empty($_POST['password'])
+    && isset($_POST['old_password']) && !empty($_POST['old_password'])
+    && isset($_POST['tag']) && !empty($_POST['tag'])
 ) {
-    $password = $_GET['password'];
-    $playerTag = $_GET['tag'];
+    $password = $_POST['password'];
+    $playerTag = $_POST['tag'];
 } else {
     return 'false';
 }
-$hash = getHashedPassword($db, $playerTag);
+$hash = getAccountInfos($db, $playerTag);
 if (validate_pw($password, $hash)) {
     $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
     updatePassword($db, $playerId, $password);
