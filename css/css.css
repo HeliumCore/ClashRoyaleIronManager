@@ -183,3 +183,7 @@ tbody tr:nth-child(5) .rank span {
 .reload-image {
     height: 20px;
 }
+
+.chests-placeholder {
+    opacity: 0.5;
+}

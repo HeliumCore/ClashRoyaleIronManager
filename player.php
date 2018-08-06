@@ -68,14 +68,22 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <!--            </div>-->
     <!--        </div>-->
     <!--    </div>-->
-    <br>
     <div class="row">
         <div class="col-md-5">
             <h3 class="whiteShadow">Coffres à venir</h3>
             <div class="row" id="chestsDiv"></div>
             <div class="row text-center" id="loadingChests">
-                <br>
-                <span class="whiteShadow">Chargement des coffres ...</span>
+                <?php for ($i = 0; $i <= 7; $i++): ?>
+                <div class="col-xs-3">
+                    <div class="img-responsive chests-placeholder">
+                        <img src="/images/chests/legendary-chest.png" alt="failed to load img"
+                             class="img-responsive chests"/>
+                        <span class="chestNumber whiteShadow">+</span>
+                    </div>
+                </div>
+                <?php endfor; ?>
+<!--                <br>-->
+<!--                <span class="whiteShadow">Chargement des coffres ...</span>-->
             </div>
         </div>
         <div class="col-md-5 col-md-offset-2">

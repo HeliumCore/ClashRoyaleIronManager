@@ -36,7 +36,7 @@ foreach ($upcomingChests[0] as $nextChest):
         <div class="col-xs-3">
             <div class="img-responsive">
                 <img src="/images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
-                     class="img-responsive little-chest chests"/>
+                     class="img-responsive chests"/>
                 <span class="chestNumber whiteShadow">+<?php print $counter; ?></span>
             </div>
         </div>
@@ -49,7 +49,7 @@ foreach ($fatChests as $key => $chest) {
         <div class="col-xs-3">
             <div class="img-responsive">
                 <img src="/images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
-                     class="img-responsive big-chest chests"/>
+                     class="img-responsive chests"/>
                 <span class="chestNumber whiteShadow">+<?php print $chests[$chest]; ?></span>
             </div>
         </div>
