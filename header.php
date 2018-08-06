@@ -29,13 +29,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right pointerHand">
                 <?php
-                $uri = $_SERVER['REQUEST_URI'];
-                if (strpos($uri, 'player') !== false) {
-                    $path = explode("/", substr($uri, 1))[0];
-                } else {
-                    //TODO revoir ca apres rewrite rule
-                    $path = explode(".php", substr($uri, 1))[0];
-                }
+                $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
                 if (in_array($path, $allowedUpdate)):
                     ?>

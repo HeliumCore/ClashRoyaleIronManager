@@ -12,6 +12,8 @@ include(__DIR__ . "/check_login.php");
 
 // TODO tableaux absences avec data du manager
 
+// TODO afficher les status uniquement pour les chefs
+
 $allWarStats = getAllWarStats($db);
 $seasons = array_unique(array_column($allWarStats, "season"));
 rsort($seasons);

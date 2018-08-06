@@ -12,6 +12,11 @@ if (session_status() == PHP_SESSION_NONE)
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     header('Location: https://ironmanager.fr/login.php');
 
+// TODO faire le calendrier des absences
+
+// TODO recup une derniere date de co
+
+
 ?>
 
 <!DOCTYPE html>
