@@ -16,11 +16,11 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
     return;
 }
 
-$playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-$passInfos = getHashedPassword($db, $playerId);
+$passInfos = getHashedPassword($db, $playerTag);
 if (is_array($passInfos)) {
     echo 'exists';
 } else {
+    $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
     $passwordHashed = generate_hash($password);
     $accountId = createAccount($db, $playerId, $passwordHashed);
 // Début de la session

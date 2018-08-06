@@ -6,7 +6,7 @@
  * Time: 10:56
  */
 
-include("tools/database.php");
+include(__DIR__ . "/check_login.php");
 
 // TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
 

@@ -18,9 +18,9 @@ if (
 } else {
     return 'false';
 }
-$playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-$hash = getHashedPassword($db, $playerId);
+$hash = getHashedPassword($db, $playerTag);
 if (validate_pw($password, $hash)) {
+    $playerId = intval(getPlayerByTag($db, $playerTag)['id']);
     updatePassword($db, $playerId, $password);
 } else {
     return 'false';

@@ -6,8 +6,9 @@
  * Time: 16:08
  */
 
-include("tools/database.php");
+include(__DIR__ . "/check_login.php");
 include("tools/api_conf.php");
+
 $playerTag = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
 if (empty($playerTag)) {
     header('Location: https://ironmanager.fr/clan.php');
@@ -22,15 +23,6 @@ $deckLink = sprintf(
     $crIds[7]
 );
 
-// CHESTS
-$chests = getPlayerChestsFromApi($api, $playerTag);
-$upcomingChests[] = $chests["upcoming"];
-$fatChests = array(
-    $chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary",
-    $chests["epic"] => "epic", $chests["giant"] => "giant"
-);
-ksort($fatChests);
-
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 //TODO faire le design de l'affichage des cartes (elixir, niveau, couleur...)
@@ -41,6 +33,27 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <meta charset="utf-8">
     <title>Iron - Détail du joueur</title>
     <?php include("head.php"); ?>
+    <script>
+        $(document).ready(function () {
+            let playerTag = $('#playerTagHidden').val();
+
+            $.ajax({
+                type: "GET",
+                url: "/query/ajax/get_player_chests.php",
+                data: {
+                    tag: playerTag
+                },
+                success(data) {
+                    if (data === 'false') {
+                        $('#loadingChests').show();
+                    } else {
+                        $('#loadingChests').hide();
+                        $('#chestsDiv').html(data);
+                    }
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <?php include("header.php"); ?>
@@ -59,40 +72,10 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     <div class="row">
         <div class="col-md-5">
             <h3 class="whiteShadow">Coffres à venir</h3>
-            <div class="row">
-                <?php
-                $counter = 1;
-                global $needed;
-                $needed = 3;
-                foreach ($upcomingChests[0] as $nextChest):
-                    $isFatChest = !($nextChest == 'silver' || $nextChest == 'gold');
-                    if ($isFatChest)
-                        $needed++;
-                    if ($counter <= $needed) { ?>
-                        <div class="col-xs-3">
-                            <div class="img-responsive">
-                                <img src="/images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
-                                     class="img-responsive little-chest chests"/>
-                                <span class="chestNumber whiteShadow">+<?php print $counter; ?></span>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                    $counter++;
-                endforeach;
-                foreach ($fatChests as $key => $chest) {
-                    if ($key > 3) { ?>
-                        <div class="col-xs-3">
-                            <div class="img-responsive">
-                                <img src="/images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
-                                     class="img-responsive big-chest chests"/>
-                                <span class="chestNumber whiteShadow">+<?php print $chests[$chest]; ?></span>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                }
-                ?>
+            <div class="row" id="chestsDiv"></div>
+            <div class="row text-center" id="loadingChests">
+                <br>
+                <span class="whiteShadow">Chargement des coffres ...</span>
             </div>
         </div>
         <div class="col-md-5 col-md-offset-2">

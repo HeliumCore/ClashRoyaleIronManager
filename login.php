@@ -12,9 +12,9 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
     exit();
 }
 
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE)
     session_start();
-}
+
 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
     header('Location: https://ironmanager.fr/index.php');
 
@@ -94,6 +94,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
         }
 
         function loginAccount(search, password) {
+            let remember = $('#rememberMe:checked').val() === 'on';
             $.ajax({
                 type: 'POST',
                 url: "query/accounts/validate_account.php",
@@ -108,9 +109,15 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                         $('#registerFailed').hide();
                     } else {
                         $('#loaderDiv').show();
+                        //index cookie
                         let date = new Date();
                         date.setTime(+date + (365 * 86400000));
                         document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
+                        if (remember) {
+                            // keep me logged in cookie
+                            document.cookie = "remember=" + search + ";expires=" + date.toUTCString();
+                        }
+                        // redirect
                         window.location.replace("player/".concat(search));
                     }
                 }
@@ -170,6 +177,11 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId']))
                 <div class="form-group">
                     <label for="password" class="whiteShadow">Mot de passe :</label>
                     <input type="password" id="password" class="pull-right">
+                </div>
+                <br>
+                <div class="form-check pull-right">
+                    <label for="rememberMe" class="whiteShadow">Resté connecté :</label>
+                    <input type="checkbox" id="rememberMe" class="form-check-input" checked>
                 </div>
                 <br><br>
                 <button id="btn-register" class="btn btn-warning">S'enregistrer</button>

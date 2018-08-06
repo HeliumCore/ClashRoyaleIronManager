@@ -10,12 +10,14 @@ if ($logout == "logout") {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
+    setcookie('remember', '', 1);
     session_unset();
     session_destroy();
 }
 
-// TODO retirer si plus d'utilité de reset le cookie avec l'arrivée des compte. Inutilisé pour le moment
-if (!isset($_GET['reset']) && isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
+include(__DIR__ . "/check_login.php");
+
+if (isset($_COOKIE["playerTag"]) && !empty($_COOKIE["playerTag"]))
     header('Location: https://ironmanager.fr/player/' . $_COOKIE["playerTag"]);
 ?>
 <!DOCTYPE html>

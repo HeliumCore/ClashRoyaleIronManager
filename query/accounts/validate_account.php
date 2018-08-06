@@ -16,8 +16,7 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
     return;
 }
 
-$playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-$passInfos = getHashedPassword($db, $playerId);
+$passInfos = getHashedPassword($db, $playerTag);
 $passwordHashed = $passInfos['password'];
 
 if (validate_pw($password, $passwordHashed)) {
@@ -27,6 +26,7 @@ if (validate_pw($password, $passwordHashed)) {
     $_SESSION['accountId'] = $passInfos['id'];
     echo 'true';
 } else {
+    setcookie('remember', '', 1);
     session_destroy();
     echo 'false';
 }

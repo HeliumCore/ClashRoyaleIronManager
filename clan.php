@@ -6,7 +6,8 @@
  * Time: 14:56
  */
 
-include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/check_login.php");
+
 $lastUpdated = getLastUpdated($db, "index");
 
 //TODO refaire les images d'arènes 1-12

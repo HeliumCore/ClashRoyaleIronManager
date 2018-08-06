@@ -8,6 +8,7 @@
 
 // TODO si pas de cookie -> redirect vers la page de choix du joueur - voir si on oblige pas a avoir un compte
 
+include(__DIR__ . "/check_login.php");
 
 ?>
 <!DOCTYPE html>

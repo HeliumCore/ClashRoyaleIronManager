@@ -932,14 +932,15 @@ function updatePassword($db, $playerId, $password)
 }
 
 // -----------------   GET  -----------------
-function getHashedPassword($db, $playerdId)
+function getHashedPassword($db, $playerdTag)
 {
     $pattern = "
-    SELECT password, id
-    FROM account
-    WHERE player_id = %d
+    SELECT a.password, a.id
+    FROM account a
+    JOIN players p ON a.player_id = p.id
+    WHERE p.tag = \"%s\"
     ";
-    return fetch_query($db, sprintf($pattern, $playerdId));
+    return fetch_query($db, sprintf($pattern, $playerdTag));
 }
 // ==========================================
 
