@@ -21,7 +21,8 @@ if (!$isAdmin)
     header("Location: https://ironmanager.fr/index");
 
 $pauses = getAllPauses($db);
-// TODO tableaux absences avec data du manager
+
+//TODO ajouter/calculer les status de stats de guerre pour les afficher ici directement, avoir une meilleure liste
 ?>
 
 <!DOCTYPE html>
