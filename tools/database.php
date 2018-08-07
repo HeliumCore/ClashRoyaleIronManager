@@ -978,31 +978,37 @@ function insertPause($db, $accountId, $dates)
     VALUES %s
     ";
 
-//    TODO finish this
     $secondPattern = "";
-    var_dump($dates);
     if (sizeof($dates) > 1) {
         foreach ($dates as $date) {
-            $firstPattern = "(%d, %s),";
+            $firstPattern = "(%d, \"%s\"),";
             $firstQuery = sprintf($firstPattern, $accountId, $date);
             $secondPattern .= $firstQuery;
         }
 
         $secondPattern = substr($secondPattern, 0, -1);
     } else if (sizeof($dates) == 1) {
-        $firstPattern = "(%d, %s)";
+        $firstPattern = "(%d, \"%s\")";
         $firstQuery = sprintf($firstPattern, $accountId, $dates[0]);
         $secondPattern .= $firstQuery;
     } else {
         return;
     }
-
-    $query = sprintf($pattern, $secondPattern);
-    var_dump($query);
-    execute_query($db, $query);
+    execute_query($db, sprintf($pattern, $secondPattern));
 }
 
 // ----------------- UPDATE -----------------
+function deletePause($db, $accountId, $date) {
+    $pattern = "
+    DELETE FROM player_pause
+    WHERE pause = %s
+    AND account_id = %d
+    ";
+
+    //TODO verifier que les delete se fassent bien
+    var_dump(sprintf($pattern, $date, $accountId));
+    execute_query($db, sprintf($pattern, $date, $accountId));
+}
 
 // -----------------   GET  -----------------
 function getAllPauseByAccount($db, $accountId)
@@ -1013,7 +1019,11 @@ function getAllPauseByAccount($db, $accountId)
     WHERE account_id = %d
     ";
 
-    return fetch_all_query($db, sprintf($pattern, $accountId));
+    $pauses = array();
+    foreach (fetch_all_query($db, sprintf($pattern, $accountId)) as $pause) {
+        array_push($pauses, $pause['pause']);
+    }
+    return $pauses;
 }
 // ==========================================
 

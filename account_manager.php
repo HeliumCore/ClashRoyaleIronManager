@@ -12,10 +12,10 @@ if (session_status() == PHP_SESSION_NONE)
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     header('Location: https://ironmanager.fr/login.php');
 
-include(__DIR__ . "/tools/database.php");
-$playerTag = getPlayerInfoByAccountId($db, $_SESSION['accountId']);
+$accountId = $_SESSION['accountId'];
 
-// TODO faire le calendrier des absences
+include(__DIR__ . "/tools/database.php");
+$playerTag = getPlayerInfoByAccountId($db, $accountId);
 
 ?>
 
@@ -27,44 +27,53 @@ $playerTag = getPlayerInfoByAccountId($db, $_SESSION['accountId']);
     <?php include("head.php"); ?>
     <script>
         let dates = [];
+        let pauses = [];
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/query/ajax/get_player_pauses.php',
+                success(data) {
+                    if (data === 'false')
+                        return;
 
-        function addOrRemoveDate(date) {
-            let index = jQuery.inArray(date, dates);
-            if (index >= 0)
-                dates.splice(index, 1);
-            else {
-                if (jQuery.inArray(date, dates) < 0)
-                    dates.push(date);
-            }
-        }
-
-        jQuery(function () {
-            jQuery("#datepicker").datepicker({
-                dateFormat: "@",
-                onSelect: function (dateText, inst) {
-                    addOrRemoveDate(dateText);
-                },
-                beforeShowDay: function (date) {
-                    let gotDate = $.inArray($.datepicker.formatDate($(this).datepicker('option', 'dateFormat'), date), dates);
-                    if (gotDate >= 0) {
-                        return [true, "ui-state-highlight"];
-                    }
-                    return [true, ""];
+                    dates = dates.concat(JSON.parse(data));
+                    $("#datepicker").datepicker({
+                        dateFormat: "@",
+                        onSelect: function (dateText, inst) {
+                            addOrRemoveDate(dateText);
+                        },
+                        beforeShowDay: function (date) {
+                            let gotDate = $.inArray($.datepicker.formatDate($(this).datepicker('option', 'dateFormat'), date), dates);
+                            if (gotDate >= 0) {
+                                return [true, "ui-state-highlight"];
+                            }
+                            return [true, ""];
+                        }
+                    });
                 }
             });
         });
 
+        function addOrRemoveDate(date) {
+            let index = $.inArray(date, dates);
+            if (index >= 0)
+                dates.splice(index, 1);
+            else {
+                if ($.inArray(date, dates) < 0)
+                    dates.push(date);
+            }
+        }
+
+
         function selectDates() {
-            console.log(dates);
             $.ajax({
                 type: "POST",
-                url: "/query/insertPlayerPause.php",
+                url: "/query/ajax/insert_player_pause.php",
                 data: {
                     dates: dates
                 },
-                success(data) {
-                    //TODO do shit
-                    console.log(data);
+                success() {
+                    window.location.reload();
                 }
             })
         }
