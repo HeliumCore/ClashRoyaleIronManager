@@ -43,7 +43,14 @@
                 if (session_status() == PHP_SESSION_NONE)
                     session_start();
 
-                if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])): ?>
+                if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])):
+                    $accountId = intval($_SESSION['accountId']);
+                    $isAdmin = isAccountAdmin($db, $accountId);
+
+                    if ($isAdmin):
+                        ?>
+                        <li><a href="<?php print $BASE; ?>/admin">Admin</a></li>
+                    <?php endif; ?>
                     <li class="dropdown pointerHand">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/account_manager">Compte<span
                                     class="caret"></span></a>
@@ -55,7 +62,7 @@
                     </li>
                 <?php else: ?>
                     <li><a href="<?php print $BASE; ?>/login">Se connecter</a></li>
-                <?php endif;?>
+                <?php endif; ?>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

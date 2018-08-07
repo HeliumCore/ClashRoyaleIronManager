@@ -17,6 +17,7 @@ if ((!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     $playerTag = $_COOKIE['playerTag'];
     $remember = $_COOKIE['remember'];
 
+//     TODO ne fonctionne pas. a refaire/tester
     if ($playerTag == $remember) {
         $accountId = getAccountInfos($db, $playerTag)['id'];
         $date = new DateTime();

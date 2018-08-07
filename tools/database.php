@@ -998,16 +998,25 @@ function insertPause($db, $accountId, $dates)
 }
 
 // ----------------- UPDATE -----------------
-function deletePause($db, $accountId, $date) {
+function deletePause($db, $accountId, $date)
+{
     $pattern = "
     DELETE FROM player_pause
     WHERE pause = %s
     AND account_id = %d
     ";
 
-    //TODO verifier que les delete se fassent bien
-    var_dump(sprintf($pattern, $date, $accountId));
     execute_query($db, sprintf($pattern, $date, $accountId));
+}
+
+function deleteAllPauseByAccount($db, $accountId)
+{
+    $pattern = "
+    DELETE FROM player_pause
+    WHERE account_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $accountId));
 }
 
 // -----------------   GET  -----------------
@@ -1024,6 +1033,30 @@ function getAllPauseByAccount($db, $accountId)
         array_push($pauses, $pause['pause']);
     }
     return $pauses;
+}
+
+function getAllPauses($db) {
+    $query = "
+    SELECT p.name, GROUP_CONCAT(pp.pause) as pauses
+    FROM player_pause pp
+    JOIN account a ON pp.account_id = a.id
+    JOIN players p ON a.player_id = p.id
+    GROUP BY account_id
+    ";
+    return fetch_all_query($db, $query);
+}
+
+function isAccountAdmin($db, $accountId)
+{
+    $pattern = "
+    SELECT p.id
+    FROM account a
+    JOIN players p ON a.player_id = p.id
+    WHERE p.role_id <= 2
+    AND a.id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $accountId)) != null;
 }
 // ==========================================
 

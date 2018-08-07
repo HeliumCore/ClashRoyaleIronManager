@@ -8,15 +8,17 @@
 
 include(__DIR__ . "/../../tools/database.php");
 
-if (isset($_POST['dates']) && !empty($_POST['dates'])) {
-    $dates = $_POST['dates'];
-} else {
-    echo 'false';
-}
 if (session_status() == PHP_SESSION_NONE)
     session_start();
 
 $accountId = $_SESSION['accountId'];
+$dates = $_POST['dates'];
+
+if ($dates == null) {
+    deleteAllPauseByAccount($db, $accountId);
+    return;
+}
+
 $pauses = getAllPauseByAccount($db, $accountId);
 $diff = trueDiff($dates, $pauses);
 
@@ -28,9 +30,8 @@ foreach ($diff as $d) {
     }
 }
 
-function trueDiff($A, $B) {
+function trueDiff($A, $B)
+{
     $intersect = array_intersect($A, $B);
     return array_merge(array_diff($A, $intersect), array_diff($B, $intersect));
 }
-
-echo 'true';

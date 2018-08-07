@@ -17,6 +17,7 @@ $accountId = $_SESSION['accountId'];
 include(__DIR__ . "/tools/database.php");
 $playerTag = getPlayerInfoByAccountId($db, $accountId);
 
+//TODO refaire le design du calendrier
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +64,6 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId);
                     dates.push(date);
             }
         }
-
 
         function selectDates() {
             $.ajax({
@@ -143,7 +143,6 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId);
             <div>
                 <div class="form-group">
                     <label class="whiteShadow" for="datepicker">Choisir des dates :</label>
-                    <!--                    TODO refaire le design du calendrier -->
                     <div id="datepicker"></div>
                 </div>
                 <button name="btn-date" onclick="selectDates()" class="btn btn-success">Envoyer</button>

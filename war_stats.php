@@ -8,11 +8,16 @@
 
 include(__DIR__ . "/check_login.php");
 
+
+if (session_status() == PHP_SESSION_NONE)
+    session_start();
+
+if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
+    $accountId = intval($_SESSION['accountId']);
+    $isAdmin = isAccountAdmin($db, $accountId);
+}
+
 // TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
-
-// TODO tableaux absences avec data du manager
-
-// TODO afficher les status uniquement pour les chefs
 
 $allWarStats = getAllWarStats($db);
 $seasons = array_unique(array_column($allWarStats, "season"));
@@ -275,9 +280,11 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $lsAllCardsEarned; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $lsAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $lsAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -306,16 +313,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
@@ -347,9 +358,11 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <?php if ($lsAllWars != 0) echo '' . round(($lsAllBattlePlayed / $lsAllWars) * 100);
                                     else echo '--'; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $lsAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $lsAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -376,17 +389,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?>
                                     </td>
 
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -437,9 +453,11 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $psAllCardsEarned; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $psAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $psAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -468,17 +486,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -509,9 +530,11 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <?php if ($psAllWars != 0) echo '' . round(($psAllBattlePlayed / $psAllWars) * 100);
                                     else echo '--'; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $psAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $psAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -538,17 +561,21 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?>
                                     </td>
 
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
+
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -599,9 +626,12 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $spsAllCardsEarned; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $spsAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $spsAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
+
                             </tr>
                             </tbody>
                         </table>
@@ -630,17 +660,21 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
+
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -671,9 +705,12 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <?php if ($spsAllWars != 0) echo '' . round(($spsAllBattlePlayed / $spsAllWars) * 100);
                                     else echo '--'; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $spsAllBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $spsAllBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
+
                             </tr>
                             </tbody>
                         </table>
@@ -699,18 +736,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     </td>
                                     <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?>
                                     </td>
-
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -761,9 +800,12 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                 <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
                                                                          height="35px"/>&nbsp;<?php echo $allCardsEarned; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
+
                             </tr>
                             </tbody>
                         </table>
@@ -792,17 +834,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow"><img src="/images/ui/deck.png"
                                                                  height="35px"/>&nbsp;<?php echo $player['totalCardsEarned']; ?>
                                     </td>
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
@@ -833,9 +878,11 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <?php if ($allWars != 0) echo '' . round(($allBattlePlayed / $allWars) * 100);
                                     else echo '--'; ?>
                                 </td>
-                                <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
-                                                            style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span>
-                                </td>
+                                <?php if ($isAdmin): ?>
+                                    <td bgcolor="#D42F2F"><span class="whiteShadow text-center"
+                                                                style="display:block;width: 41px;margin:auto"><?php echo $allBadStatus; ?></span>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -862,17 +909,20 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                                     <td class="whiteShadow text-center">Absence<br><?php echo $player['missedWar'] ?>
                                     </td>
 
-                                    <!-- Status -->
-                                    <?php if ($player['ban']) : ?>
-                                        <td bgcolor="#D42F2F" class="text-center"><img src="/images/ui/no-cancel.png"
-                                                                                       height="35px"/></td>
-                                    <?php elseif ($player['warning']): ?>
-                                        <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
-                                                                                       height="35px"/></td>
-                                    <?php else : ?>
-                                        <td bgcolor="#66B266" class="text-center"><img src="/images/ui/yes-confirm.png"
-                                                                                       height="35px"/></td>
-                                    <?php endif; ?>
+                                    <?php if ($isAdmin): ?>
+                                        <!-- Status -->
+                                        <?php if ($player['ban']) : ?>
+                                            <td bgcolor="#D42F2F" class="text-center"><img
+                                                        src="/images/ui/no-cancel.png"
+                                                        height="35px"/></td>
+                                        <?php elseif ($player['warning']): ?>
+                                            <td bgcolor="#FFB732" class="text-center"><img src="/images/ui/watch.png"
+                                                                                           height="35px"/></td>
+                                        <?php else : ?>
+                                            <td bgcolor="#66B266" class="text-center"><img
+                                                        src="/images/ui/yes-confirm.png"
+                                                        height="35px"/></td>
+                                        <?php endif; endif; ?>
                                 </tr>
                                 <input type="hidden" class="hd_playerName"
                                        value="<?php print utf8_encode($player['name']); ?>"/>
