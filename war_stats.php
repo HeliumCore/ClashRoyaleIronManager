@@ -19,6 +19,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 
 // TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
 
+// TODO revoir requete, ne doit pas prendre la guerre en cours
 $allWarStats = getAllWarStats($db);
 $seasons = array_unique(array_column($allWarStats, "season"));
 rsort($seasons);
