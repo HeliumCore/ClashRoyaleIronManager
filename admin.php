@@ -23,6 +23,8 @@ if (!$isAdmin)
 $pauses = getAllPauses($db);
 
 //TODO ajouter/calculer les status de stats de guerre pour les afficher ici directement, avoir une meilleure liste
+
+//TODO trier les dates par ordre chrono, ne pas afficher les dates passées (sauf sur appuie bouton?)
 ?>
 
 <!DOCTYPE html>

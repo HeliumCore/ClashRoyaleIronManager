@@ -757,7 +757,7 @@ function getAllWarStats($db)
             w.season
             FROM player_war pw
             JOIN players p ON pw.player_id = p.id AND p.in_clan = 1
-            JOIN war w ON pw.war_id = w.id
+            JOIN war w ON pw.war_id = w.id AND w.past_war > 0
             WHERE w.season != 0
             GROUP BY pw.player_id, w.season
             ORDER BY p.rank ASC, w.season DESC
@@ -773,7 +773,7 @@ function getAllWarStats($db)
             SUM(IFNULL(battle_won, 0)) as total_battle_won, 0
             FROM player_war pw
             JOIN players p ON pw.player_id = p.id AND p.in_clan = 1
-            JOIN war w ON pw.war_id = w.id
+            JOIN war w ON pw.war_id = w.id AND w.past_war > 0
             WHERE w.season != 0
             GROUP BY pw.player_id
         )    

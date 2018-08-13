@@ -164,7 +164,7 @@ foreach ($allWarStats as $player) {
         $spsAllBattlePlayed += $totalBattlesPlayed;
         $spsAllBattleWon += $totalBattlesWon;
         $spsAllMissedWar += $missedWar;
-    } else if ($season == intval($seasons[3])) {
+    } else if ($season == 0) {
         if ($playerInfo['warning'] || $playerInfo['ban']) {
             $allBadStatus++;
         }
