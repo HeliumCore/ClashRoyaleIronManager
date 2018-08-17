@@ -8,6 +8,8 @@
 
 include(__DIR__ . "/tools/database.php");
 include(__DIR__ . "/tools/api_conf.php");
+include_once(__DIR__ . "/check_login.php");
+
 
 if (isset($_GET['tab']) && !empty($_GET['tab'])) {
     $currentTab = $_GET['tab'];

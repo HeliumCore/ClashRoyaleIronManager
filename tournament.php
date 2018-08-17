@@ -6,6 +6,9 @@
  * Time: 15:46
  */
 
+include(__DIR__ . "/tools/database.php");
+include_once(__DIR__ . "/check_login.php");
+
 // TODO si pas de cookie -> redirect vers la page de choix du joueur - voir si on oblige pas a avoir un compte
 ?>
 <!DOCTYPE html>

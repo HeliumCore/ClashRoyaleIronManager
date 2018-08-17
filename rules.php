@@ -5,6 +5,8 @@
  * Date: 01/08/18
  * Time: 14:41
  */
+include(__DIR__ . "/tools/database.php");
+include_once(__DIR__ . "/check_login.php");
 
 ?>
 <!DOCTYPE html>
