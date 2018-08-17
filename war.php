@@ -8,6 +8,8 @@
 
 include(__DIR__ . "/tools/database.php");
 include(__DIR__ . "/tools/api_conf.php");
+include_once(__DIR__ . "/check_login.php");
+
 
 if (isset($_GET['order']) && !empty($_GET['order'])) {
     $order = $_GET['order'];

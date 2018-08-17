@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE)
     session_start();
 
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
-    header('Location: https://ironmanager.fr/login.php');
+    header('Location: https://ironmanager.fr/login');
 
 $accountId = $_SESSION['accountId'];
 

@@ -7,6 +7,7 @@
  */
 
 include(__DIR__ . "/tools/database.php");
+include_once(__DIR__ . "/check_login.php");
 
 $lastUpdated = getLastUpdated($db, "index");
 
