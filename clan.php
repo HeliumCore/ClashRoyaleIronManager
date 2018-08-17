@@ -99,11 +99,11 @@ $lastUpdated = getLastUpdated($db, "index");
                     </td>
                     <td class=" text-center whiteShadow">
                         Reçues <br>
-                        <?php print $player['donations'] ?>
+                        <?php print $player['donations_received'] ?>
                     </td>
                     <td class=" text-center whiteShadow">
                         Données <br>
-                        <?php print $player['donations_received'] ?>
+                        <?php print $player['donations'] ?>
                     </td>
                 </tr>
                 <input type="hidden" class="hd_playerName" value="<?php print utf8_encode($player['playerName']); ?>"/>
