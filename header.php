@@ -27,7 +27,7 @@
                 <?php
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
-                if (in_array($path, $allowedUpdate)):
+                if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
                     ?>
                     <li>
                         <a class="pointerHand" onclick="update()">

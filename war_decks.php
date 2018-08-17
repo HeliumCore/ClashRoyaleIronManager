@@ -175,9 +175,9 @@ function getDeckLink($deck)
         print '<ul class="pagination pagination-lg">';
         for ($i = 1; $i <= $numberOfPages; $i++):
             if ($i == $currentPageNumber):
-                print '<li class="active"><a href="war_decks.php?tab=current&page=' . $i . '">' . $i . '</a></li>';
+                print '<li class="active"><a href="/war_decks?tab=current&page=' . $i . '">' . $i . '</a></li>';
             else:
-                print '<li><a href="war_decks.php?tab=current&page=' . $i . '">' . $i . '</a></li>';
+                print '<li><a href="/war_decks?tab=current&page=' . $i . '">' . $i . '</a></li>';
             endif;
         endfor;
         print '</ul>';
@@ -278,9 +278,9 @@ function getDeckLink($deck)
         print '<ul class="pagination pagination-md">';
         for ($i = 1; $i <= $numberOfPages; $i++):
             if ($i == $allWarsPageNumber):
-                print '<li class="active"><a href="war_decks.php?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
+                print '<li class="active"><a href="/war_decks?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
             else:
-                print '<li><a href="war_decks.php?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
+                print '<li><a href="/war_decks?tab=allWar&page=' . $i . '">' . $i . '</a></li>';
             endif;
         endfor;
         print '</ul>';
