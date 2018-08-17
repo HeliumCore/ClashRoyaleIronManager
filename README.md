@@ -1,2 +1,3 @@
 # ClashRoyaleIronManager
-Website for managing a clan in the game Clash Royale, only for our clan (Iron), can be easly modified for other clan
+Website for managing a clan in the game Clash Royale.
+Only for our clan (Iron), but can be easily be modified for your clan.
