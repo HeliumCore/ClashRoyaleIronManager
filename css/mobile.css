@@ -7,4 +7,8 @@
     .h1 {
         font-size: 1.8em;
     }
+
+    .dropdown-menu > li > a {
+        font-size: 10px;
+    }
 }

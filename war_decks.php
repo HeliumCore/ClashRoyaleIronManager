@@ -6,7 +6,7 @@
  * Time: 14:38
  */
 
-include(__DIR__ . "/check_login.php");
+include(__DIR__ . "/tools/database.php");
 include(__DIR__ . "/tools/api_conf.php");
 
 if (isset($_GET['tab']) && !empty($_GET['tab'])) {

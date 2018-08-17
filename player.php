@@ -6,8 +6,8 @@
  * Time: 16:08
  */
 
-include(__DIR__ . "/check_login.php");
-include("tools/api_conf.php");
+include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/tools/api_conf.php");
 
 $playerTag = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
 if (empty($playerTag)) {

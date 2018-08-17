@@ -6,8 +6,8 @@
  * Time: 16:41
  */
 
-include(__DIR__ . "/check_login.php");
-include("tools/api_conf.php");
+include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/tools/api_conf.php");
 
 if (isset($_GET['order']) && !empty($_GET['order'])) {
     $order = $_GET['order'];

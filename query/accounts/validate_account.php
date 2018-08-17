@@ -26,10 +26,11 @@ if (validate_pw($password, $passwordHashed)) {
     $date = new DateTime();
     $time = $date->getTimestamp();
     setLastVisit($db, $passInfos['id'], $time);
+    setcookie('remember', $playerTag, strtotime( '+30 days' ), "/");
     $_SESSION['accountId'] = $passInfos['id'];
     echo 'true';
 } else {
-    setcookie('remember', '', 1);
+    setcookie('remember', null, -1, "/");
     session_destroy();
     echo 'false';
 }

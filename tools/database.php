@@ -210,6 +210,16 @@ function getNumberOfPlayersInClan($db)
     return sizeof(getAllPlayersInClan($db));
 }
 
+function getPlayerTagByAccountId($db, $accountId) {
+    $pattern = "
+    SELECT p.tag
+    FROM players p
+    JOIN account a ON p.id = a.player_id
+    WHERE a.id = %d
+    ";
+    return fetch_query($db, sprintf($pattern, $accountId));
+}
+
 // ==========================================
 
 
@@ -1059,4 +1069,3 @@ function isAccountAdmin($db, $accountId)
     return fetch_query($db, sprintf($pattern, $accountId)) != null;
 }
 // ==========================================
-

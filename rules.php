@@ -6,8 +6,6 @@
  * Time: 14:41
  */
 
-include(__DIR__ . "/check_login.php");
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -6,7 +6,7 @@
  * Time: 17:02
  */
 
-include(__DIR__ . "/check_login.php");
+include(__DIR__ . "/tools/database.php");
 
 if (session_status() == PHP_SESSION_NONE)
     session_start();
@@ -18,13 +18,13 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 
 // Si l'utilisateur n'est pas admin, on redirige
 if (!$isAdmin)
-    header("Location: https://ironmanager.fr/index");
+    header("Location: https://ironmanager.fr/login");
 
 $pauses = getAllPauses($db);
 
 //TODO ajouter/calculer les status de stats de guerre pour les afficher ici directement, avoir une meilleure liste
 
-//TODO trier les dates par ordre chrono, ne pas afficher les dates passées (sauf sur appuie bouton?)
+// TODO cacher les dates de pauses passées
 ?>
 
 <!DOCTYPE html>
@@ -49,9 +49,20 @@ $pauses = getAllPauses($db);
                         <div>
                             <span class="whiteShadow"><?php print $playerPause['name']; ?> :</span><br>
                             <ul>
-                                <?php foreach (explode(',', $playerPause['pauses']) as $p):
-                                    print '<li class="whiteShadow">' . date('d/m/Y', ($p / 1000)) . '</li>';
-                                endforeach; ?>
+                                <?php
+                                $playerPauses = explode(',', $playerPause['pauses']);
+                                sort($playerPauses);
+                                $firstDay = $playerPauses[0];
+                                $previousDay = $playerPauses[0];
+                                if (sizeof($playerPauses) > 1):
+                                    for ($i = 1; $i <= sizeof($playerPauses) - 1; $i++):
+                                        if ($playerPauses[$i] - $previousDay == 86400000):
+                                            $previousDay = $playerPauses[$i];
+                                        endif;
+                                    endfor;
+                                    $lastDay = $playerPauses[sizeof($playerPauses) - 1];
+                                    print '<li class="whiteShadow">Du ' . date('d/m/Y', ($firstDay / 1000)) . ' au ' . date('d/m/Y', ($lastDay / 1000)) . '</li>';
+                                endif; ?>
                             </ul>
                         </div>
                         <br>
