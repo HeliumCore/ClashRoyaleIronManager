@@ -9,10 +9,8 @@
 if (session_status() == PHP_SESSION_NONE)
     session_start();
 
-$accountId = $_SESSION['accountId'];
-$playerTag = $_COOKIE['remember'];
-if ((!isset($accountId) || empty($accountId)) && isset($playerTag) && !empty($playerTag)) {
-    $accountId = getAccountInfos($db, $playerTag)['id'];
+if (empty($_SESSION['accountId']) && !empty($_COOKIE['remember'])) {
+    $accountId = getAccountInfos($db, $_COOKIE['remember'])['id'];
     $date = new DateTime();
     $time = $date->getTimestamp();
     setLastVisit($db, $accountId, $time);
