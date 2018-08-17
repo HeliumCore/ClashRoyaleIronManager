@@ -6,11 +6,8 @@
  * Time: 14:53
  */
 require_once('conf.php');
-try {
-    $db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
+
+$db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
 
 // ================== SQL ===================
 function fetch_query($db, $query)

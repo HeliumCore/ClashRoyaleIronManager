@@ -11,6 +11,7 @@ include(__DIR__ . "/tools/database.php");
 if (session_status() == PHP_SESSION_NONE)
     session_start();
 
+$isAdmin = false;
 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
     $accountId = intval($_SESSION['accountId']);
     $isAdmin = isAccountAdmin($db, $accountId);

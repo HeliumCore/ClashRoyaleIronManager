@@ -10,22 +10,18 @@
             </button>
             <a class="navbar-brand" href="/index">Iron</a>
         </div>
-        <?php
-        $BASE = "https://ironmanager.fr";
-        ?>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="<?php print $BASE; ?>/clan">Clan</a></li>
+                <li><a href="/clan">Clan</a></li>
                 <li class="dropdown pointerHand">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/war">Guerre<span
-                                class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="/war">Guerre<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-li"><a href="<?php print $BASE; ?>/war">Guerre en cours</a></li>
-                        <li class="dropdown-li"><a href="<?php print $BASE; ?>/war_decks">Decks</a></li>
-                        <li class="dropdown-li"><a href="<?php print $BASE; ?>/war_stats">Statistiques</a></li>
+                        <li class="dropdown-li"><a href="/war">Guerre en cours</a></li>
+                        <li class="dropdown-li"><a href="/war_decks">Decks</a></li>
+                        <li class="dropdown-li"><a href="/war_stats">Statistiques</a></li>
                     </ul>
                 </li>
-                <li><a href="<?php print $BASE; ?>/rules">Réglement</a></li>
+                <li><a href="/rules">Réglement</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right pointerHand">
                 <?php
@@ -40,8 +36,10 @@
                     </li>
                 <?php endif;
 
+                /* Err -> headers already been sent !
                 if (session_status() == PHP_SESSION_NONE)
                     session_start();
+                */
 
                 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])):
                     $accountId = intval($_SESSION['accountId']);
@@ -49,19 +47,18 @@
 
                     if ($isAdmin):
                         ?>
-                        <li><a href="<?php print $BASE; ?>/admin">Admin</a></li>
+                        <li><a href="/admin">Admin</a></li>
                     <?php endif; ?>
                     <li class="dropdown pointerHand">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="<?php print $BASE; ?>/account_manager">Compte<span
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/account_manager">Gestion du
-                                    compte</a></li>
-                            <li class="dropdown-li"><a href="<?php print $BASE; ?>/index/logout">Se deconnecter</a></li>
+                            <li class="dropdown-li"><a href="/account_manager">Gestion du compte</a></li>
+                            <li class="dropdown-li"><a href="/index/logout">Se deconnecter</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
-                    <li><a href="<?php print $BASE; ?>/login">Se connecter</a></li>
+                    <li><a href="/login">Se connecter</a></li>
                 <?php endif; ?>
             </ul>
         </div><!--/.nav-collapse -->

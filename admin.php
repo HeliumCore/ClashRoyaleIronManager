@@ -18,7 +18,7 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 
 // Si l'utilisateur n'est pas admin, on redirige
 if (!$isAdmin)
-    header("Location: https://ironmanager.fr/login");
+    header("Location: /login");
 
 $pauses = getAllPauses($db);
 

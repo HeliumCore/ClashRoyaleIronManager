@@ -7,8 +7,8 @@
  */
 include(__DIR__ . "/tools/database.php");
 
-if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
-    header('HTTP/1.1 301 Moved Permanently');
+$bForceHttpsLogin = defined('FORCE_HTTPS_LOGIN')?FORCE_HTTPS_LOGIN:true;
+if ($bForceHttpsLogin && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off")) {
     header('Location: https://ironmanager.fr/login');
     exit();
 }
@@ -16,20 +16,19 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
 if (session_status() == PHP_SESSION_NONE)
     session_start();
 
-$accountId = $_SESSION['accountId'];
-if (isset($accountId) && !empty($accountId)) {
-    $playerTag  = getPlayerTagByAccountId($db, $accountId)['tag'];
-    header('Location: https://ironmanager.fr/player/' . $playerTag);
+if (!empty($_SESSION['accountId'])) {
+    $playerTag  = getPlayerTagByAccountId($db, $_SESSION['accountId'])['tag'];
+    header('Location: /player/' . $playerTag);
 }
 
-$playerTag = $_COOKIE['remember'];
-if (isset($playerTag) && !empty($playerTag)) {
-    $accountId = getAccountInfos($db, $playerTag)['id'];
+if (!empty($_COOKIE['remember'])) {
+    $playerTag = $_COOKIE['remember'];
+    $accountId = getAccountInfos($db, $_COOKIE['remember'])['id'];
     $date = new DateTime();
     $time = $date->getTimestamp();
     setLastVisit($db, $accountId, $time);
     $_SESSION['accountId'] = $accountId;
-    header("Location: https://ironmanager.fr/player/" . $playerTag);
+    header("Location: /player/" . $playerTag);
 }
 ?>
 <!DOCTYPE html>

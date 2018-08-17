@@ -16,4 +16,4 @@ if ($logout == "logout") {
     session_unset();
     session_destroy();
 }
-header('Location: https://ironmanager.fr/login');
+header('Location: /login');

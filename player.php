@@ -11,7 +11,7 @@ include(__DIR__ . "/tools/api_conf.php");
 
 $playerTag = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
 if (empty($playerTag)) {
-    header('Location: https://ironmanager.fr/clan.php');
+    header('Location: /clan');
 }
 
 $player = getPlayerInfos($db, $playerTag);

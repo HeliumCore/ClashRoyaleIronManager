@@ -1,7 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lmironne
- * Date: 03/07/18
- * Time: 09:37
- */
+// Database hostname
+define('DBHOST', 'localhost');
+
+// Database name
+define('DBNAME', 'ironmanager');
+
+// Database user name
+define('DBUSER', '');
+
+// Database password
+define('DBPASS', '');
+
+// Define this to access login page locally
+// define('FORCE_HTTPS_LOGIN', false);

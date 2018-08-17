@@ -1,4 +1,6 @@
 .idea/
 *.iml
 .idea/encodings.xml
-conf.php
+tools/conf.php
+.project
+.buildpath
