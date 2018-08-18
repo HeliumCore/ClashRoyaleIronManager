@@ -147,7 +147,7 @@ if ($state == "collectionDay") {
             <?php
             if ($state == "warDay") { ?>
                 <div class="divStandings table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <tbody>
                         <?php
                         if (isset($standings)) {
@@ -179,7 +179,7 @@ if ($state == "collectionDay") {
                 </div>
             <?php } else { ?>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <tbody>
                         <tr>
                             <td class="whiteShadow text-center">Participants<br><span id="numberOfParticipant"></span>
@@ -207,7 +207,7 @@ if ($state == "collectionDay") {
             </div>
             <br>
             <div class="divCurrentWar table-responsive">
-                <table id="tableIndex" class="table">
+                <table id="tableIndex" class="table table-hover">
                     <thead>
                     <tr class="rowIndex">
                         <th class="text-center headIndex">Rang</th>

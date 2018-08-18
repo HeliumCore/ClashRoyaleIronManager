@@ -291,7 +291,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($lsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -369,7 +369,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($lsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -464,7 +464,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($psPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -541,7 +541,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($psPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -638,7 +638,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($spsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -717,7 +717,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($spsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -812,7 +812,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($playerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
@@ -889,7 +889,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table js-player-table" id="tableIndex">
+                        <table class="table js-player-table table-hover" id="tableIndex">
                             <tbody>
                             <?php foreach ($playerList as $player) : ?>
                                 <tr class="pointerHand playerTr">

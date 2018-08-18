@@ -15,7 +15,7 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
 $accountId = $_SESSION['accountId'];
 
 include(__DIR__ . "/tools/database.php");
-$playerTag = getPlayerInfoByAccountId($db, $accountId);
+$playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
 
 //TODO refaire le design du calendrier
 ?>
@@ -85,22 +85,23 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId);
             if (!oldPass.trim() || !newPass.trim())
                 return;
 
+            let tag = $('#playerTag').val();
             $.ajax({
                 type: "POST",
                 url: "query/accounts/update_password.php",
                 data: {
                     old: oldPass,
                     new: newPass,
-                    tag: $('#playerTag').val()
+                    tag: tag
                 },
                 success: function (data) {
                     $('#passwordChangeForm').hide();
-                    if (data === 'false') {
-                        $('#passwordChangeFailed').show();
-                        $('#passwordChangeSuccess').hide();
-                    } else {
+                    if (data === 'true') {
                         $('#passwordChangeSuccess').show();
                         $('#passwordChangeFailed').hide();
+                    } else {
+                        $('#passwordChangeFailed').show();
+                        $('#passwordChangeSuccess').hide();
                     }
                 }
             });

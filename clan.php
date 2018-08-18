@@ -11,7 +11,6 @@ include_once(__DIR__ . "/check_login.php");
 
 $lastUpdated = getLastUpdated($db, "index");
 
-//TODO refaire les images d'arènes 1-12
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,13 +58,13 @@ $lastUpdated = getLastUpdated($db, "index");
         </div>
     </div>
     <div class="table-responsive">
-        <table id="tableIndex" class="table tableIndex">
+        <table id="tableIndex" class="table tableIndex table-hover">
             <thead>
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
                 <th class="headIndex">Nom</th>
                 <th class="headIndex">Trophée</th>
-                <th class="headIndex">Arène</th>
+                <th class="headIndex text-center">Arène</th>
                 <th class="headIndex text-center" colspan="2">Dons</th>
             </tr>
             </thead>
@@ -85,8 +84,8 @@ $lastUpdated = getLastUpdated($db, "index");
                     <td class=" whiteShadow">
                         <?php print $player['trophies'] ?> <img src="/images/ui/trophy.png" height="20px">
                     </td>
-                    <td class="">
-                        <?php if ($player['arena_id'] > 9): ?>
+                    <td class="text-center">
+                        <?php if ($player['arena_id'] > 5): ?>
                             <img src="/images/arenas/arena-<?php print $player['arena_id']; ?>.png"
                                  title="<?php print $player['arena']; ?>" height="50px">
                         <?php else : ?>

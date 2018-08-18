@@ -935,7 +935,7 @@ function updatePassword($db, $playerId, $password)
     SET password = \"%s\"
     WHERE player_id = %d
     ";
-    execute_query($db, sprintf($pattern, $playerId, $password));
+    execute_query($db, sprintf($pattern, $password, $playerId));
 }
 
 function setLastVisit($db, $accountId, $time)
@@ -969,7 +969,6 @@ function getPlayerInfoByAccountId($db, $accountId)
     JOIN account a ON p.id = a.player_id
     WHERE a.id = %d
     ";
-
     return fetch_query($db, sprintf($pattern, $accountId));
 }
 
