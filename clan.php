@@ -64,7 +64,6 @@ $lastUpdated = getLastUpdated($db, "index");
             <tr class="rowIndex">
                 <th class="headIndex">Rang</th>
                 <th class="headIndex">Nom</th>
-                <th class="headIndex hidden-xs">Tag</th>
                 <th class="headIndex">Trophée</th>
                 <th class="headIndex">Arène</th>
                 <th class="headIndex text-center" colspan="2">Dons</th>
@@ -83,7 +82,6 @@ $lastUpdated = getLastUpdated($db, "index");
                         <?php print utf8_encode($player['playerRole']); ?>
                     </span>
                     </td>
-                    <td class=" whiteShadow hidden-xs"> <?php print $player['tag']; ?></td>
                     <td class=" whiteShadow">
                         <?php print $player['trophies'] ?> <img src="/images/ui/trophy.png" height="20px">
                     </td>
