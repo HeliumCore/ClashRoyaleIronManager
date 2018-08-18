@@ -26,7 +26,7 @@ $passInfos = getAccountInfos($db, $playerTag);
 $date = new DateTime();
 $time = $date->getTimestamp();
 
-if (is_array($passInfos)) {
+if (!is_array($passInfos)) {
     $passwordHashed = generate_hash($password);
     $accountId = createAccount($db, intval($playerInfos['id']), $passwordHashed, $time);
     if ($accountId < 1) {
