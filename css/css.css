@@ -167,7 +167,7 @@ tbody tr:nth-child(5) .rank span {
     color: #777;
 }
 
-#passwordChangeFailed, #passwordChangeSuccess, #loginFailed, #playerExists, #registerFailed {
+#passwordChangeFailed, #passwordChangeSuccess, #loginFailed, #registerFailed, #playerNotInClan {
     display: none;
 }
 

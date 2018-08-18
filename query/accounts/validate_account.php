@@ -16,21 +16,46 @@ if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['tag
     return;
 }
 
-$passInfos = getAccountInfos($db, $playerTag);
-$passwordHashed = $passInfos['password'];
+$playerInfos = getPlayerByTag($db, $playerTag);
+if ($playerInfos == null) {
+    echo 'wrongTag';
+    return;
+}
 
-if (validate_pw($password, $passwordHashed)) {
+$passInfos = getAccountInfos($db, $playerTag);
+$date = new DateTime();
+$time = $date->getTimestamp();
+
+if (is_array($passInfos)) {
+    $passwordHashed = generate_hash($password);
+    $accountId = createAccount($db, intval($playerInfos['id']), $passwordHashed, $time);
+    if ($accountId < 1) {
+        echo 'registerFailed';
+        return;
+    }
+
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-    $date = new DateTime();
-    $time = $date->getTimestamp();
-    setLastVisit($db, $passInfos['id'], $time);
+    $_SESSION['accountId'] = $accountId;
+    setLastVisit($db, $accountId, $time);
     setcookie('remember', $playerTag, strtotime( '+30 days' ), "/");
-    $_SESSION['accountId'] = $passInfos['id'];
-    echo 'true';
+    setcookie('playerTag', $playerTag, strtotime( '+30 days' ), "/");
+    echo 'registerOk';
 } else {
-    setcookie('remember', null, -1, "/");
-    session_destroy();
-    echo 'false';
+    if (validate_pw($password, $passInfos['password'])) {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['accountId'] = $passInfos['id'];
+        setLastVisit($db, $passInfos['id'], $time);
+        setcookie('remember', $playerTag, strtotime( '+30 days' ), "/");
+        setcookie('playerTag', $playerTag, strtotime( '+30 days' ), "/");
+        echo 'loginOk';
+    } else {
+        setcookie('remember', null, -1, "/");
+        setcookie('playerTag', null, -1, "/");
+        session_destroy();
+        echo 'wrongPass';
+    }
 }

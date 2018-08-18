@@ -8,13 +8,13 @@
 
 include(__DIR__ . "/../../tools/database.php");
 
-if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
+if (isset($_POST['tag']) && !empty($_POST['tag'])) $playerTag = $_POST['tag'];
 else {
     echo 'false';
     return;
 }
 
-if (getPlayerByTag($db, $playerTag) == null)
+if (getAccountInfos($db, $playerTag) == false)
     echo 'false';
 else
     echo 'true';

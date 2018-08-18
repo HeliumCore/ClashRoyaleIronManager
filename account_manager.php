@@ -53,6 +53,12 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
                     });
                 }
             });
+
+            $("#newPass").keyup(function(event) {
+                if (event.keyCode === 13) {
+                    $("#changePassBtn").click();
+                }
+            });
         });
 
         function addOrRemoveDate(date) {
@@ -132,7 +138,7 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
                         <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
                         <input type="password" id="newPass" class="pull-right">
                     </div>
-                    <button name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">
+                    <button id="changePassBtn" name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">
                         Envoyer
                     </button>
                 </div>

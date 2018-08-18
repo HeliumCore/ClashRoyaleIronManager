@@ -209,7 +209,7 @@ function getNumberOfPlayersInClan($db)
 
 function getPlayerTagByAccountId($db, $accountId) {
     $pattern = "
-    SELECT p.tag
+    SELECT p.tag, p.name
     FROM players p
     JOIN account a ON p.id = a.player_id
     WHERE a.id = %d
@@ -975,7 +975,7 @@ function getPlayerInfoByAccountId($db, $accountId)
 // ==========================================
 
 
-// ================= ACCOUNTS ===============
+// ================= PAUSES =================
 // ----------------- INSERT -----------------
 function insertPause($db, $accountId, $dates)
 {

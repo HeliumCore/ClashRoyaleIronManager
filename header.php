@@ -44,7 +44,7 @@
                 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])):
                     $accountId = intval($_SESSION['accountId']);
                     $isAdmin = isAccountAdmin($db, $accountId);
-
+                    $playerInfos = getPlayerTagByAccountId($db, $accountId);
                     if ($isAdmin):
                         ?>
                         <li><a href="/admin">Admin</a></li>
@@ -53,7 +53,7 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-li"><a href="/account_manager">Gestion du compte</a></li>
+                            <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name'];?> - Gestion</a></li>
                             <li class="dropdown-li"><a href="/index/logout">Se deconnecter</a></li>
                         </ul>
                     </li>

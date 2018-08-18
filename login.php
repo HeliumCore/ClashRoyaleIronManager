@@ -55,18 +55,39 @@ if (!empty($_COOKIE['remember'])) {
                         select: function (event, ui) {
                             let tag = ui.item.label.substr(0, 9).trim();
                             $('#search').val(tag);
+                            $.ajax({
+                                type: "POST",
+                                url: "query/accounts/ajax_check_player_tag.php",
+                                data: {
+                                    tag: tag
+                                },
+                                success(data) {
+                                    let btn = $('#btn-login');
+                                    if (data === 'false') {
+                                        btn.html("Créer un compte");
+                                        btn.addClass("btn-warning");
+                                        btn.removeClass("btn-success");
+                                    } else {
+                                        btn.html("Se connecter");
+                                        btn.addClass("btn-success");
+                                        btn.removeClass("btn-warning");
+                                    }
+                                }
+                            });
                             return false;
                         }
                     });
                 }
             });
 
-            $('#btn-register').click(function () {
-                launchSearch('register');
+            $('#btn-login').click(function () {
+                launchSearch();
             });
 
-            $('#btn-login').click(function () {
-                launchSearch('login');
+            $("#password").keyup(function(event) {
+                if (event.keyCode === 13) {
+                    $("#btn-login").click();
+                }
             });
         });
 
@@ -80,7 +101,7 @@ if (!empty($_COOKIE['remember'])) {
             }
         }
 
-        function launchSearch(state) {
+        function launchSearch() {
             let search = $('#search').val();
             let password = $('#password').val();
 
@@ -90,70 +111,33 @@ if (!empty($_COOKIE['remember'])) {
             if (search.charAt(0) === '#')
                 search = search.substr(1);
 
-            if (state === 'register') {
-                $.ajax({
-                    url: "query/accounts/ajax_check_player_tag.php?tag=".concat(search),
-                    success: function (data) {
-                        if (data === 'false')
-                            return;
-
-                        createAccount(search, password);
-                    }
-                });
-            } else if (state === 'login') {
-                loginAccount(search, password);
-            }
-        }
-
-        function loginAccount(search, password) {
             $.ajax({
-                type: 'POST',
+                type: "POST",
                 url: "query/accounts/validate_account.php",
                 data: {
                     tag: search,
                     password: password
                 },
                 success: function (data) {
-                    if (data === 'false') {
-                        $('#playerExists').hide();
+                    if (data === 'wrongTag') {
+                        $('#playerNotInClan').show();
+                        $('#loginFailed').hide();
+                        $('#registerFailed').hide();
+                    } else if (data === 'wrongPass') {
+                        $('#playerNotInClan').hide();
                         $('#loginFailed').show();
                         $('#registerFailed').hide();
-                    } else {
-                        $('#loaderDiv').show();
-                        let date = new Date();
-                        date.setTime(+date + (365 * 86400000));
-                        document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                        window.location.replace("player/".concat(search));
-                    }
-                }
-            })
-        }
-
-        function createAccount(search, password) {
-            $.ajax({
-                type: 'POST',
-                url: "query/accounts/create_account.php",
-                data: {
-                    tag: search,
-                    password: password
-                },
-                success: function (data) {
-                    if (data === 'true') {
-                        let date = new Date();
-                        date.setTime(+date + (365 * 86400000));
-                        document.cookie = "playerTag=" + search + ";expires=" + date.toUTCString();
-                        window.location.replace("player/".concat(search));
-                    } else if (data === 'exists') {
-                        $('#playerExists').show();
-                        $('#loginFailed').hide();
-                        $('#registerFailed').hide();
-                    } else {
-                        $('#playerExists').hide();
+                    } else if (data === 'registerFailed') {
+                        $('#playerNotInClan').hide();
                         $('#loginFailed').hide();
                         $('#registerFailed').show();
+                    } else if (data === 'loginOk') {
+                        window.location.replace("player/".concat(search));
+                    } else if (data === 'registerOk') {
+                        window.location.replace("account_manager");
                     }
                 }
-            })
+            });
         }
     </script>
 </head>
@@ -169,8 +153,8 @@ if (!empty($_COOKIE['remember'])) {
             <div id="registerFailed">
                 <span class="whiteShadow error-message">Une erreur est survenue, veuillez réessayer plus tard</span><br><br>
             </div>
-            <div id="playerExists">
-                <span class="whiteShadow error-message">Un compte existe déjà pour ce joueur</span><br><br>
+            <div id="playerNotInClan">
+                <span class="whiteShadow error-message">Le tag est incorrect ou ce joueur n'est pas dans le clan</span><br><br>
             </div>
             <div>
                 <span class="whiteShadow">Entrez votre tag ou votre nom de joueur :</span><br><br>
@@ -184,8 +168,7 @@ if (!empty($_COOKIE['remember'])) {
                     <input type="password" id="password" class="pull-right">
                 </div>
                 <br>
-                <button id="btn-register" class="btn btn-warning">S'enregistrer</button>
-                <button id="btn-login" class="btn btn-success pull-right">Se connecter</button>
+                <button id="btn-login" class="btn btn-success pull-right" type="submit">Se connecter</button>
             </div>
         </div>
     </div>
