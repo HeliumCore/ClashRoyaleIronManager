@@ -53,11 +53,8 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
                     });
                 }
             });
-
-            $("#newPass").keyup(function(event) {
-                if (event.keyCode === 13) {
-                    $("#changePassBtn").click();
-                }
+            $('#changePassBtn').click(function () {
+                changePassword();
             });
         });
 
@@ -129,19 +126,19 @@ $playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
                 <div id="passwordChangeFailed">
                     <span class="whiteShadow error-message">Une erreur est survenue lors de la modification de votre mot de passe, veuillez réessayer plus tard</span><br><br>
                 </div>
-                <div id="passwordChangeForm">
-                    <div class="form-group">
-                        <label class="whiteShadow" for="oldPass">Ancien mot de passe :</label>
-                        <input type="password" id="oldPass" class="pull-right">
-                    </div>
-                    <div class="form-group">
-                        <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
-                        <input type="password" id="newPass" class="pull-right">
-                    </div>
-                    <button id="changePassBtn" name="btn-change-password" onclick="changePassword()" class="btn btn-success pull-right">
-                        Envoyer
-                    </button>
+            </div>
+            <div id="passwordChangeForm">
+                <div class="form-group">
+                    <label class="whiteShadow" for="oldPass">Ancien mot de passe :</label>
+                    <input type="password" id="oldPass" class="pull-right">
                 </div>
+                <div class="form-group">
+                    <label class="whiteShadow" for="newPass">Nouveau mot de passe :</label>
+                    <input type="password" id="newPass" class="pull-right">
+                </div>
+                <button id="changePassBtn" type="submit" class="btn btn-success pull-right">
+                    Envoyer
+                </button>
             </div>
         </div>
 
