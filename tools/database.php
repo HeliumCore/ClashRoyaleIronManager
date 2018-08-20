@@ -5,7 +5,9 @@
  * Date: 11/06/2018
  * Time: 14:53
  */
-require_once('conf.php');
+
+if(!defined('CONFIGURED'))
+    require_once('conf.php');
 
 $db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
 
@@ -36,7 +38,7 @@ function insertPlayer($db, $name, $tag, $rank, $trophies, $role, $expLevel, $are
                       $donationsDelta, $donationsPercent)
 {
     $pattern = "
-INSERT INTO players (players.name, tag, rank, trophies, role_id, exp_level, in_clan, arena, donations, 
+INSERT INTO players (players.name, tag, rank, trophies, role_id, exp_level, in_clan, arena, donations,
 donations_received, donations_delta, donations_ratio)
 VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %f)
 ";
@@ -85,7 +87,7 @@ function updateMaxTrophies($db, $maxTrophies, $tag)
     $pattern = "
 UPDATE players
 SET players.max_trophies = %d
-WHERE players.tag = \"%s\" 
+WHERE players.tag = \"%s\"
 ";
     execute_query($db, utf8_decode(sprintf($pattern, $maxTrophies, $tag)));
 }
@@ -101,7 +103,7 @@ function getPlayerInfos($db, $playerTag)
     ";
 
     $pattern = "
-    SELECT 
+    SELECT
     GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
@@ -118,7 +120,7 @@ function getPlayerInfos($db, $playerTag)
     LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN player_war war_missed ON war_missed.player_id = p.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN (
-    	SELECT player_id, 
+    	SELECT player_id,
         SUM(cards_earned) as total_cards_earned,
         SUM(collection_played) as total_collection_played,
         SUM(collection_won) as total_collection_won,
@@ -179,8 +181,8 @@ WHERE players.tag = \"%s\"
 function getAllPlayersForIndex($db)
 {
     $query = "
-SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole, 
-arena.arena as arena, arena.arena_id as arena_id, players.donations, players.donations_received  
+SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole,
+arena.arena as arena, arena.arena_id as arena_id, players.donations, players.donations_received
 FROM players
 INNER JOIN role ON role.id = players.role_id
 INNER JOIN arena ON arena.arena_id = players.arena
@@ -193,9 +195,9 @@ ORDER BY players.rank ASC
 function getRoleIdByMachineName($db, $machineName)
 {
     $query = "
-SELECT id 
-FROM role 
-WHERE machine_name 
+SELECT id
+FROM role
+WHERE machine_name
 LIKE \"%s\"
 ";
     $result = fetch_query($db, utf8_decode(sprintf($query, $machineName)));
@@ -295,8 +297,8 @@ AND pd.deck_id = %d
 function getAllWarDecksWithPagination($db, $current, $page)
 {
     $pattern = "
-    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns, 
-    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids, 
+    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns,
+    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids,
     (
         SELECT CEIL(COUNT(d.id) / 10)
         FROM decks d
@@ -308,7 +310,7 @@ function getAllWarDecksWithPagination($db, $current, $page)
     LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
     LEFT JOIN decks d ON d.id = wd.deck_id
     LEFT JOIN war w ON w.id = wd.war_id
-    LEFT JOIN 
+    LEFT JOIN
         (
             SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, ROUND(AVG(c.elixir), 1) as elixir_cost
             FROM card_deck cd
@@ -426,7 +428,7 @@ cards.type = \"%s\",
 rarity = \"%s\",
 arena = %d,
 cr_id = %d
-WHERE cards.card_key = \"%s\" 
+WHERE cards.card_key = \"%s\"
 ";
     execute_query($db, utf8_decode(sprintf($pattern, $name, $elixir, $type, $rarity, $arena, $crId, $key)));
 }
@@ -543,9 +545,9 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
 function updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
 {
     $pattern = "
-UPDATE player_war 
-SET cards_earned = %d, battle_played = %d, battle_won = %d 
-WHERE player_id = %d 
+UPDATE player_war
+SET cards_earned = %d, battle_played = %d, battle_won = %d
+WHERE player_id = %d
 AND war_id = %d
 ";
 
@@ -576,10 +578,10 @@ function updateStanding($db, $participants, $battlesPlayed, $wins, $crowns, $war
 {
     $pattern = "
 UPDATE standings
-SET participants = %d, 
-battles_played = %d, 
-battles_won = %d, 
-crowns = %d, 
+SET participants = %d,
+battles_played = %d,
+battles_won = %d,
+crowns = %d,
 war_trophies = %d
 WHERE id = %d
 ";
@@ -700,7 +702,7 @@ AND war_id = %d
 function getWarPlayers($db, $order = null)
 {
     $pattern = "
-SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played, 
+SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played,
 player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned as cards
 FROM player_war
 INNER JOIN war ON war.id = player_war.war_id
@@ -726,7 +728,7 @@ SELECT standings.name, participants, battles_played, battles_won, crowns, war_tr
 FROM standings
 JOIN war ON standings.war_id = war.id
 AND war.past_war = 0
-ORDER BY battles_won DESC, crowns DESC 
+ORDER BY battles_won DESC, crowns DESC
 ";
     return fetch_all_query($db, $query);
 }
@@ -734,13 +736,13 @@ ORDER BY battles_won DESC, crowns DESC
 function getNotEligiblePlayers($db)
 {
     $query = "
-SELECT players.id 
-FROM players 
+SELECT players.id
+FROM players
 WHERE players.id NOT IN
 (
-  SELECT pw.player_id 
-  FROM player_war pw 
-  JOIN war ON pw.war_id = war.id 
+  SELECT pw.player_id
+  FROM player_war pw
+  JOIN war ON pw.war_id = war.id
   WHERE war.past_war = 0
 )
 AND players.in_clan = 1
@@ -757,7 +759,7 @@ function getAllWarStats($db)
             SELECT
             p.id, p.name, p.rank, p.tag,
             SUM(IFNULL(cards_earned, 0)) as total_cards_earned,
-            SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+            SUM(IFNULL(collection_played, 0)) as total_collection_played,
             SUM(IFNULL(collection_won, 0)) as total_collection_won,
             SUM(IFNULL(battle_played, 0)) as total_battle_played,
             SUM(IFNULL(battle_won, 0)) as total_battle_won,
@@ -774,7 +776,7 @@ function getAllWarStats($db)
             SELECT
             p.id, p.name, p.rank, p.tag,
             SUM(IFNULL(cards_earned, 0)) as total_cards_earned,
-            SUM(IFNULL(collection_played, 0)) as total_collection_played, 
+            SUM(IFNULL(collection_played, 0)) as total_collection_played,
             SUM(IFNULL(collection_won, 0)) as total_collection_won,
             SUM(IFNULL(battle_played, 0)) as total_battle_played,
             SUM(IFNULL(battle_won, 0)) as total_battle_won, 0
@@ -783,7 +785,7 @@ function getAllWarStats($db)
             JOIN war w ON pw.war_id = w.id AND w.past_war > 0
             WHERE w.season != 0
             GROUP BY pw.player_id
-        )    
+        )
     ) sub
     ORDER BY sub.rank ASC
 ";
@@ -836,7 +838,7 @@ function getNumberOfEligibleWarByPlayerId($db, $playerId, $season)
     $pattern = "
 SELECT COUNT(pw.id) as number_of_war
 FROM player_war pw
-JOIN war ON pw.war_id = war.id 
+JOIN war ON pw.war_id = war.id
 WHERE war.past_war = 1
 AND pw.player_id = %d
 AND war.season = %d
