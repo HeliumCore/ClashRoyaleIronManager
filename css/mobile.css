@@ -1,14 +1,27 @@
 @media screen and (max-width: 1024px) {
     body {
         font-size: 10px;
+        background-image: url('../images/background_mobile.png');
     }
 
     h1,
     .h1 {
         font-size: 1.8em;
     }
-
+    h1.whiteShadow {
+        text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+    }
     .dropdown-menu > li > a {
         font-size: 10px;
     }
+    .h3, h3{
+        font-size: 16px;
+        text-align: center;
+    }
+    .wrapper-current-deck{
+    }
+    .wrapper-current-deck {
+        height: 90vw;
+        margin: 0 -15px;
+        padding: 26px 13% 24px 12%;
 }
