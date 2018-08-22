@@ -118,7 +118,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                         </div>
                     <?php endfor; ?>
                 </div>
-                <div id="deckLinkDiv" class="text-center pointerHand">
+                <div id="deckLinkDiv" class="text-center pointerHand deckLinkHand">
                     <a href="<?php print $deckLink; ?>" class="text-center">
                         <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                         <span id="spanDeckLink" class="whiteShadow text-center">Copier</span>
@@ -146,6 +146,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <tbody>
             <?php
             echo '<tr>';
+            echo '<input id="playerTagHidden" type="hidden" name="playerTagHidden" value="' . $player['tag'] . '" />';
             echo '<td class="whiteShadow text-center">Données<br>' . $player['donations'] . '</td>';
             echo '<td class="whiteShadow text-center">Reçues<br>' . $player['received'] . '</td>';
             echo '</tr>';
@@ -158,14 +159,14 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         <table class="table">
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex text-center table-border" colspan="6">Collections</th>
+                <th class="headIndex text-center" colspan="6">Collections</th>
             </tr>
             </thead>
             <tbody>
                 <tr>
                     
             
-                    <td class="whiteShadow text-center table-border-left" colspan="2">Jouées<br><?php print $player['total_collection_played'] ?></td>
+                    <td class="whiteShadow text-center" colspan="2">Jouées<br><?php print $player['total_collection_played'] ?></td>
                     <td class="whiteShadow text-center" colspan="2">Gagnées<br><?php print $player['total_collection_won'] ?></td>
                     <td class="whiteShadow text-center" colspan="2"><img src="/images/ui/deck.png" height="35px"/><?php print $player['total_cards_earned'] ?></td>
                 </tr>
@@ -177,7 +178,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             </thead>
             <tbody>
                 <tr>
-                    <td class="whiteShadow text-center table-border-left" colspan="3">Jouées<br><?php print $player['total_battle_played'] ?></td>
+                    <td class="whiteShadow text-center" colspan="3">Jouées<br><?php print $player['total_battle_played'] ?></td>
                     <td class="whiteShadow text-center" colspan="3">Gagnées<br><?php print $player['total_battle_won'] ?></td>
                 </tr>
             </tbody>
