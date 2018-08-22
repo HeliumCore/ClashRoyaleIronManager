@@ -82,7 +82,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         </div>
         <div>
             Rang: <?php print $player['rank']; ?> <br>
-            <?php print $player['arena']; ?>
+            <?php print $player['arenaName']; ?>
         </div>
     </div>
 </div>

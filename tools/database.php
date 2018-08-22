@@ -107,7 +107,7 @@ function getPlayerInfos($db, $playerTag)
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
     p.id as playerId, p.tag, p.name as playerName, p.rank, p.trophies, p.max_trophies, role.name as playerRole, p.exp_level as level,
-    p.donations_delta as delta, p.donations_ratio as ratio, arena.arena as arena, p.donations, p.donations_received as received,
+    p.donations_delta as delta, p.donations_ratio as ratio, arena.arena as arena, arena.name as arenaName, p.donations, p.donations_received as received,
     arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned, pw1.total_cards_earned, pw1.total_collection_played, pw1.total_collection_won, pw1.total_battle_played, pw1.total_battle_won
     FROM players p
     INNER JOIN arena ON arena.arena_id = p.arena
@@ -138,7 +138,7 @@ function getPlayerInfos($db, $playerTag)
     SELECT
     GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
     players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
+    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, arena.name as arenaName, players.donations, players.donations_received as received,
     arena.trophy_limit, arena.arena_id
     FROM players
     INNER JOIN arena ON arena.arena_id = players.arena
