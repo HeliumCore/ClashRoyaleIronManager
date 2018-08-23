@@ -13,7 +13,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/clan">Clan</a></li>
-                <li class="dropdown pointerHand">
+                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="/war">Guerre<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-li"><a href="/war">Guerre en cours</a></li>
@@ -23,14 +23,14 @@
                 </li>
                 <li><a href="/rules">Réglement</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right pointerHand">
+            <ul class="nav navbar-nav navbar-right">
                 <?php
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
                     ?>
                     <li>
-                        <a class="pointerHand" onclick="update()">
+                        <a onclick="update()">
                             Mise à jour&nbsp;<img src="/images/ui/reload.png" class="reload-image">
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                         ?>
                         <li><a href="/admin">Admin</a></li>
                     <?php endif; ?>
-                    <li class="dropdown pointerHand">
+                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">

@@ -10,5 +10,6 @@ RewriteRule ^admin$                  /admin.php
 RewriteRule ^account_manager$        /account_manager.php
 RewriteRule ^login$                  /login.php
 
-RewriteRule ^player/(.*)$            /player.php?tag=$1
-RewriteRule ^index/(.*)/([0-9]+)     /index.php?$1
+RewriteRule ^player/(.*)			 /player.php?tag=$1
+RewriteRule ^/player/(.*)/([0-9]+)   /player.php?tag=$1
+RewriteRule ^/index/(.*)/([0-9]+)    /index.php?$1

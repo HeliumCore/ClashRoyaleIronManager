@@ -4,4 +4,5 @@
 tools/conf.php
 .project
 .buildpath
-
+test/
+ClashRoyaleIronManager/
