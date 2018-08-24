@@ -30,7 +30,7 @@ $deckLink = sprintf(
 
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
-// TODO : Faire le "glow" multicolor autour des légendaires et les couleurs autour des autres (card level compris)
+// TODO : Faire le "glow" multicolor autour des légendaires
 
 // TODO voir le probleme de la typo selon la taille
 ?>
