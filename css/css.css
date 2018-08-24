@@ -328,6 +328,33 @@ tbody tr:nth-child(5) .rank span {
     border: 3px solid lightblue;
     background-color: rgba(0, 0, 0, .3);
 }
+
 .player-table {
     margin-bottom: 0;
+}
+
+.card-shadow {
+    position: absolute;
+    border-radius: 7%;
+    width: 98%;
+    height: 76%;
+    top: 19%;
+}
+
+.legendary-card-shadow {
+    position: absolute;
+    border-radius: 7%;
+    width: 98%;
+    height: 86%;
+    top: 14%;
+    clip-path: polygon(0 20%, 50% 0, 100% 20%, 100% 80%, 50% 100%, 0 80%);
+    /*box-shadow: 0 0 2px 2px rgb(239, 196, 253);*/
+}
+
+.rare-shadow {
+    box-shadow: 0 0 3px 1px rgb(252, 108, 12);
+}
+
+.epic-shadow {
+    box-shadow: 0 0 3px 1px rgb(206, 2, 255);
 }

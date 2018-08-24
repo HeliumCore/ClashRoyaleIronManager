@@ -480,7 +480,7 @@ function getCardLevelByPlayer($db, $card, $playerId)
 function getCardsLevelsByPlayerId($db, $playerId)
 {
     $pattern = "
-    SELECT DISTINCT c.card_key, cl.level
+    SELECT DISTINCT c.card_key, cl.level, c.rarity
     FROM players p
     JOIN player_deck pd ON p.id = pd.player_id
     JOIN card_deck cd ON cd.deck_id = pd.deck_id AND pd.current = 1

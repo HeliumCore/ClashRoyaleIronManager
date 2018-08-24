@@ -58,4 +58,13 @@
     .clan-dons {
         display: none;
     }
+    .card-shadow {
+        position: absolute;
+        border-radius: 8%;
+        width: 100%;
+        height: 74%;
+        top: 22%;
+        margin-left: 2px;
+    }
+
 }

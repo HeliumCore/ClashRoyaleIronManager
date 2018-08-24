@@ -72,15 +72,33 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                         let json = JSON.parse(data);
                         $('.card-level-span').each(function () {
                             let key = $(this).data('card');
-                            let level = 0;
+                            let level = "";
+                            let rarity = "";
                             for (let i = 0; i < 8; i++) {
                                 if (json[i]['card_key'] === key) {
-                                    level = json[i]['level']
+                                    level = json[i]['level'];
+                                    rarity = json[i]['rarity'];
                                 }
                             }
-                            if (level !== 0) {
+                            if (level !== "") {
                                 $(this).html("Niveau ".concat(level));
                                 $(this).parent('.card-level').fadeIn();
+                            }
+                            if (rarity !== "") {
+                                let shadow = $(this).parent().parent().children(".card-shadow");
+                                switch (rarity) {
+                                    case "Rare":
+                                        shadow.addClass("rare-shadow");
+                                        break;
+                                    case "Epic":
+                                        shadow.addClass("epic-shadow");
+                                        break;
+                                    case "Legendary":
+                                        // shadow.addClass("legendary-card-shadow");
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         });
                     }
@@ -151,6 +169,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                                     <span class="greyShadow card-level-span"
                                           data-card="<?php print $cardKeys[$i]; ?>"></span>
                                 </div>
+                                <div class="card-shadow"></div>
                             </div>
                         </div>
                     <?php endfor; ?>
