@@ -102,7 +102,7 @@ function getPlayerInfos($db, $playerTag)
 
     $pattern = "
     SELECT 
-    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
+    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys, ROUND(AVG(c.elixir), 1) as elixir_cost,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
@@ -115,7 +115,7 @@ function getPlayerInfos($db, $playerTag)
     INNER JOIN player_war ON player_war.player_id = p.id
     INNER JOIN war ON player_war.war_id = war.id
     LEFT JOIN player_war war_played ON war_played.player_id = p.id AND war_played.collection_played > 0
-    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played < 3 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN player_war war_missed ON war_missed.player_id = p.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN (
     	SELECT player_id, 

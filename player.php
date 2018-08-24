@@ -30,7 +30,10 @@ $deckLink = sprintf(
 
 // last updated
 $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
-//TODO faire le design de l'affichage des cartes (elixir, niveau, couleur...)
+// TODO afficher le niveau des cartes
+// IDEA : Faire le "glow" multicolor autour des légendaires
+
+// TODO voir le probleme de la typo selon la taille
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,12 +80,14 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <h1 class="whiteShadow">
                 <?php print utf8_encode($player['playerName']); ?>
                 <br>
-                <span class="small"><?php print utf8_encode($player['playerRole']) ?></span>&nbsp;<span class="tiny"><?php print utf8_encode($player['tag']); ?></span>
+                <span class="small whiteShadow"><?php print utf8_encode($player['playerRole']) ?></span>&nbsp;<span class="tiny"><?php print utf8_encode($player['tag']); ?></span>
             </h1>
         </div>
         <div>
-            Rang: <?php print $player['rank']; ?> <br>
-            <?php print $player['arenaName']; ?>
+            <span class="whiteShadow">
+                Rang: <?php print $player['rank']; ?> <br>
+                <?php print $player['arenaName']; ?>
+            </span>
         </div>
     </div>
 </div>
@@ -118,14 +123,14 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                         </div>
                     <?php endfor; ?>
                 </div>
-                <div id="deckLinkDiv" class="text-center pointerHand deckLinkHand">
+                <div class="text-center pointerHand deckLinkHand">
                     <a href="<?php print $deckLink; ?>" class="text-center">
                         <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                         <span id="spanDeckLink" class="whiteShadow text-center">Copier</span>
                     </a>
                 </div>
                 <div class="elixir-average">
-                    Cout moyen en élixir: 2.9
+                    Cout moyen en élixir: <?php print $player['elixir_cost']; ?>
                 </div>
             </div>
                 <?php else: ?>
