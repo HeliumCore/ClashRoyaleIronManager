@@ -55,4 +55,7 @@
         vertical-align: bottom;
         margin-left: 1px;
     }
+    .clan-dons {
+        display: none;
+    }
 }

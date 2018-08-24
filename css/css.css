@@ -179,16 +179,19 @@ tbody tr:nth-child(5) .rank span {
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
+.playerHeadIndex {
+    color: lightblue;
+    text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
+}
+
 .second-row {
     margin-top: 2%;
 }
 
 .player-badge {
     padding: 1em;
-    /*border-top: 3px solid #fff;*/
     border-radius: 3px;
     border: 3px solid lightblue;
-    /*background-color: #DDEAF0;*/
     background-color: rgba(0, 0, 0, .3);
 }
 
@@ -318,4 +321,13 @@ tbody tr:nth-child(5) .rank span {
 
 .card-level-span {
     font-size: 80%;
+}
+
+.player-table-div {
+    border-radius: 3px;
+    border: 3px solid lightblue;
+    background-color: rgba(0, 0, 0, .3);
+}
+.player-table {
+    margin-bottom: 0;
 }

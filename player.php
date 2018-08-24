@@ -138,7 +138,6 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         <div class="col-md-5 col-md-offset-2">
             <div class="wrapper-current-deck">
                 <h3 class="whiteShadow">Deck du moment</h3>
-
                 <?php
                 $cardKeys = explode(",", $player['card_keys']);
                 if (sizeof($cardKeys) > 0): ?>
@@ -173,10 +172,9 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             <?php endif; ?>
         </div>
     </div>
-    <h3 class="whiteShadow">Dons</h3>
-    <div class="table-responsive">
-
-        <table class="table">
+    <h3 class="whiteShadow">Dons de la semaine</h3>
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
             <thead>
             <tr class="rowIndex">
             </tr>
@@ -194,17 +192,15 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
     </div>
     <h3 class="whiteShadow">Guerres <span class="small whiteShadow">(&nbsp;<?php print $player['total_war_played'] ?>
             jouées&nbsp;)</span></h3>
-    <div class="table-responsive">
-        <table class="table">
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex text-center" colspan="6">Collections</th>
+                <th class="playerHeadIndex text-center" colspan="6">Collections</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-
-
                 <td class="whiteShadow text-center" colspan="2">
                     Jouées<br><?php print $player['total_collection_played'] ?></td>
                 <td class="whiteShadow text-center" colspan="2">
@@ -216,7 +212,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
             </tbody>
             <thead>
             <tr class="rowIndex">
-                <th class="headIndex text-center" colspan="6">Batailles</th>
+                <th class="playerHeadIndex text-center" colspan="6">Batailles</th>
             </tr>
             </thead>
             <tbody>
@@ -230,8 +226,8 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
         </table>
     </div>
     <h3 class="whiteShadow">Absences</h3>
-    <div class="table-responsive">
-        <table class="table">
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
             <thead>
             <tbody>
             <?php

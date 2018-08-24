@@ -477,20 +477,6 @@ function getCardLevelByPlayer($db, $card, $playerId)
     return fetch_query($db, sprintf($pattern, $card, $playerId));
 }
 
-// TODO check if necessary
-function getCardLevelByCrId($db, $crId, $playerId)
-{
-    $pattern = "
-    SELECT cl.level
-    FROM card_level cl
-    JOIN cards c ON cl.card_id = c.id
-    WHERE c.cr_id = %d
-    AND cl.player_id = %d
-    ";
-
-    return fetch_query($db, sprintf($pattern, $crId, $playerId));
-}
-
 function getCardsLevelsByPlayerId($db, $playerId)
 {
     $pattern = "
@@ -499,9 +485,8 @@ function getCardsLevelsByPlayerId($db, $playerId)
     JOIN player_deck pd ON p.id = pd.player_id
     JOIN card_deck cd ON cd.deck_id = pd.deck_id AND pd.current = 1
     JOIN cards c ON cd.card_id = c.id
-    JOIN card_level cl ON cd.card_id = cl.card_id
+    JOIN card_level cl ON cd.card_id = cl.card_id AND cl.player_id = p.id
     WHERE p.id = %d
-    LIMIT 8
     ";
 
     return fetch_all_query($db, sprintf($pattern, $playerId));
