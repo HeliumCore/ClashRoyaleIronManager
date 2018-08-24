@@ -207,7 +207,8 @@ function getNumberOfPlayersInClan($db)
     return sizeof(getAllPlayersInClan($db));
 }
 
-function getPlayerTagByAccountId($db, $accountId) {
+function getPlayerTagByAccountId($db, $accountId)
+{
     $pattern = "
     SELECT p.tag, p.name
     FROM players p
@@ -474,6 +475,36 @@ function getCardLevelByPlayer($db, $card, $playerId)
     ";
 
     return fetch_query($db, sprintf($pattern, $card, $playerId));
+}
+
+// TODO check if necessary
+function getCardLevelByCrId($db, $crId, $playerId)
+{
+    $pattern = "
+    SELECT cl.level
+    FROM card_level cl
+    JOIN cards c ON cl.card_id = c.id
+    WHERE c.cr_id = %d
+    AND cl.player_id = %d
+    ";
+
+    return fetch_query($db, sprintf($pattern, $crId, $playerId));
+}
+
+function getCardsLevelsByPlayerId($db, $playerId)
+{
+    $pattern = "
+    SELECT DISTINCT c.card_key, cl.level
+    FROM players p
+    JOIN player_deck pd ON p.id = pd.player_id
+    JOIN card_deck cd ON cd.deck_id = pd.deck_id AND pd.current = 1
+    JOIN cards c ON cd.card_id = c.id
+    JOIN card_level cl ON cd.card_id = cl.card_id
+    WHERE p.id = %d
+    LIMIT 8
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $playerId));
 }
 
 function getFavCards($db)
@@ -1041,7 +1072,8 @@ function getAllPauseByAccount($db, $accountId)
     return $pauses;
 }
 
-function getAllPauses($db) {
+function getAllPauses($db)
+{
     $query = "
     SELECT p.name, GROUP_CONCAT(pp.pause) as pauses
     FROM player_pause pp
