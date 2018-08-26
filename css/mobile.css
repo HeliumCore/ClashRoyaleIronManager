@@ -8,23 +8,28 @@
     .h1 {
         font-size: 1.8em;
     }
+
     h1.whiteShadow {
         text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
     }
+
     .dropdown-menu > li > a {
         font-size: 10px;
     }
-    .h3, h3{
+
+    .h3, h3 {
         font-size: 16px;
         text-align: center;
     }
+
     .wrapper-current-deck {
         height: 90vw;
         margin: 0 -15px;
         padding: 26px 13% 24px 12%;
 
     }
-    .level-container span{
+
+    .level-container span {
         position: absolute;
         top: 16%;
         left: 27%;
@@ -32,32 +37,38 @@
         color: #fff;
         text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     }
+
     .deckLinkHand {
         position: absolute;
         top: -4%;
         left: 66%;
     }
-    .wrapper-current-deck h3{
+
+    .wrapper-current-deck h3 {
         position: absolute;
         top: 0.2%;
         left: 12%;
         font-size: 1.3rem;
     }
-    .elixir-average{
+
+    .elixir-average {
         position: absolute;
         right: 33%;
         bottom: 6%;
         color: #dc55e4;
         font-size: 1rem;
     }
-    .wrapper-current-deck img{
+
+    .wrapper-current-deck img {
         padding-top: 23px;
         vertical-align: bottom;
         margin-left: 1px;
     }
+
     .clan-dons {
         display: none;
     }
+
     .card-shadow {
         position: absolute;
         border-radius: 8%;
@@ -67,4 +78,153 @@
         margin-left: 2px;
     }
 
+    .standing-div {
+        float: left;
+        width: 25%;
+        overflow: hidden;
+    }
+
+    .results-div {
+        float: left;
+        width: 75%;
+        overflow: hidden;
+        height: 115px;
+
+    }
+
+    .standings-s-div {
+        height: 115px;
+    }
+
+    .participants-div, .battles-div, .wins-div, .crowns-div, .clan-trophies-div {
+        margin-top: 0;
+        margin-left: 10%;
+    }
+
+    .clan-trophies-div {
+        width: 80px;
+        top: -58px;
+    }
+
+    .participants-div {
+        width: 80px;
+        left: 43%;
+        top: -34px;
+        padding: 0 15px 0 37px;
+    }
+
+    .battles-div {
+        margin-top: 1em;
+        width: 80px;
+        left: -44%;
+        padding: 0 15px 0 37px;
+    }
+
+    .wins-div {
+        margin-top: 1em;
+        width: 80px;
+        left: 43%;
+        top: 34px;
+        padding: 0 15px 0 37px;
+    }
+
+    .crowns-div {
+        margin-top: 1em;
+        width: 80px;
+        top: 70px;
+        left: -1%;
+        padding: 0 15px 0 37px;
+    }
+
+    .clan-trophies-img {
+        position: absolute;
+        left: -19px;
+        top: -4px;
+    }
+
+    .participants-img {
+        position: absolute;
+        left: -14px;
+        top: -5px;
+    }
+
+    .battles-img {
+        position: absolute;
+        left: -15px;
+        top: -3.3px;
+    }
+
+    .wins-img {
+        position: absolute;
+        left: -11px;
+        top: -5px;
+    }
+
+    .crowns-img {
+        position: absolute;
+        left: -23px;
+        top: -5px;
+    }
+
+    .clan-result-badge {
+        height: 130px;
+    }
+
+    .clan-participants-div {
+        width: 100px;
+        left: 3%;
+        margin-top: 0;
+        padding: 0 15px 0 45px;
+        top: -20%;
+    }
+
+    .clan-non-participants-div {
+        width: 100px;
+        margin-top: 0;
+        left: 26.5%;
+        padding: 0 15px 0 45px;
+        top: -20%;
+    }
+
+    .clan-non-participants-img {
+        position: absolute;
+        left: -15px;
+        top: -5px;
+    }
+
+    .played-div {
+        margin-top: 0;
+        width: 100px;
+        left: -60%;
+        padding: 0 15px 0 45px;
+        top: 14%;
+    }
+
+    .played-img {
+        position: absolute;
+        left: -18px;
+        top: -4px;
+    }
+
+    .clan-wins-div {
+        width: 100px;
+        left: 42%;
+        margin-top: 0;
+        padding: 0 15px 0 45px;
+        top: 36%;
+    }
+
+    .clan-cards-div {
+        width: 150px;
+        margin-top: 0;
+        left: -25%;
+        padding: 0 15px 0 50px;
+        top: 77%;
+    }
+
+    .clan-cards-img {
+        position: absolute;
+        left: -18px;
+        top: -5px;
+    }
 }

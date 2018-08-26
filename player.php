@@ -111,8 +111,8 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 <?php include("header.php"); ?>
 <input type="hidden" id="hd_playerId" value="<?php print $player['playerId']; ?>"/>
 <div class="container">
-    <div class="player-badge">
-        <div class="pull-right whiteShadow trophy-div">
+    <div class="player-badge badge-div">
+        <div class="pull-right whiteShadow trophy-div hideOnUpdate">
             <img src="/images/ui/trophy.png" height="30px" class="trophy-img"/>
             <span><?php print $player['trophies']; ?></span>
             <div class="max-trophy">Max <?php print $player['max_trophies'] ?></div>

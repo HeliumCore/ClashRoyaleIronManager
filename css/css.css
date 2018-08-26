@@ -37,7 +37,7 @@ body {
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
-.player-badge h1 {
+.badge-div h1 {
     vertical-align: text-top;
 }
 
@@ -95,27 +95,35 @@ h1.whiteShadow {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 999999;
 }
 
 .rank span {
     color: #D7F9E8;
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
-    margin: 3px 6px;
     display: block;
-    line-height: 45px;
+    line-height: 35px;
     border-radius: 5px;
+    min-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    max-width: 40px;
+    margin: auto;
 }
 
 tbody tr:first-child .rank span {
     background: #E5C449;
+    border: 3px solid #DAA520;
 }
 
 tbody tr:nth-child(3) .rank span {
     background: #BBC5C0;
+    border: 3px solid #A9A9A9;
 }
 
 tbody tr:nth-child(5) .rank span {
     background: #BE7A54;
+    border: 3px solid #A0522D;
 }
 
 .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
@@ -179,7 +187,7 @@ tbody tr:nth-child(5) .rank span {
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
-.playerHeadIndex {
+.playerHeadIndex, .warHeadIndex {
     color: lightblue;
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
@@ -188,14 +196,14 @@ tbody tr:nth-child(5) .rank span {
     margin-top: 2%;
 }
 
-.player-badge {
+.badge-div {
     padding: 1em;
     border-radius: 3px;
     border: 3px solid lightblue;
     background-color: rgba(0, 0, 0, .3);
 }
 
-.player-badge h1 {
+.badge-div h1 {
     margin: 0 0 1em;
 }
 
@@ -230,7 +238,7 @@ tbody tr:nth-child(5) .rank span {
 .trophy-img {
     position: absolute;
     left: -15px;
-    top: -5px;
+    top: -1px;
 }
 
 .max-trophy {
@@ -323,13 +331,13 @@ tbody tr:nth-child(5) .rank span {
     font-size: 80%;
 }
 
-.player-table-div {
+.player-table-div, .war-table-div {
     border-radius: 3px;
     border: 3px solid lightblue;
     background-color: rgba(0, 0, 0, .3);
 }
 
-.player-table {
+.player-table, .war-table {
     margin-bottom: 0;
 }
 
@@ -357,4 +365,160 @@ tbody tr:nth-child(5) .rank span {
 
 .epic-shadow {
     box-shadow: 0 0 3px 1px rgb(206, 2, 255);
+}
+
+.standing-div {
+    float: left;
+    width: 25%;
+    overflow: hidden;
+}
+
+.results-div {
+    float: left;
+    width: 75%;
+    overflow: hidden;
+
+}
+
+.standings-s-div {
+    height: 35px;
+}
+
+.participants-div, .battles-div, .wins-div, .crowns-div, .clan-trophies-div {
+    margin-top: 0;
+    margin-left: 7%;
+}
+
+.participants-div {
+    width: 60px;
+}
+
+.battles-div {
+    width: 60px;
+}
+
+.wins-div {
+    width: 60px;
+}
+
+.crowns-div {
+    width: 70px;
+}
+
+.clan-trophies-div {
+    width: 80px;
+}
+
+.clan-trophies-img {
+    position: absolute;
+    left: -16px;
+}
+
+.participants-img {
+    position: absolute;
+    left: -14px;
+}
+
+.battles-img {
+    position: absolute;
+    left: -15px;
+}
+
+.wins-img {
+    position: absolute;
+    left: -11px;
+}
+
+.crowns-img {
+    position: absolute;
+    left: -23px;
+}
+
+.clan-rank {
+    display: block;
+    line-height: 35px;
+    border-radius: 5px;
+    min-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    max-width: 40px;
+}
+
+.first-place {
+    background: #E5C449;
+    border: 3px solid #DAA520;
+}
+
+.second-place {
+    background: #BBC5C0;
+    border: 3px solid #A9A9A9;
+}
+
+.third-place {
+    background: #BE7A54;
+    border: 3px solid #A0522D;
+}
+
+.last-place {
+    background: #3E4041;
+    border: 3px solid #000000;
+}
+
+.clan-name {
+    margin-top: 9px;
+}
+
+.clan-result-badge {
+    height: 70px;
+}
+
+.clan-participants-div {
+    width: 80px;
+    left: -46%;
+    margin-top: 0;
+    padding: 0 15px 0 30px;
+}
+
+.clan-non-participants-div {
+    width: 80px;
+    margin-top: 0;
+    left: -34%;
+    padding: 0 15px 0 30px;
+}
+
+.clan-non-participants-img {
+    position: absolute;
+    left: -15px;
+}
+
+.played-div {
+    margin-top: 0;
+    width: 100px;
+    left: -23%;
+    padding: 0 15px 0 40px;
+}
+
+.played-img {
+    position: absolute;
+    left: -18px;
+}
+
+.clan-wins-div {
+    width: 100px;
+    left: -13%;
+    margin-top: 0;
+    padding: 0 15px 0 40px;
+}
+
+.clan-cards-div {
+    width: 150px;
+    margin-top: 0;
+    left: -5%;
+    padding: 0 15px 0 45px;
+
+}
+
+.clan-cards-img {
+    position: absolute;
+    left: -18px;
 }

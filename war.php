@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: ADufresne
- * Date: 27/06/2018
- * Time: 16:41
+ * User: miron
+ * Date: 26/08/2018
+ * Time: 15:04
  */
 
 include(__DIR__ . "/tools/database.php");
@@ -21,6 +21,7 @@ if (isset($_GET['order']) && !empty($_GET['order'])) {
     $warPlayers = getWarPlayers($db);
 }
 $lastUpdated = getLastUpdated($db, "war");
+$warNumber = getWarNumber($db);
 
 // API
 $war = getWarFromApi($api);
@@ -30,9 +31,10 @@ if ($state == "collectionDay") {
     $endTime = $war['collectionEndTime'];
 } else if ($state == "warDay") {
     $stateName = "Jour de guerre";
-    $standings = getAllStandings($db);
+    $standings = getTemporaryStandings($db);
     $endTime = $war['warEndTime'];
 }
+$currentTrophies = $war['clan']['warTrophies'];
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +45,7 @@ if ($state == "collectionDay") {
     <?php include("head.php"); ?>
     <script>
         $(document).ready(function () {
-            $('#tableIndex').on('click', 'tbody td', function () {
+            $('#playersTable').on('click', 'tbody td', function () {
                 $("body").css("cursor", "wait");
                 window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
             });
@@ -52,54 +54,23 @@ if ($state == "collectionDay") {
             $('#numberOfMissing').html($('#hd_numberOfMissing').val());
             $('#numberOfCollectionPlayed').html($('#hd_numberOfCollectionPlayed').val());
             $('#numberOfCollectionWon').html($('#hd_numberOfCollectionWon').val());
-            $('#numberOfCardsEarned').html($('#hd_numberOfCardsEarned').val());
+            $('#numberOfCardsEarned').html("&nbsp;".concat($('#hd_numberOfCardsEarned').val()));
 
-            $('#tx_search').on("keyup paste", function () {
-                let value = $(this).val().toLowerCase();
-                const playerLine = $('.playerTr');
-                if (value.length === 0) {
-                    playerLine.show();
-                    return;
-                }
-
-                playerLine.each(function () {
-                    if ($(this).next().val().toLowerCase().indexOf(value) < 0)
-                        $(this).hide();
-                    else
-                        $(this).show();
-                });
-            });
-            let orderSelect = $('#orderSelect');
-            orderSelect.change(function () {
-                const val = $(this).val();
-                let url = "war.php", order;
-                switch (val) {
-                    case '1':
-                        order = "?order=collection_played1";
-                        break;
-                    case '2':
-                        order = "?order=collection_won2";
-                        break;
-                    case '3':
-                        order = "?order=cards_earned3";
-                        break;
-                    case '4':
-                        order = "?order=battle_played4";
-                        break;
-                    case '5':
-                        order = "?order=battle_won5";
-                        break;
-                    default:
-                        order = "";
-                        break;
-                }
-                if (parseInt(val) >= 0) {
-                    url = url + order;
-                    window.location = url;
+            $('.clan-rank').each(function() {
+                let pos = $(this).data('pos');
+                if (pos === 1) {
+                    $(this).addClass("first-place");
+                } else if (pos === 2) {
+                    $(this).addClass("second-place");
+                } else if (pos === 3) {
+                    $(this).addClass("third-place");
+                } else {
+                    $(this).addClass("last-place");
                 }
             });
 
-            orderSelect.val($('#hd_selectValue').val());
+            // TODO refaire le tri et la recherche par joueur
+
         });
     </script>
 </head>
@@ -107,175 +78,201 @@ if ($state == "collectionDay") {
 <?php include("header.php"); ?>
 <div class="container">
     <?php if ($state == "notInWar"): ?>
-        <div id="noWarDiv">
-            <div class="row text-center">
-                <h3 class="whiteShadow">Il n'y a pas de guerre en cours</h3>
-            </div>
-            <br><br>
+        <div class="row text-center">
+            <h3 class="whiteShadow">Il n'y a pas de guerre en cours</h3>
         </div>
-    <?php else: ?>
-        <div id="warDiv">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="whiteShadow">Guerre en cours</h1>
-                    <span class="whiteShadow"><?php echo $stateName ?></span><br>
-                    <span class="whiteShadow">Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b></span>
-                    <?php if ($state == 'warDay'): ?>
-                        <a href="/war_decks" class="whiteShadow pull-right">Voir les decks de guerres utilisés</a>
-                    <?php endif; ?>
-                </div>
+    <?php elseif ($state == "collectionDay" || $state == "warDay"): ?>
+        <div class="war-badge badge-div">
+            <div class="pull-right whiteShadow trophy-div hideOnUpdate">
+                <img src="/images/ui/clan-trophies.png" height="30px" class="clan-trophies-img"/>
+                <span><?php print $currentTrophies; ?></span>
             </div>
-            <br><br>
-            <div class="row">
-                <div class="col-md-8">
-                    <span class="pageSubtitle whiteShadow">Résultats du clan</span>
-                </div>
-                <div class="col-md-4">
-                    <select id="orderSelect" class="form-control pull-right">
-                        <option value="-1">Trier par colonne</option>
-                        <option value="0">Rang</option>
-                        <option value="1">Collections jouées</option>
-                        <option value="2">Collections gagnées</option>
-                        <option value="3">Cartes gagnées</option>
-                        <option value="4">Batailles jouées</option>
-                        <option value="5">Batailles gagnées</option>
-                    </select>
-                    <input type="hidden" id="hd_selectValue" value="<?php print $selectValue; ?>"/>
-                </div>
+            <div class="flex">
+                <h1 class="whiteShadow">
+                    <?php print "Guerre n°" . $warNumber; ?><br>
+                    <span class="small whiteShadow"><?php print $stateName; ?></span>
+                </h1>
             </div>
-            <br>
-            <?php
-            if ($state == "warDay") { ?>
-                <div class="divStandings table-responsive">
-                    <table class="table table-hover">
-                        <tbody>
-                        <?php
-                        if (isset($standings)) {
-                            $pos = 1;
-                            $lastBattlesWon = 0;
-                            $lastCrowns = 0;
-                            foreach ($standings as $clan) {
-                                if ($lastCrowns == $clan['crowns'] && $lastBattlesWon == $clan['battles_won']) {
-                                    $pos--;
-                                }
-                                echo '<tr>';
-                                echo '<td class="whiteShadow text-center rank"><span>' . $pos . '</span></td>';
-                                echo '<td class="whiteShadow text-center">' . utf8_encode($clan['name']) . '</td>';
-                                echo '<td class="whiteShadow text-center">Participants<br>' . $clan['participants'] . '</td>';
-                                echo '<td class="whiteShadow text-center">Jouées<br>' . $clan['battles_played'] . '</td>';
-                                echo '<td class="whiteShadow text-center">Gagnées<br>' . $clan['battles_won'] . '</td>';
-                                echo '<td class="whiteShadow text-center">Couronnes<br>' . $clan['crowns'] . '</td>';
-                                echo '<td class="whiteShadow text-center">Trophées<br>' . $clan['war_trophies'] . '</td>';
-                                echo '</tr>';
-                                echo '<input type="hidden" value=""/>';
-                                $pos++;
-                                $lastBattlesWon = $clan['battles_won'];
-                                $lastCrowns = $clan['crowns'];
-                            }
-                        }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php } else { ?>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <tbody>
-                        <tr>
-                            <td class="whiteShadow text-center">Participants<br><span id="numberOfParticipant"></span>
-                            </td>
-                            <td class="whiteShadow text-center">Absents<br><span id="numberOfMissing"></span></td>
-                            <td class="whiteShadow text-center">Jouées<br><span id="numberOfCollectionPlayed"></span>
-                            </td>
-                            <td class="whiteShadow text-center">Gagnées<br><span id="numberOfCollectionWon"></span></td>
-                            <td class="whiteShadow text-center"><img src="/images/ui/deck.png"
-                                                                     height="35px"/>&nbsp;<span
-                                        id="numberOfCardsEarned"></span></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            <?php } ?>
-            <br>
-            <div class="row">
-                <div class="col-md-8">
-                    <span class="pageSubtitle whiteShadow">Résultats par joueurs</span>
-                </div>
-                <div class="col-md-4">
-                    <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom"/>
-                </div>
-            </div>
-            <br>
-            <div class="divCurrentWar table-responsive">
-                <table id="tableIndex" class="table table-hover">
-                    <thead>
-                    <tr class="rowIndex">
-                        <th class="text-center headIndex">Rang</th>
-                        <th class="headIndex">Joueur</th>
-                        <th class="text-center headIndex" colspan="3">Collections</th>
-                        <th class="text-center headIndex" colspan="2">Batailles</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            <div>
+                <span class="whiteShadow">
+                    Fin le <b><?php echo '' . date('d/m/Y', $endTime) ?></b> à <b><?php echo '' . date('H:i', $endTime) ?></b>
                     <?php
-                    $totalTrophies = 0;
-                    $totalCollectionPlayed = 0;
-                    $totalCollectionWon = 0;
-                    $totalCardsEarned = 0;
-                    $totalBattlesPlayed = 0;
-                    $totalBattlesWon = 0;
-                    $minusParticipant = 0;
-
-                    foreach ($warPlayers as $player) {
-                        $playerTrophies = $player['trophies'];
-                        $playerCollectionPlayed = $player['collection_played'];
-                        $playerCollectionWon = $player['collection_won'];
-                        $playerCardsEarned = $player['cards'];
-                        $playerBattlesPlayed = $player['battle_played'];
-                        $playerBattlesWon = $player['battle_won'];
-
-                        $totalTrophies += $playerTrophies;
-                        $totalCollectionPlayed += $playerCollectionPlayed;
-                        $totalCollectionWon += $playerCollectionWon;
-                        $totalCardsEarned += $playerCardsEarned;
-                        $totalBattlesPlayed += $playerBattlesPlayed;
-                        $totalBattlesWon += $playerBattlesWon;
-
-                        if ($playerCollectionPlayed == 0) {
-                            $minusParticipant++;
-                        }
-
-                        echo '<tr class="pointerHand playerTr">';
-                        echo '<td class="whiteShadow text-center rank"><span>' . utf8_encode($player['rank']) . '</span></td>';
-                        echo '<td class="whiteShadow"><a class="linkToPlayer" href="player/' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
-                        echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
-                        echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
-                        echo '<td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
-                        echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
-                        echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
-                        echo '</tr>';
-                        echo '<input type="hidden" class="hd_playerName" value="' . utf8_encode($player['name']) . '"/>';
-                    }
+                    if ($state == "warDay"):
+                        print '<br><a href="/war_decks">Voir les decks de guerres utilisés</a>';
+                    endif;
                     ?>
-                    </tbody>
-                </table>
+                </span>
             </div>
-            <?php if ($state == "collectionDay") {
-                $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant); ?>
-                <input type="hidden" id="hd_numberOfParticipants" value="<?php print $numberOfParticipant; ?>"/>
-                <input type="hidden" id="hd_numberOfMissing" value="<?php print $minusParticipant; ?>"/>
-                <input type="hidden" id="hd_numberOfCollectionPlayed" value="<?php print $totalCollectionPlayed; ?>"/>
-                <input type="hidden" id="hd_numberOfCollectionWon" value="<?php print $totalCollectionWon; ?>"/>
-                <input type="hidden" id="hd_numberOfCardsEarned" value="<?php print $totalCardsEarned; ?>"/>
-            <?php } ?>
-            <br>
         </div>
     <?php endif; ?>
+</div>
+<div class="container">
+    <?php
+    if ($state == "warDay"): ?>
+        <h3 class="whiteShadow">Résultats des clans</h3>
+        <div class="standings-badge badge-div">
+            <?php
+            if (isset($standings)):
+                $i = 0;
+                $pos = 1;
+                $lastBattlesWon = 0;
+                $lastCrowns = 0;
+                $maxBattles = 0;
+                foreach ($standings as $standing):
+                    if ($standing['participants'] > $maxBattles):
+                        $maxBattles = $standing['participants'];
+                    endif;
+                endforeach;
+
+                foreach ($standings as $clan):
+                    if ($lastCrowns == $clan['crowns'] && $lastBattlesWon == $clan['battles_won']):
+                        $pos--;
+                    endif;
+                    ?>
+                    <div class="standings-s-div">
+                        <div class="standing-div">
+                            <div class="flex">
+                                <span class="whiteShadow text-center clan-rank" data-pos="<?php print $pos; ?>"><?php print $pos; ?></span>&nbsp;
+                                <span class="whiteShadow clan-name"><?php print $clan['name']; ?></span>
+                            </div>
+                        </div>
+                        <div class="results-div hideOnUpdate">
+                            <div class="pull-right whiteShadow crowns-div trophy-div">
+                                <img src="/images/ui/crowns.png" height="30px" class="crowns-img"/>
+                                <span><?php print $clan['crowns']; ?></span>
+                            </div>
+                            <div class="pull-right whiteShadow wins-div trophy-div">
+                                <img src="/images/ui/war-win.png" height="30px" class="wins-img"/>
+                                <span><?php print $clan['battles_won']; ?></span>
+                            </div>
+                            <div class="pull-right whiteShadow battles-div trophy-div">
+                                <img src="/images/ui/war-battle.png" height="30px" class="battles-img"/>
+                                <span><?php print ($maxBattles - $clan['battles_played']); ?></span>
+                            </div>
+                            <div class="pull-right whiteShadow participants-div trophy-div">
+                                <img src="/images/ui/participants.png" height="30px" class="participants-img"/>
+                                <span><?php print $clan['participants']; ?></span>
+                            </div>
+                            <div class="pull-right whiteShadow clan-trophies-div trophy-div">
+                                <img src="/images/ui/clan-trophies.png" height="30px" class="clan-trophies-img"/>
+                                <span><?php print $clan['war_trophies']; ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    if ($i < 4):
+                        print "<hr>";
+                    endif;
+                    $i++;
+                    $pos++;
+                    $lastBattlesWon = $clan['battles_won'];
+                    $lastCrowns = $clan['crowns'];
+                endforeach;
+            endif;
+            ?>
+        </div>
+    <?php elseif ($state == "collectionDay"): ?>
+        <h3 class="whiteShadow">Résultats du clan</h3>
+        <div class="clan-result-badge badge-div hideOnUpdate">
+            <div class="pull-right whiteShadow clan-cards-div trophy-div">
+                <img src="/images/ui/deck.png" height="30px" class="clan-cards-img"/>
+                <span id="numberOfCardsEarned"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-wins-div trophy-div">
+                <img src="/images/ui/war-win.png" height="30px" class="wins-img"/>
+                <span id="numberOfCollectionWon"></span>
+            </div>
+            <div class="pull-right whiteShadow played-div trophy-div">
+                <img src="/images/ui/battle.png" height="30px" class="played-img"/>
+                <span id="numberOfCollectionPlayed"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-non-participants-div trophy-div">
+                <img src="/images/ui/non-participants.png" height="30px" class="clan-non-participants-img"/>
+                <span id="numberOfMissing"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-participants-div hideOnUpdate trophy-div">
+                <img src="/images/ui/participants.png" height="30px" class="participants-img"/>
+                <span id="numberOfParticipant"></span>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+<div class="container">
+    <?php if ($state != "notInWar"): ?>
+        <h3 class="whiteShadow">Résultats par joueur</h3>
+
+        <div class="divCurrentWar table-responsive war-table-div">
+            <table id="playersTable" class="table table-hover war-table">
+                <thead>
+                <tr class="rowIndex">
+                    <th class="text-center warHeadIndex">Rang</th>
+                    <th class="warHeadIndex">Joueur</th>
+                    <th class="text-center warHeadIndex" colspan="3">Collections</th>
+                    <?php if ($state == "warDay"): ?>
+                        <th class="text-center warHeadIndex" colspan="2">Batailles</th>
+                    <?php endif; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $totalTrophies = 0;
+                $totalCollectionPlayed = 0;
+                $totalCollectionWon = 0;
+                $totalCardsEarned = 0;
+                $totalBattlesPlayed = 0;
+                $totalBattlesWon = 0;
+                $minusParticipant = 0;
+
+                foreach ($warPlayers as $player):
+                    $playerTrophies = $player['trophies'];
+                    $playerCollectionPlayed = $player['collection_played'];
+                    $playerCollectionWon = $player['collection_won'];
+                    $playerCardsEarned = $player['cards'];
+                    $playerBattlesPlayed = $player['battle_played'];
+                    $playerBattlesWon = $player['battle_won'];
+
+                    $totalTrophies += $playerTrophies;
+                    $totalCollectionPlayed += $playerCollectionPlayed;
+                    $totalCollectionWon += $playerCollectionWon;
+                    $totalCardsEarned += $playerCardsEarned;
+                    $totalBattlesPlayed += $playerBattlesPlayed;
+                    $totalBattlesWon += $playerBattlesWon;
+
+                    if ($playerCollectionPlayed == 0) {
+                        $minusParticipant++;
+                    }
+
+                    echo '<tr class="pointerHand playerTr">';
+                    echo '<td class="whiteShadow text-center rank"><div><span>' . utf8_encode($player['rank']) . '</span></div></td>';
+                    echo '<td class="whiteShadow"><a class="linkToPlayer" href="player/' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
+                    echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
+                    echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
+                    echo '<td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
+                    if ($state == "warDay"):
+                        echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
+                        echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
+                    endif;
+                    echo '</tr>';
+                    echo '<input type="hidden" class="hd_playerName" value="' . utf8_encode($player['name']) . '"/>';
+                endforeach;
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <?php if ($state == "collectionDay"):
+            $numberOfParticipant = intval(sizeof($warPlayers) - $minusParticipant); ?>
+            <input type="hidden" id="hd_numberOfParticipants" value="<?php print $numberOfParticipant; ?>"/>
+            <input type="hidden" id="hd_numberOfMissing" value="<?php print $minusParticipant; ?>"/>
+            <input type="hidden" id="hd_numberOfCollectionPlayed" value="<?php print $totalCollectionPlayed; ?>"/>
+            <input type="hidden" id="hd_numberOfCollectionWon" value="<?php print $totalCollectionWon; ?>"/>
+            <input type="hidden" id="hd_numberOfCardsEarned" value="<?php print $totalCardsEarned; ?>"/>
+        <?php endif; endif; ?>
 </div>
 <div id="loaderDiv">
     <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <div class="row text-center">
+    <br>
     <?php if ($lastUpdated['updated'] != null):
         $time = strtotime($lastUpdated['updated']);
         ?>

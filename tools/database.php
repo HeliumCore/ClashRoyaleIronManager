@@ -549,7 +549,7 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
 ";
     $clanName = utf8_decode($name);
     if (strpos(trim($clanName), '???') !== false) {
-        $clanName = "Nom Arabe ou chinois";
+        $clanName = "Arabe/Chinois";
     }
     execute_query($db, utf8_decode(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns,
         $warTrophies, $warId)));
@@ -740,8 +740,7 @@ function getAllStandings($db)
     $query = "
 SELECT standings.name, participants, battles_played, battles_won, crowns, war_trophies
 FROM standings
-JOIN war ON standings.war_id = war.id
-AND war.past_war = 0
+JOIN war ON standings.war_id = war.id AND war.past_war = 0
 ORDER BY battles_won DESC, crowns DESC 
 ";
     return fetch_all_query($db, $query);
@@ -870,6 +869,17 @@ JOIN war ON player_war.war_id = war.id
 WHERE war.past_war = 0
 ";
     return fetch_query($db, $query);
+}
+
+function getWarNumber($db)
+{
+    $query = "
+    SELECT COUNT(w.id) as warNumber
+    FROM war w
+    WHERE w.id > 24
+    ";
+
+    return fetch_query($db, $query)['warNumber'];
 }
 
 // ==========================================

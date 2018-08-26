@@ -17,6 +17,7 @@
     });
 
     function update() {
+        $('.hideOnUpdate').hide();
         let source = window.location.pathname.substr(1);
         source = source.split("/")[0];
         let url;
