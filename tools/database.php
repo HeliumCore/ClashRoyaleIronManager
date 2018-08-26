@@ -102,12 +102,12 @@ function getPlayerInfos($db, $playerTag)
 
     $pattern = "
     SELECT 
-    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
+    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys, ROUND(AVG(c.elixir), 1) as elixir_cost,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
     p.id as playerId, p.tag, p.name as playerName, p.rank, p.trophies, p.max_trophies, role.name as playerRole, p.exp_level as level,
-    p.donations_delta as delta, p.donations_ratio as ratio, arena.arena as arena, p.donations, p.donations_received as received,
+    p.donations_delta as delta, p.donations_ratio as ratio, arena.arena as arena, arena.name as arenaName, p.donations, p.donations_received as received,
     arena.trophy_limit, arena.arena_id, player_war.battle_played, player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned, pw1.total_cards_earned, pw1.total_collection_played, pw1.total_collection_won, pw1.total_battle_played, pw1.total_battle_won
     FROM players p
     INNER JOIN arena ON arena.arena_id = p.arena
@@ -115,7 +115,7 @@ function getPlayerInfos($db, $playerTag)
     INNER JOIN player_war ON player_war.player_id = p.id
     INNER JOIN war ON player_war.war_id = war.id
     LEFT JOIN player_war war_played ON war_played.player_id = p.id AND war_played.collection_played > 0
-    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played < 3 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN player_war war_missed ON war_missed.player_id = p.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN (
     	SELECT player_id, 
@@ -138,7 +138,7 @@ function getPlayerInfos($db, $playerTag)
     SELECT
     GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
     players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, players.donations, players.donations_received as received,
+    players.donations_delta as delta, players.donations_ratio as ratio, arena.arena as arena, arena.name as arenaName, players.donations, players.donations_received as received,
     arena.trophy_limit, arena.arena_id
     FROM players
     INNER JOIN arena ON arena.arena_id = players.arena
@@ -207,7 +207,8 @@ function getNumberOfPlayersInClan($db)
     return sizeof(getAllPlayersInClan($db));
 }
 
-function getPlayerTagByAccountId($db, $accountId) {
+function getPlayerTagByAccountId($db, $accountId)
+{
     $pattern = "
     SELECT p.tag, p.name
     FROM players p
@@ -474,6 +475,21 @@ function getCardLevelByPlayer($db, $card, $playerId)
     ";
 
     return fetch_query($db, sprintf($pattern, $card, $playerId));
+}
+
+function getCardsLevelsByPlayerId($db, $playerId)
+{
+    $pattern = "
+    SELECT DISTINCT c.card_key, cl.level, c.rarity
+    FROM players p
+    JOIN player_deck pd ON p.id = pd.player_id
+    JOIN card_deck cd ON cd.deck_id = pd.deck_id AND pd.current = 1
+    JOIN cards c ON cd.card_id = c.id
+    JOIN card_level cl ON cd.card_id = cl.card_id AND cl.player_id = p.id
+    WHERE p.id = %d
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $playerId));
 }
 
 function getFavCards($db)
@@ -1041,7 +1057,8 @@ function getAllPauseByAccount($db, $accountId)
     return $pauses;
 }
 
-function getAllPauses($db) {
+function getAllPauses($db)
+{
     $query = "
     SELECT p.name, GROUP_CONCAT(pp.pause) as pauses
     FROM player_pause pp

@@ -15,47 +15,61 @@ body {
     overflow-x: hidden;
     overflow-y: scroll;
 }
-.flex{
+
+.flex {
     display: flex;
     /* width: 100%; */
 }
-.player-level{
+
+.player-level {
     height: 40px;
     padding-right: .7em;
 }
+
+.greyShadow {
+    color: lightgray;
+    text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
+}
+
 .whiteShadow,
 .whiteShadow a {
     color: #fff;
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
-.player-badge h1{
+
+.player-badge h1 {
     vertical-align: text-top;
 }
-h1 .small{
+
+h1 .small {
     font-size: 60%;
     text-shadow: none;
     color: #262626;
 }
 
-.tiny{
-    color: #535353;
+.tiny {
+    color: #A1A1A1;
     text-shadow: none;
     font-size: 50%;
 }
+
 h1.whiteShadow {
     text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -1px black;
 }
+
 .level-container {
     position: relative;
 }
-.level-container span{
+
+.level-container span {
     position: absolute;
-    top: 10px;
-    left: 11px;
+    top: 9%;
+    left: 27%;
     font-size: 12px;
     color: #fff;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
+
 .table-responsive {
     background: #DDEAEF;
     overflow-x: initial;
@@ -143,7 +157,9 @@ tbody tr:nth-child(5) .rank span {
     left: 10px;
 }
 
-#spanDeckLink {line-height: 33px;}
+#spanDeckLink {
+    line-height: 33px;
+}
 
 .deckLink {
     height: 59px;
@@ -163,17 +179,9 @@ tbody tr:nth-child(5) .rank span {
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
-.table-border {
-    border-right: 2px solid #84afd3;
-    border-left: 2px solid #84afd3;
-}
-
-.table-border-left {
-    border-left: 2px solid #84afd3;
-}
-
-.table-border-right {
-    border-right: 2px solid #84afd3;
+.playerHeadIndex {
+    color: lightblue;
+    text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
 .second-row {
@@ -182,13 +190,15 @@ tbody tr:nth-child(5) .rank span {
 
 .player-badge {
     padding: 1em;
-    border-top: 3px solid #fff;
-    border-radius: 0;
-    background-color: #DDEAF0;
+    border-radius: 3px;
+    border: 3px solid lightblue;
+    background-color: rgba(0, 0, 0, .3);
 }
-.player-badge h1{
+
+.player-badge h1 {
     margin: 0 0 1em;
 }
+
 .trophy-div {
     padding: 0 15px 0 25px;
     margin-top: .8em;
@@ -198,8 +208,9 @@ tbody tr:nth-child(5) .rank span {
     line-height: 2em;
     z-index: 2;
 }
+
 .trophy-div span:before,
-.trophy-div span:after{
+.trophy-div span:after {
     content: "";
     width: 100%;
     display: block;
@@ -210,9 +221,10 @@ tbody tr:nth-child(5) .rank span {
     background: #3E4041;
     left: 0px;
 }
-.trophy-div span:after{
-   bottom: 0;
-   background: #2A2D2D; 
+
+.trophy-div span:after {
+    bottom: 0;
+    background: #2A2D2D;
 }
 
 .trophy-img {
@@ -220,51 +232,59 @@ tbody tr:nth-child(5) .rank span {
     left: -15px;
     top: -5px;
 }
-.max-trophy{
+
+.max-trophy {
     position: absolute;
     top: 100%;
     font-size: 0.8em;
     left: 2em;
 }
-.wrapper-current-deck{
+
+.wrapper-current-deck {
     background-image: url('../images/deck_background.png');
     background-size: cover;
-    margin: 0 -15px;
     padding: 42px 11% 24px 11%;
     height: 432px;
     position: relative;
-    margin-top: 20px;
+    margin: 20px -15px 0;
 }
-.wrapper-current-deck h3{
+
+.wrapper-current-deck h3 {
     position: absolute;
-    top: 0.2%;
+    top: 1%;
     left: 12%;
-    font-size: 1.3rem;
+    font-size: 1.8rem;
 }
-.pointerHand{
+
+.deckLinkHand {
     position: absolute;
-    top: -4%;
+    top: -1.5%;
     left: 66%;
 }
-.elixir-average{
+
+.elixir-average {
     position: absolute;
     right: 33%;
-    bottom: 6%;
+    bottom: 5%;
     color: #dc55e4;
-    font-size: 1rem;
+    font-size: 1.4rem;
 }
-.wrapper-current-deck [class^='col']{
+
+.wrapper-current-deck [class^='col'] {
     padding: 3px;
 }
-.wrapper-current-deck img{
-    padding-top: 25px;
+
+.wrapper-current-deck img {
+    padding-top: 23px;
     vertical-align: bottom;
+    margin-left: -4px;
 }
+
 .dropdown-li {
     color: #777;
 }
 
-#passwordChangeFailed, #passwordChangeSuccess, #loginFailed, #registerFailed, #playerNotInClan {
+#passwordChangeFailed, #passwordChangeSuccess, #loginFailed, #registerFailed, #playerNotInClan, .card-level {
     display: none;
 }
 
@@ -284,6 +304,57 @@ tbody tr:nth-child(5) .rank span {
 .chests-placeholder {
     opacity: 0.5;
 }
-.small.whiteShadow{
+
+.small.whiteShadow {
     color: #fff;
+}
+
+.card-level {
+    position: absolute;
+    background: rgba(0, 0, 0, .3);
+    width: 96%;
+    height: 10%;
+    margin-left: 2%;
+    top: 82%;
+    border-bottom: 2px;
+}
+
+.card-level-span {
+    font-size: 80%;
+}
+
+.player-table-div {
+    border-radius: 3px;
+    border: 3px solid lightblue;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.player-table {
+    margin-bottom: 0;
+}
+
+.card-shadow {
+    position: absolute;
+    border-radius: 7%;
+    width: 98%;
+    height: 76%;
+    top: 19%;
+}
+
+.legendary-card-shadow {
+    position: absolute;
+    border-radius: 7%;
+    width: 98%;
+    height: 86%;
+    top: 14%;
+    clip-path: polygon(0 20%, 50% 0, 100% 20%, 100% 80%, 50% 100%, 0 80%);
+    /*box-shadow: 0 0 2px 2px rgb(239, 196, 253);*/
+}
+
+.rare-shadow {
+    box-shadow: 0 0 3px 1px rgb(252, 108, 12);
+}
+
+.epic-shadow {
+    box-shadow: 0 0 3px 1px rgb(206, 2, 255);
 }

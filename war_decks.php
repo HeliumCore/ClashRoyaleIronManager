@@ -39,8 +39,6 @@ function getDeckLink($deck)
     $crIds = explode(",", $deck['cr_ids']);
     return sprintf($pattern, $crIds[0], $crIds[1], $crIds[2], $crIds[3], $crIds[4], $crIds[5], $crIds[6], $crIds[7]);
 }
-
-// TODO use JPEG compression? check alternative
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +112,7 @@ function getDeckLink($deck)
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?><br></span>
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
-                            <div id="deckLinkDiv" class="text-center pointerHand">
+                            <div class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink"
@@ -151,7 +149,7 @@ function getDeckLink($deck)
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?><br></span>
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
-                            <div id="deckLinkDiv" class="text-center pointerHand">
+                            <div class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink"
@@ -219,7 +217,7 @@ function getDeckLink($deck)
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?><br></span>
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
-                            <div id="deckLinkDiv" class="text-center pointerHand">
+                            <div class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
@@ -255,7 +253,7 @@ function getDeckLink($deck)
                                 - <?php print round($deck['wins'] / $deck['played'] * 100) ?> %<br></span>
                             <span class="whiteShadow">Couronnes : <?php print $deck['total_crowns']; ?><br></span>
                             <span class="whiteShadow">Coût : <?php print $deck['elixir_cost']; ?></span><br><br>
-                            <div id="deckLinkDiv" class="text-center pointerHand">
+                            <div class="text-center pointerHand">
                                 <a href="<?php print $deckLink; ?>" class="text-center">
                                     <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
                                     <span id="spanDeckLink" class="whiteShadow text-center">Copier le deck</span>
@@ -299,7 +297,7 @@ function getDeckLink($deck)
             <div class="col-lg-4">
                 <div class="row">
                     <img src="/images/cards/<?php print $card['card_key']; ?>.png" alt="cardImage"
-                         class="img-responsive center-block"/>
+                         class="img-responsive center-block" style="display: block !important;"/>
                 </div>
                 <div class="row">
                     <span class="whiteShadow text-center center-block">Présente dans <?php print $card['occurence']; ?>

@@ -7,7 +7,8 @@
  */
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-else return;
+//else return;
+else $playerTag = "8YG908L08";
 
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");
@@ -37,7 +38,7 @@ if (getPlayerDeck($db, $deckId, $playerId) != null) {
 foreach ($player['cards'] as $card) {
     $cardId = intval(getCardByCrId($db, $card['id'])['id']);
     $level = getCardLevelByPlayer($db, $cardId, $playerId);
-    if ($level) {
+    if (is_array($level)) {
         updateCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
     } else {
         insertCardLevelByPlayer($db, $cardId, $playerId, $card['level']);

@@ -15,7 +15,6 @@ else {
     return;
 }
 
-// CHESTS
 $chests = getPlayerChestsFromApi($api, $playerTag);
 $upcomingChests[] = $chests["upcoming"];
 $fatChests = array(
