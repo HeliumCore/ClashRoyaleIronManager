@@ -31,7 +31,7 @@ if ($state == "collectionDay") {
     $endTime = $war['collectionEndTime'];
 } else if ($state == "warDay") {
     $stateName = "Jour de guerre";
-    $standings = getTemporaryStandings($db);
+    $standings = getAllStandings($db);
     $endTime = $war['warEndTime'];
 }
 $currentTrophies = $war['clan']['warTrophies'];
@@ -207,10 +207,10 @@ $currentTrophies = $war['clan']['warTrophies'];
                 <tr class="rowIndex">
                     <th class="text-center warHeadIndex">Rang</th>
                     <th class="warHeadIndex">Joueur</th>
-                    <th class="text-center warHeadIndex" colspan="3">Collections</th>
                     <?php if ($state == "warDay"): ?>
                         <th class="text-center warHeadIndex" colspan="2">Batailles</th>
                     <?php endif; ?>
+                    <th class="text-center warHeadIndex" colspan="3">Collections</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -243,15 +243,15 @@ $currentTrophies = $war['clan']['warTrophies'];
                     }
 
                     echo '<tr class="pointerHand playerTr">';
-                    echo '<td class="whiteShadow text-center rank"><div><span>' . utf8_encode($player['rank']) . '</span></div></td>';
+                    echo '<td class="whiteShadow text-center rank"><div><span class="last-place">' . utf8_encode($player['rank']) . '</span></div></td>';
                     echo '<td class="whiteShadow"><a class="linkToPlayer" href="player/' . $player['tag'] . '">' . utf8_encode($player['name']) . '</a></td>';
-                    echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
-                    echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
-                    echo '<td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
                     if ($state == "warDay"):
                         echo '<td class="whiteShadow text-center">Jouées<br>' . $player['battle_played'] . '</td>';
                         echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['battle_won'] . '</td>';
                     endif;
+                    echo '<td class="whiteShadow text-center">Jouées<br>' . $player['collection_played'] . '</td>';
+                    echo '<td class="whiteShadow text-center">Gagnées<br>' . $player['collection_won'] . '</td>';
+                    echo '<td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;' . $player['cards'] . '</td>';
                     echo '</tr>';
                     echo '<input type="hidden" class="hd_playerName" value="' . utf8_encode($player['name']) . '"/>';
                 endforeach;

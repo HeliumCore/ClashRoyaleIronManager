@@ -299,7 +299,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                             <?php foreach ($lsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
                                     <td class="whiteShadow text-center rank">
-                                        <span><?php echo utf8_encode($player['rank']); ?></span></td>
+                                        <span class="last-place"><?php echo utf8_encode($player['rank']); ?></span></td>
                                     <td class="whiteShadow"><a class="linkToPlayer"
                                                                href="player/<?php echo $player['tag']; ?>"><?php echo utf8_encode($player['name']); ?></a>
                                     </td>
