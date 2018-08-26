@@ -137,7 +137,7 @@ $currentTrophies = $war['clan']['warTrophies'];
                             </div>
                         </div>
                         <div class="results-div hideOnUpdate">
-                            <div class="pull-right whiteShadow crowns-div trophy-div">
+                            <div class="pull-right whiteShadow crowns-div trophy-div clan-crows-div">
                                 <img src="/images/ui/crowns.png" height="30px" class="crowns-img"/>
                                 <span><?php print $clan['crowns']; ?></span>
                             </div>

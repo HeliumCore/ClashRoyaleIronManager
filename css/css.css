@@ -510,6 +510,10 @@ tbody tr:nth-child(5) .rank span {
     padding: 0 15px 0 40px;
 }
 
+.clan-crows-div {
+    padding: 0 15px 0 35px;
+}
+
 .clan-cards-div {
     width: 150px;
     margin-top: 0;
