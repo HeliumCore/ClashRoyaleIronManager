@@ -526,3 +526,8 @@ tbody tr:nth-child(5) .rank span {
     position: absolute;
     left: -18px;
 }
+
+.player-chests {
+    left: 5%;
+    top: 70px;
+}

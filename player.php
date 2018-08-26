@@ -139,7 +139,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-5 player-chests">
             <h3 class="whiteShadow">Coffres à venir</h3>
             <div class="row text-center" id="chestsDiv">
                 <?php for ($i = 0; $i <= 7; $i++): ?>

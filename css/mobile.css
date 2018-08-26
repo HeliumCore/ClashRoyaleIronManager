@@ -227,4 +227,9 @@
         left: -18px;
         top: -5px;
     }
+
+    .player-chests {
+        left: 0;
+        top: 0;
+    }
 }

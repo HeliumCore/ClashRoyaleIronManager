@@ -224,8 +224,11 @@ $currentTrophies = $war['clan']['warTrophies'];
                 $minusParticipant = 0;
 
                 foreach ($warPlayers as $player):
-                    $playerTrophies = $player['trophies'];
                     $playerCollectionPlayed = $player['collection_played'];
+                    if ($state == "warDay" && $playerCollectionPlayed <= 0):
+                        continue;
+                    endif;
+                    $playerTrophies = $player['trophies'];
                     $playerCollectionWon = $player['collection_won'];
                     $playerCardsEarned = $player['cards'];
                     $playerBattlesPlayed = $player['battle_played'];
