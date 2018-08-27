@@ -43,36 +43,7 @@ $currentTrophies = $war['clan']['warTrophies'];
     <meta charset="UTF-8">
     <title>Iron - Guerre en cours</title>
     <?php include("head.php"); ?>
-    <script>
-        $(document).ready(function () {
-            $('#playersTable').on('click', 'tbody td', function () {
-                $("body").css("cursor", "wait");
-                window.location = $(this).closest('tr').find('.linkToPlayer').attr('href');
-            });
-
-            $('#numberOfParticipant').html($('#hd_numberOfParticipants').val());
-            $('#numberOfMissing').html($('#hd_numberOfMissing').val());
-            $('#numberOfCollectionPlayed').html($('#hd_numberOfCollectionPlayed').val());
-            $('#numberOfCollectionWon').html($('#hd_numberOfCollectionWon').val());
-            $('#numberOfCardsEarned').html("&nbsp;".concat($('#hd_numberOfCardsEarned').val()));
-
-            $('.clan-rank').each(function() {
-                let pos = $(this).data('pos');
-                if (pos === 1) {
-                    $(this).addClass("first-place");
-                } else if (pos === 2) {
-                    $(this).addClass("second-place");
-                } else if (pos === 3) {
-                    $(this).addClass("third-place");
-                } else {
-                    $(this).addClass("last-place");
-                }
-            });
-
-            // TODO refaire le tri et la recherche par joueur
-
-        });
-    </script>
+    <script type="text/javascript" src="/js/war.js"></script>
 </head>
 <body>
 <?php include("header.php"); ?>
@@ -274,7 +245,7 @@ $currentTrophies = $war['clan']['warTrophies'];
 <div id="loaderDiv">
     <img id="loaderImg" src="/images/loader.gif"/>
 </div>
-<div class="row text-center">
+<div class="text-center">
     <br>
     <?php if ($lastUpdated['updated'] != null):
         $time = strtotime($lastUpdated['updated']);
