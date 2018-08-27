@@ -104,7 +104,7 @@ function getPlayerInfos($db, $playerTag)
 
     $pattern = "
     SELECT
-    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys,
+    GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys, ROUND(AVG(c.elixir), 1) as elixir_cost,
     COUNT(DISTINCT war_played.id) total_war_played,
     COUNT(DISTINCT war_collection.id) missed_collection,
     COUNT(DISTINCT war_missed.id) missed_war,
@@ -117,7 +117,7 @@ function getPlayerInfos($db, $playerTag)
     INNER JOIN player_war ON player_war.player_id = p.id
     INNER JOIN war ON player_war.war_id = war.id
     LEFT JOIN player_war war_played ON war_played.player_id = p.id AND war_played.collection_played > 0
-    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played = 0 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
+    LEFT JOIN player_war war_collection ON war_collection.player_id = p.id AND war_collection.collection_played < 3 AND war_collection.war_id > 24 AND war_collection.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN player_war war_missed ON war_missed.player_id = p.id AND war_missed.battle_played = 0 AND war_missed.collection_played > 0 AND war_missed.war_id > 24 AND war_missed.war_id != (SELECT MAX(id) FROM war)
     LEFT JOIN (
     	SELECT player_id,
@@ -209,7 +209,8 @@ function getNumberOfPlayersInClan($db)
     return sizeof(getAllPlayersInClan($db));
 }
 
-function getPlayerTagByAccountId($db, $accountId) {
+function getPlayerTagByAccountId($db, $accountId)
+{
     $pattern = "
     SELECT p.tag, p.name
     FROM players p
@@ -478,6 +479,21 @@ function getCardLevelByPlayer($db, $card, $playerId)
     return fetch_query($db, sprintf($pattern, $card, $playerId));
 }
 
+function getCardsLevelsByPlayerId($db, $playerId)
+{
+    $pattern = "
+    SELECT DISTINCT c.card_key, cl.level, c.rarity
+    FROM players p
+    JOIN player_deck pd ON p.id = pd.player_id
+    JOIN card_deck cd ON cd.deck_id = pd.deck_id AND pd.current = 1
+    JOIN cards c ON cd.card_id = c.id
+    JOIN card_level cl ON cd.card_id = cl.card_id AND cl.player_id = p.id
+    WHERE p.id = %d
+    ";
+
+    return fetch_all_query($db, sprintf($pattern, $playerId));
+}
+
 function getFavCards($db)
 {
     $query = "
@@ -535,7 +551,7 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d)
 ";
     $clanName = utf8_decode($name);
     if (strpos(trim($clanName), '???') !== false) {
-        $clanName = "Nom Arabe ou chinois";
+        $clanName = "Arabe/Chinois";
     }
     execute_query($db, utf8_decode(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns,
         $warTrophies, $warId)));
@@ -726,8 +742,7 @@ function getAllStandings($db)
     $query = "
 SELECT standings.name, participants, battles_played, battles_won, crowns, war_trophies
 FROM standings
-JOIN war ON standings.war_id = war.id
-AND war.past_war = 0
+JOIN war ON standings.war_id = war.id AND war.past_war = 0
 ORDER BY battles_won DESC, crowns DESC
 ";
     return fetch_all_query($db, $query);
@@ -856,6 +871,17 @@ JOIN war ON player_war.war_id = war.id
 WHERE war.past_war = 0
 ";
     return fetch_query($db, $query);
+}
+
+function getWarNumber($db)
+{
+    $query = "
+    SELECT COUNT(w.id) as warNumber
+    FROM war w
+    WHERE w.id > 24
+    ";
+
+    return fetch_query($db, $query)['warNumber'];
 }
 
 // ==========================================
@@ -1043,7 +1069,8 @@ function getAllPauseByAccount($db, $accountId)
     return $pauses;
 }
 
-function getAllPauses($db) {
+function getAllPauses($db)
+{
     $query = "
     SELECT p.name, GROUP_CONCAT(pp.pause) as pauses
     FROM player_pause pp

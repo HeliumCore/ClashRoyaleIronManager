@@ -65,13 +65,13 @@ $lastUpdated = getLastUpdated($db, "index");
                 <th class="headIndex">Nom</th>
                 <th class="headIndex">Trophée</th>
                 <th class="headIndex text-center">Arène</th>
-                <th class="headIndex text-center" colspan="2">Dons</th>
+                <th class="headIndex text-center clan-dons" colspan="2">Dons</th>
             </tr>
             </thead>
             <tbody>
             <?php foreach (getAllPlayersForIndex($db) as $player) : ?>
                 <tr class="pointerHand playerTr">
-                    <td class="rank text-center"><span> <?php echo $player['rank']; ?></span></td>
+                    <td class="rank text-center"><span class="last-place"> <?php echo $player['rank']; ?></span></td>
                     <td class="whiteShadow">
                         <a class="linkToPlayer" href="/player/<?php print $player['tag']; ?>">
                             <?php print utf8_encode($player['playerName']); ?>
@@ -95,11 +95,11 @@ $lastUpdated = getLastUpdated($db, "index");
                             </div>
                         <?php endif; ?>
                     </td>
-                    <td class=" text-center whiteShadow">
+                    <td class=" text-center whiteShadow clan-dons">
                         Reçues <br>
                         <?php print $player['donations_received'] ?>
                     </td>
-                    <td class=" text-center whiteShadow">
+                    <td class=" text-center whiteShadow clan-dons">
                         Données <br>
                         <?php print $player['donations'] ?>
                     </td>

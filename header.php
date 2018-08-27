@@ -30,7 +30,7 @@
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
                     ?>
                     <li>
-                        <a onclick="update()">
+                        <a onclick="update()" class="pointerHand">
                             Mise à jour&nbsp;<img src="/images/ui/reload.png" class="reload-image">
                         </a>
                     </li>

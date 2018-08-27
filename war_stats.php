@@ -20,6 +20,9 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 
 // TODO creer un graph avec les stats de guerre par jour de la semaine. get war_result group by war -> timestamp -> date -> day of the week
 
+// TODO refaire la page des stats
+// Inclure des graphs, plus de stats detaillées, moins globales?
+
 $allWarStats = getAllWarStats($db);
 $seasons = array_unique(array_column($allWarStats, "season"));
 rsort($seasons);
@@ -296,7 +299,7 @@ $lastUpdated = getLastUpdated($db, "war_stats");
                             <?php foreach ($lsPlayerList as $player) : ?>
                                 <tr class="pointerHand playerTr">
                                     <td class="whiteShadow text-center rank">
-                                        <span><?php echo utf8_encode($player['rank']); ?></span></td>
+                                        <span class="last-place"><?php echo utf8_encode($player['rank']); ?></span></td>
                                     <td class="whiteShadow"><a class="linkToPlayer"
                                                                href="player/<?php echo $player['tag']; ?>"><?php echo utf8_encode($player['name']); ?></a>
                                     </td>
