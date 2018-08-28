@@ -18,3 +18,5 @@ define('DBPASS', '');
 define('SMARTY_COMPILE_DIR',    'tmp/smarty/templates_c');
 // Dossier de cache de Smarty
 define('SMARTY_CACHE_DIR',      'tmp/smarty/cache');
+
+define('API_KEY', "votre clef api ici");
