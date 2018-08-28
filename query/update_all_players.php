@@ -9,6 +9,9 @@
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");
 
+if (!isApiRunning($api))
+    return;
+
 foreach (getAllPlayersInClan($db) as $playerDB) {
     $playerTag = $playerDB['tag'];
     $player = getPlayerFromApi($api, $playerTag);

@@ -88,7 +88,7 @@ $lastUpdated = getLastUpdatedPlayer($db, $playerTag);
                 <?php endfor; ?>
             </div>
         </div>
-        <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-5 col-md-offset-2 player-deck">
             <div class="wrapper-current-deck">
                 <h3 class="whiteShadow">Deck du moment</h3>
                 <?php

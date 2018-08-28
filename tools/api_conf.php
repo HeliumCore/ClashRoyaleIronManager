@@ -63,3 +63,8 @@ function getWarBattlesFromApi($api)
     $query = file_get_contents("https://api.royaleapi.com/clan/9RGPL8PC/battles?type=war", true, $api);
     return json_decode($query, true);
 }
+
+function isApiRunning($api) {
+    $apiResult = getClanFromApi($api);
+    return ($apiResult['error'] != true && $apiResult != null);
+}

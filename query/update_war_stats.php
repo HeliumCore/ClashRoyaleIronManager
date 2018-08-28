@@ -9,6 +9,9 @@
 include(__DIR__ . "/../tools/database.php");
 include(__DIR__ . "/../tools/api_conf.php");
 
+if (!isApiRunning($api))
+    return;
+
 $allPlayers = getAllPlayersInClan($db);
 
 foreach (getWarLogFromApi($api) as $war) {

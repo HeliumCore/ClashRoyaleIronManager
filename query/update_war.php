@@ -9,6 +9,9 @@
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");
 
+if (!isApiRunning($api))
+    return;
+
 $data = getWarFromApi($api);
 $numberOfCurrentPlayers = getNumberOfCurrentPlayersInWar($db);
 if (getNumberOfPlayersInClan($db) > $numberOfCurrentPlayers && $numberOfCurrentPlayers != 0) {

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('.apiError').hide();
+
     let playerTag = $('#playerTagHidden').val();
 
     $.ajax({

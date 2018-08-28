@@ -13,6 +13,9 @@ else $playerTag = "8YG908L08";
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");
 
+if (!isApiRunning($api))
+    return;
+
 $player = getPlayerFromApi($api, $playerTag);
 updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
 $deck = $player['currentDeck'];
