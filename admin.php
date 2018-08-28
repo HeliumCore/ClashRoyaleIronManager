@@ -6,7 +6,7 @@
  * Time: 17:02
  */
 
-include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/tools/bootstrap.php");
 
 if (session_status() == PHP_SESSION_NONE)
     session_start();

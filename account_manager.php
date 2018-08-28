@@ -14,7 +14,7 @@ if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
 
 $accountId = $_SESSION['accountId'];
 
-include(__DIR__ . "/tools/database.php");
+include(__DIR__ . "/tools/bootstrap.php");
 $playerTag = getPlayerInfoByAccountId($db, $accountId)['tag'];
 
 //TODO refaire le design du calendrier

@@ -5,7 +5,8 @@
  * Date: 02/08/18
  * Time: 17:09
  */
-include(__DIR__ . "/tools/database.php");
+
+include(__DIR__ . "/tools/bootstrap.php");
 
 $bForceHttpsLogin = defined('FORCE_HTTPS_LOGIN')?FORCE_HTTPS_LOGIN:true;
 if ($bForceHttpsLogin && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off")) {

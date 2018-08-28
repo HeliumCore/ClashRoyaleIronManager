@@ -6,8 +6,7 @@
  * Time: 14:38
  */
 
-include(__DIR__ . "/tools/database.php");
-include(__DIR__ . "/tools/api_conf.php");
+include(__DIR__ . "/tools/bootstrap.php");
 include_once(__DIR__ . "/check_login.php");
 
 
