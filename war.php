@@ -35,8 +35,14 @@ if ($state == "collectionDay") {
     $endTime = $war['warEndTime'];
 }
 $currentTrophies = $war['clan']['warTrophies'];
-?>
 
+// TODO ajouter la recherche par nom
+
+// TODO ajouter le tri des tableaux
+
+// TODO lorsqu'on est connecté, afficher en en-tete du tableau la ligne du joueur connecté
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
