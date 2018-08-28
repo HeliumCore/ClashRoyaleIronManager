@@ -8,6 +8,7 @@ class MVCEngine {
     private static $oInstance = null;
 
     private $oSmarty = null;
+    private $aScripts = array();
 
     /**
      * Construit le moteur (initialise Smarty)
@@ -65,6 +66,12 @@ class MVCEngine {
      */
     public function renderTemplate($sTemplateName = null){
         $sTemplateName = empty($sTemplateName)?basename($_SERVER['SCRIPT_NAME'],'.php'):$sTemplateName;
+
+        if(file_exists('js/'.$sTemplateName.'.js'))
+            $this->_addScript($sTemplateName);
+
+        $this->oSmarty->assign('scripts', $this->aScripts);
+
         $this->oSmarty->display('header.tpl.html');
         $this->oSmarty->display($sTemplateName.'.tpl.html');
         $this->oSmarty->display('footer.tpl.html');
@@ -90,5 +97,19 @@ class MVCEngine {
      */
     public static function setTitle($sTitle){
         self::assign('title', $sTitle);
+    }
+
+    private function _addScript($sScriptName){
+        if(!in_array($sScriptName, $this->aScripts)){
+            $this->aScripts[] = $sScriptName;
+        }
+    }
+
+    /**
+     * Ajoute un fichier JS à la page
+     * @param string $sScriptName Nom du script
+     */
+    public static function addScript($sScriptName){
+        self::getInstance()->_addScript($sScriptName);
     }
 }
