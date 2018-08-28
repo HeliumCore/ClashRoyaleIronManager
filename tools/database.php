@@ -6,6 +6,9 @@
  * Time: 14:53
  */
 
+if(!defined('CONFIGURED'))
+    require_once('conf.php');
+
 $db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
 
 // ================== SQL ===================

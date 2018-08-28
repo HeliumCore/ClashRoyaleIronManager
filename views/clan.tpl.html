@@ -26,11 +26,11 @@
                     <td class="rank text-center"><span class="last-place">{$player['rank']}</span></td>
                     <td class="whiteShadow">
                         <a class="linkToPlayer" href="/player/{$player['tag']}">
-                            {$player['playerName']}
+                            {utf8_encode($player['playerName'])}
                         </a>
                         <br>
                         <span class="small">
-                            {$player['playerRole']}
+                            {utf8_encode($player['playerRole'])}
                         </span>
                     </td>
                     <td class=" whiteShadow">

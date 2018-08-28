@@ -6,9 +6,10 @@
  * Time: 17:11
  */
 
+$token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAxNywiaWRlbiI6IjI3MjUwMDMyNzcyOTU5NDM3MCIsIm1kIjp7InVzZXJuYW1lIjoiS2FvdWxvbWJyZSIsImtleVZlcnNpb24iOjMsImRpc2NyaW1pbmF0b3IiOiIxOTY4In0sInRzIjoxNTM1NDU0MTMwODgzfQ.I9Msmnyqq33vtuKvNea5LeWXzkj6CFOGULVqAI4ZOqs";
 $opts = [
     "http" => [
-        "header" => "auth:" . API_KEY
+        "header" => "auth:" . $token
     ]
 ];
 

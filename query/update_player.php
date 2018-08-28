@@ -7,8 +7,7 @@
  */
 
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
-//else return;
-else $playerTag = "8YG908L08";
+else return;
 
 include(__DIR__ . "/../tools/api_conf.php");
 include(__DIR__ . "/../tools/database.php");

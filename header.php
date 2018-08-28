@@ -25,6 +25,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php
+                // TODO refaire ca en smarty (assez haute priorité)
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
