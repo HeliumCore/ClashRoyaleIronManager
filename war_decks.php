@@ -320,7 +320,7 @@ function getDeckLink($deck)
     <img id="loaderImg" src="/images/loader.gif"/>
 </div>
 <br>
-<div class="row text-center">
+<div class="text-center">
     <?php if ($lastUpdated['updated'] != null):
         $time = strtotime($lastUpdated['updated']);
         ?>
