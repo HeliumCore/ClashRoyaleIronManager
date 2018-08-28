@@ -1,0 +1,77 @@
+<div class="container">
+    <h1 class="whiteShadow">Liste des joueurs</h1>
+    <div class="row">
+        <div class="col-md-9">
+            <span class="whiteShadow">Vous pouvez cliquer sur une ligne pour voir le détail d'un joueur</span><br>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="tx_search" class="pull-right form-control" placeholder="Filtrer par nom"
+                   style="margin-left: 10px;"/><br><br>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="tableIndex" class="table tableIndex table-hover">
+            <thead>
+            <tr class="rowIndex">
+                <th class="headIndex text-center">Rang</th>
+                <th class="headIndex">Nom</th>
+                <th class="headIndex">Trophée</th>
+                <th class="headIndex text-center">Arène</th>
+                <th class="headIndex text-center clan-dons" colspan="2">Dons</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$clanPlayers item=player}
+                <tr class="pointerHand playerTr">
+                    <td class="rank text-center"><span class="last-place">{$player['rank']}</span></td>
+                    <td class="whiteShadow">
+                        <a class="linkToPlayer" href="/player/{$player['tag']}">
+                            {$player['playerName']}
+                        </a>
+                        <br>
+                        <span class="small">
+                            {$player['playerRole']}
+                        </span>
+                    </td>
+                    <td class=" whiteShadow">
+                        {$player['trophies']} <img src="/images/ui/trophy.png" height="20px">
+                    </td>
+                    <td class="text-center">
+                        <!--  TODO fix missing arena-9 -->
+                        {if $player['arena_id'] > 5 && $player['arena_id'] != 9}
+                            <img src="/images/arenas/arena-{$player['arena_id']}.png" title="{$player['arena']}" height="50px">
+                        {else}
+                            <div>
+                                <img src="/images/arenas/arena-.png" title="" height="50px">
+                                <span class="whiteShadow arenaNumber">{$player['arena_id']}</span>
+                            </div>
+                        {/if}
+                    </td>
+                    <td class=" text-center whiteShadow clan-dons">
+                        Reçues <br>
+                        {$player['donations_received']}
+                    </td>
+                    <td class=" text-center whiteShadow clan-dons">
+                        Données <br>
+                        {$player['donations']}
+                    </td>
+                </tr>
+                <input type="hidden" class="hd_playerName" value="{$player['playerName']}"/>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+<div id="loaderDiv">
+    <img id="loaderImg" src="/images/loader.gif"/>
+</div>
+<div class="row text-center">
+    {if $lastUpdated != null}
+        <span class="whiteShadow">
+            Dernière mise à jour le : <b>{$lastUpdated|date_format:"%d/%m/%Y"}</b> à <b>{$lastUpdated|date_format:"%H:%M"}
+        </span>
+    {else}
+        <span class="whiteShadow">Nécessite une mise à jour</span>
+    {/if}
+</div>
