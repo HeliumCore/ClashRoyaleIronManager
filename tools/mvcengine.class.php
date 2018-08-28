@@ -17,16 +17,18 @@ class MVCEngine {
 
         // Dossier des templates compilées de Smarty
         if(defined('SMARTY_COMPILE_DIR') && !empty(SMARTY_COMPILE_DIR)){
-            if(!is_dir(SMARTY_COMPILE_DIR))
-                mkdir(SMARTY_COMPILE_DIR, null, true);
-                $this->oSmarty->setCompileDir(SMARTY_COMPILE_DIR);
+            if(!is_dir(SMARTY_COMPILE_DIR)){
+                mkdir(SMARTY_COMPILE_DIR, 0777, true);
+            }
+            $this->oSmarty->setCompileDir(SMARTY_COMPILE_DIR);
         }
 
         // Dossier de cache Smarty
         if(defined('SMARTY_CACHE_DIR') && !empty(SMARTY_CACHE_DIR)){
-            if(!is_dir(SMARTY_CACHE_DIR))
-                mkdir(SMARTY_CACHE_DIR, null, true);
-                $this->oSmarty->setCacheDir(SMARTY_CACHE_DIR);
+            if(!is_dir(SMARTY_CACHE_DIR)){
+                mkdir(SMARTY_CACHE_DIR, 0777, true);
+            }
+            $this->oSmarty->setCacheDir(SMARTY_CACHE_DIR);
         }
 
         // Dossier contenant les templates pour Smarty
@@ -71,8 +73,15 @@ class MVCEngine {
     /**
      * Permet de faire simplement le rendu de la page (par appel static)
      */
-    public static function render(){
-        self::getInstance()->renderTemplate();
+    public static function render($sTemplateName = null){
+        self::getInstance()->renderTemplate($sTemplateName);
+    }
+
+    /**
+     * Raccourci statique pour l'assignation de variables Smarty
+     */
+    public static function assign($mVar, $mValue=null){
+        self::getInstance()->getSmarty()->assign($mVar, $mValue);
     }
 
     /**
@@ -80,6 +89,6 @@ class MVCEngine {
      * @param string $sTitle Titre de la page
      */
     public static function setTitle($sTitle){
-        self::getInstance()->getSmarty()->assign('title', $sTitle);
+        self::assign('title', $sTitle);
     }
 }

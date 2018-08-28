@@ -6,6 +6,8 @@
 
 // Init conf
 require('conf.php');
+require('api_conf.php');
+define('CONFIGURED', true);
 
 // Init database
 require('database.php');
