@@ -17,8 +17,20 @@ if (isset($_GET['tag'])) $playerTag = $_GET['tag'];
 
 if (empty($playerTag)) header('Location: /clan');
 
+$isLogged = false;
+$isAdmin = false;
+
+if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
+    $accountId = intval($_SESSION['accountId']);
+    $isAdmin = isAccountAdmin($db, $accountId);
+    $isLogged = true;
+}
+
 $player = new Player($playerTag);
 MVCEngine::setTitle('Infos du joueur');
 MVCEngine::assign('player',         $player->getPlayerInfos());
 MVCEngine::assign('lastUpdated',    $player->getLastUpdated());
+MVCEngine::assign('allowUpdate',    true);
+MVCEngine::assign('isAdmin',    true);
+MVCEngine::assign('isLogged',    true);
 MVCEngine::render();

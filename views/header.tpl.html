@@ -43,7 +43,30 @@
                 </li>
                 <li><a href="/rules">Réglement</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right pointerHand">
+            <ul class="nav navbar-nav navbar-right">
+                {if $allowUpdate}
+                <li>
+                    <a onclick="update()" class="pointerHand">
+                        Mise à jour&nbsp;<img src="/images/ui/reload.png" class="reload-image">
+                    </a>
+                </li>
+                {/if}
+
+                {if $isLogged}
+                {if $isAdmin}
+                <li><a href="/admin">Admin</a></li>
+                {/if}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name']; ?> - Gestion</a></li>
+                        <li class="dropdown-li"><a href="/index/logout">Se deconnecter</a></li>
+                    </ul>
+                </li>
+                {else}
+                <li><a href="/login">Se connecter</a></li>
+                {/if}
             </ul>
         </div>
     </div>
