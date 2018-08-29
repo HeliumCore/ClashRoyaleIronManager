@@ -1,10 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<input type="hidden" id="hd_playerId" value="{$player->getId()}"/>
+<input type="hidden" id="playerTagHidden" value="{$player->getTag()}"/>
+<div class="container">
+    <div class="player-badge badge-div">
+        <div class="pull-right whiteShadow trophy-div hideOnUpdate">
+            <img src="/images/ui/trophy.png" height="30px" class="trophy-img"/>
+            <span>{$player->getTrophies()}</span>
+            <div class="max-trophy">Max {$player->getMaxTrophies()}</div>
+        </div>
+        <div class="flex">
+            <div class="level-container">
+                <span>{$player->getLevel()}</span>
+                <img src="/images/ui/level-big.png" class="player-level"/>
+            </div>
+            <h1 class="whiteShadow">
+                {utf8_encode($player->getName())}
+                <br>
+                <span class="small whiteShadow">{$player->getRole()}</span>&nbsp;<span
+                    class="tiny">{$player->getTag()}</span>
+            </h1>
+        </div>
+        <div>
+            <span class="whiteShadow">
+                Rang: {$player->getRank()}<br>
+                {$player->getArena()->getName()}
+            </span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 player-chests">
+            <h3 class="whiteShadow">Coffres à venir</h3>
+            <div class="row text-center" id="chestsDiv">
+                {for $i=0 to 7}
+                <div class="col-xs-3">
+                    <div class="img-responsive chests-placeholder">
+                        <img src="/images/chests/legendary-chest.png" alt="failed to load img"
+                             class="img-responsive chests"/>
+                        <span class="chestNumber whiteShadow">+</span>
+                    </div>
+                </div>
+                {/for}
+            </div>
+        </div>
+        <div class="col-md-5 col-md-offset-2 player-deck">
+            <div class="wrapper-current-deck">
+                <h3 class="whiteShadow">Deck du moment</h3>
+                <div class="row">
+                    {foreach from=$player->getCurrentDeck()->getCards() item=card}
+                    <div class="col-xs-3">
+                        <div class="img-responsive">
+                            <img src="/images/cards/{$card->getKey()}.png"
+                                 alt="failed to load img" class="img-responsive cards"/>
+                            <div class="card-level">
+                                    <span class="greyShadow card-level-span"
+                                          data-card="{$card->getKey()}"></span>
+                            </div>
+                            <div class="card-shadow"></div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+                <div class="text-center pointerHand deckLinkHand">
+                    <a href="{$player->getCurrentDeck()->getDeckLink()}" class="text-center">
+                        <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                        <span id="spanDeckLink" class="whiteShadow text-center">Copier</span>
+                    </a>
+                </div>
+                <div class="elixir-average">
+                    Cout moyen en élixir: {$player->getCurrentDeck()->getElixirCost()}
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 class="whiteShadow">Dons de la semaine</h3>
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
+            <thead>
+            <tr class="rowIndex"></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="whiteShadow text-center">Données<br>{$player->getDonations()}</td>
+                <td class="whiteShadow text-center">Reçues<br>{$player->getDonationsReceived()}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 class="whiteShadow">Guerres <span
+            class="small whiteShadow">(&nbsp;{$player->getWarPlayed()} jouées&nbsp;)</span></h3>
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
+            <thead>
+            <tr class="rowIndex">
+                <th class="playerHeadIndex text-center" colspan="6">Collections</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="whiteShadow text-center" colspan="2">Jouées<br>{$player->getCollectionPlayed()}</td>
+                <td class="whiteShadow text-center" colspan="2">Gagnées<br>{$player->getCollectionWon()}</td>
+                <td class="whiteShadow text-center" colspan="2"><img src="/images/ui/deck.png" height="35px"/>{$player->getCardsEarned()}
+                </td>
+            </tr>
+            </tbody>
+            <thead>
+            <tr class="rowIndex">
+                <th class="playerHeadIndex text-center" colspan="6">Batailles</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="whiteShadow text-center" colspan="3">Jouées<br>{$player->getBattlePlayed()}</td>
+                <td class="whiteShadow text-center" colspan="3">Gagnées<br>{$player->getBattleWon()}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 class="whiteShadow">Absences</h3>
+    <div class="table-responsive player-table-div">
+        <table class="table player-table">
+            <thead>
+            <tbody>
+            <tr>
+                <td class="whiteShadow text-center">Collections<br>{$player->getCollectionMissed()}</td>
+                <td class="whiteShadow text-center">Batailles<br>{$player->getBattleMissed()}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+<div id="loaderDiv">
+    <img id="loaderImg" src="/images/loader.gif"/>
+</div>
+<div class="row text-center">
+    {if $lastUpdated != null}
+    <span class="whiteShadow">
+            Dernière mise à jour le : <b>{$lastUpdated|date_format:"%d/%m/%Y"}</b> à <b>{$lastUpdated|date_format:"%H:%M"}</b>
+        </span>
+    {else}
+    <span class="whiteShadow">Nécessite une mise à jour</span>
+    {/if}
+</div>

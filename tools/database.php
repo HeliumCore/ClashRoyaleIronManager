@@ -1075,7 +1075,7 @@ function getAllPauses($db)
     SELECT p.name, GROUP_CONCAT(pp.pause) as pauses
     FROM player_pause pp
     JOIN account a ON pp.account_id = a.id
-    JOIN players p ON a.player_id = p.id
+    JOIN players p ON a.player_id = p.id AND in_clan > 0
     GROUP BY account_id
     ";
     return fetch_all_query($db, $query);

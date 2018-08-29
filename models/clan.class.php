@@ -37,7 +37,7 @@ class Clan {
             FROM last_updated
             WHERE page_name = 'index'
         ")->fetch();
-        if(!empty($result['updated'])){
+        if (!empty($result['updated'])) {
             return strtotime($result['updated']);
         }
         return null;

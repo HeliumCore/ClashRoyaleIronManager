@@ -25,7 +25,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php
-                // TODO refaire ca en smarty (assez haute priorité)
+//                 TODO changer en smarty, une fois que tout le site est passé en smarty. Sinon ca va bug sur les page php classique
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
@@ -36,11 +36,6 @@
                         </a>
                     </li>
                 <?php endif;
-
-                /* Err -> headers already been sent !
-                if (session_status() == PHP_SESSION_NONE)
-                    session_start();
-                */
 
                 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])):
                     $accountId = intval($_SESSION['accountId']);
@@ -54,7 +49,7 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name'];?> - Gestion</a></li>
+                            <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name']; ?> - Gestion</a></li>
                             <li class="dropdown-li"><a href="/index/logout">Se deconnecter</a></li>
                         </ul>
                     </li>
