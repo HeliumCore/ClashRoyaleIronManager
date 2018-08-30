@@ -63,6 +63,7 @@ class MVCEngine {
     /**
      * Fais le rendu de la template en fonction de la page, ou du nom de la template passée en paramètre
      * @param string $sTemplateName Nom de la template (sans l'extension et le dossier)
+     * @throws SmartyException
      */
     public function renderTemplate($sTemplateName = null){
         $sTemplateName = empty($sTemplateName)?basename($_SERVER['SCRIPT_NAME'],'.php'):$sTemplateName;
