@@ -19,6 +19,6 @@ MVCEngine::assign('clan',           $oClan);
 MVCEngine::assign('clanPlayers',    $oClan->getPlayers());
 MVCEngine::assign('lastUpdated',    $oClan->getLastUpdated());
 MVCEngine::assign('allowUpdate',    true);
-MVCEngine::assign('isAdmin',    true);
-MVCEngine::assign('isLogged',    true);
+MVCEngine::assign('isAdmin',    $isAdmin);
+MVCEngine::assign('isLogged',    $isLogged);
 MVCEngine::render();

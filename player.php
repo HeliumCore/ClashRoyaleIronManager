@@ -32,6 +32,6 @@ MVCEngine::setTitle('Infos du joueur');
 MVCEngine::assign('player',         $player->getPlayerInfos());
 MVCEngine::assign('lastUpdated',    $player->getLastUpdated());
 MVCEngine::assign('allowUpdate',    true);
-MVCEngine::assign('isAdmin',    true);
-MVCEngine::assign('isLogged',    true);
+MVCEngine::assign('isAdmin',    $isAdmin);
+MVCEngine::assign('isLogged',    $isLogged);
 MVCEngine::render();

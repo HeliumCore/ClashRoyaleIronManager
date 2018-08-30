@@ -12,6 +12,6 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 
 MVCEngine::addScript("main");
 MVCEngine::setTitle('Réglement');
-MVCEngine::assign('isAdmin',    true);
-MVCEngine::assign('isLogged',    true);
+MVCEngine::assign('isAdmin',    $isAdmin);
+MVCEngine::assign('isLogged',    $isLogged);
 MVCEngine::render();

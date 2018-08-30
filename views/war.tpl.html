@@ -1,0 +1,119 @@
+<div class="container">
+    {if $war->getState() == "warDay"}
+        <h3 class="whiteShadow">Résultats des clans</h3>
+        <div class="standings-badge badge-div">
+            {foreach name=standings_foreach from=$war->getStandings() item=standing}
+                <div class="standings-s-div">
+                    <div class="standing-div">
+                        <div class="flex">
+                            <span class="whiteShadow text-center clan-rank" data-pos="{$standing->getRank()}">{$standing->getRank()}</span>&nbsp;
+                            <span class="whiteShadow clan-name">{$standing->getName()}</span>
+                        </div>
+                    </div>
+                    <div class="results-div hideOnUpdate">
+                        <div class="pull-right whiteShadow crowns-div trophy-div clan-crows-div">
+                            <img src="/images/ui/crowns.png" height="30px" class="crowns-img"/>
+                            <span>{$standing->getCrowns()}</span>
+                        </div>
+                        <div class="pull-right whiteShadow wins-div trophy-div">
+                            <img src="/images/ui/war-win.png" height="30px" class="wins-img"/>
+                            <span>{$standing->getBattleWon()}</span>
+                        </div>
+                        <div class="pull-right whiteShadow battles-div trophy-div">
+                            <img src="/images/ui/war-battle.png" height="30px" class="battles-img"/>
+                            <span>{$war->getMaxBattle() - $standing->getBattlePlayed()}</span>
+                        </div>
+                        <div class="pull-right whiteShadow participants-div trophy-div">
+                            <img src="/images/ui/participants.png" height="30px" class="participants-img"/>
+                            <span>{$standing->getParticipants()}</span>
+                        </div>
+                        <div class="pull-right whiteShadow clan-trophies-div trophy-div">
+                            <img src="/images/ui/clan-trophies.png" height="30px" class="clan-trophies-img"/>
+                            <span>{$standing->getWarTrophies()}</span>
+                        </div>
+                    </div>
+                </div>
+                {if not $smarty.foreach.standings_foreach.last}
+                    <hr>
+                {/if}
+            {/foreach}
+        </div>
+    {elseif $war->getState() == "collectionDay"}
+        <h3 class="whiteShadow">Résultats du clan</h3>
+        <div class="clan-result-badge badge-div hideOnUpdate">
+            <div class="pull-right whiteShadow clan-cards-div trophy-div">
+                <img src="/images/ui/deck.png" height="30px" class="clan-cards-img"/>
+                <span id="numberOfCardsEarned"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-wins-div trophy-div">
+                <img src="/images/ui/war-win.png" height="30px" class="wins-img"/>
+                <span id="numberOfCollectionWon"></span>
+            </div>
+            <div class="pull-right whiteShadow played-div trophy-div">
+                <img src="/images/ui/battle.png" height="30px" class="played-img"/>
+                <span id="numberOfCollectionPlayed"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-non-participants-div trophy-div">
+                <img src="/images/ui/non-participants.png" height="30px" class="clan-non-participants-img"/>
+                <span id="numberOfMissing"></span>
+            </div>
+            <div class="pull-right whiteShadow clan-participants-div hideOnUpdate trophy-div">
+                <img src="/images/ui/participants.png" height="30px" class="participants-img"/>
+                <span id="numberOfParticipant"></span>
+            </div>
+        </div>
+    {/if}
+</div>
+<div class="container">
+    {if $war->getState() != "notIntWar"}
+    <h3 class="whiteShadow">Résultats par joueur</h3>
+    <div class="divCurrentWar table-responsive war-table-div">
+        {if $war->getState() == "collectionDay"}
+            <input type="hidden" id="hd_numberOfParticipants" value="{$numberOfParticipants}"/>
+            <input type="hidden" id="hd_numberOfMissing" value="{$missingPlayers}"/>
+            <input type="hidden" id="hd_numberOfCollectionPlayed" value="{$clanResult->getCollectionPlayed()}"/>
+            <input type="hidden" id="hd_numberOfCollectionWon" value="{$clanResult->getCollectionWon()}"/>
+            <input type="hidden" id="hd_numberOfCardsEarned" value="{$clanResult->getCardsEarned()}"/>
+        {/if}
+        <table id="playersTable" class="table table-hover war-table">
+            <thead>
+            <tr class="rowIndex">
+                <th class="text-center warHeadIndex">Rang</th>
+                <th class="warHeadIndex">Joueur</th>
+                {if $war->getState() == "warDay"}
+                <th class="text-center warHeadIndex" colspan="2">Batailles</th>
+                {/if}
+                <th class="text-center warHeadIndex" colspan="3">Collections</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$war->getResults() item=playerResult}
+            <tr class="pointerHand playerTr">
+                <td class="whiteShadow text-center rank"><div><span class="last-place">{$playerResult->getRank()}</span></div></td>
+                <td class="whiteShadow"><a class="linkToPlayer" href="player/{$playerResult->getTag()}">{utf8_encode($playerResult->getName())}</a></td>
+                {if $war->getState() == "warDay"}
+                <td class="whiteShadow text-center">Jouées<br>{$playerResult->getBattlePlayed()}</td>
+                <td class="whiteShadow text-center">Gagnées<br>{$playerResult->getBattleWon()}</td>
+                {/if}
+                <td class="whiteShadow text-center">Jouées<br>{$playerResult->getCollectionPlayed()}</td>
+                <td class="whiteShadow text-center">Gagnées<br>{$playerResult->getCollectionWon()}</td>
+                <td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;{$playerResult->getCardsEarned()}</td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    {/if}
+</div>
+<div id="loaderDiv">
+    <img id="loaderImg" src="/images/loader.gif"/>
+</div>
+<div class="row text-center">
+    {if $lastUpdated != null}
+    <span class="whiteShadow">
+            Dernière mise à jour le : <b>{$lastUpdated|date_format:"%d/%m/%Y"}</b> à <b>{$lastUpdated|date_format:"%H:%M"}</b>
+        </span>
+    {else}
+    <span class="whiteShadow">Nécessite une mise à jour</span>
+    {/if}
+</div>

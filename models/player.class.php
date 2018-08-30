@@ -262,4 +262,88 @@ class Player {
     public function getCurrentDeck() {
         return $this->currentDeck;
     }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setSTag($sTag) {
+        $this->sTag = $sTag;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setTrophies($trophies) {
+        $this->trophies = $trophies;
+    }
+
+    public function setMaxTrophies($maxTrophies) {
+        $this->maxTrophies = $maxTrophies;
+    }
+
+    public function setLevel($level) {
+        $this->level = $level;
+    }
+
+    public function setRole($role) {
+        $this->role = $role;
+    }
+
+    public function setRank($rank) {
+        $this->rank = $rank;
+    }
+
+    public function setArena($arena) {
+        $this->arena = $arena;
+    }
+
+    public function setDonations($donations) {
+        $this->donations = $donations;
+    }
+
+    public function setDonationsReceived($donationsReceived) {
+        $this->donationsReceived = $donationsReceived;
+    }
+
+    public function setWarPlayed($warPlayed) {
+        $this->warPlayed = $warPlayed;
+    }
+
+    public function setCollectionPlayed($collectionPlayed) {
+        $this->collectionPlayed = $collectionPlayed;
+    }
+
+    public function setCollectionMissed($collectionMissed) {
+        $this->collectionMissed = $collectionMissed;
+    }
+
+    public function setCollectionWon($collectionWon) {
+        $this->collectionWon = $collectionWon;
+    }
+
+    public function setCardsEarned($cardsEarned) {
+        $this->cardsEarned = $cardsEarned;
+    }
+
+    public function setBattlePlayed($battlePlayed) {
+        $this->battlePlayed = $battlePlayed;
+    }
+
+    public function setBattleMissed($battleMissed) {
+        $this->battleMissed = $battleMissed;
+    }
+
+    public function setBattleWon($battleWon) {
+        $this->battleWon = $battleWon;
+    }
+
+    public function setANextChests($aNextChests) {
+        $this->aNextChests = $aNextChests;
+    }
+
+    public function setCurrentDeck($currentDeck) {
+        $this->currentDeck = $currentDeck;
+    }
 }
