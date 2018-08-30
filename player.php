@@ -1,6 +1,7 @@
 <?php
 require('tools/bootstrap.php');
 require('models/player.class.php');
+require("check_login.php");
 
 // TODO : Faire le "glow" multicolor autour des légendaires
 

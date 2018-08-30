@@ -1,5 +1,6 @@
 <?php
 require('tools/bootstrap.php');
+require("check_login.php");
 
 $isLogged = false;
 $isAdmin = false;

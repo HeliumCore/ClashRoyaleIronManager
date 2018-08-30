@@ -1,13 +1,10 @@
 <?php
 require('tools/bootstrap.php');
-
 require('models/clan.class.php');
+require("check_login.php");
 
 $isLogged = false;
 $isAdmin = false;
-
-// TODO check ca pour la connexion, ca deconne
-
 if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
     $accountId = intval($_SESSION['accountId']);
     $isAdmin = isAccountAdmin($db, $accountId);

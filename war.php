@@ -1,7 +1,8 @@
 <?php
 require('tools/bootstrap.php');
 require('models/war.class.php');
-//require('models/player.class.php');
+require("check_login.php");
+
 
 $isLogged = false;
 $isAdmin = false;
