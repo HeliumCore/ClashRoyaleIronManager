@@ -1,4 +1,32 @@
 <div class="container">
+    {if $war->getState() == "notInWar"}
+    <div class="row text-center">
+        <h3 class="whiteShadow">Il n'y a pas de guerre en cours</h3>
+    </div>
+    {elseif $war->getState() == "collectionDay" || $war->getState() == "warDay"}
+    <div class="war-badge badge-div">
+        <div class="pull-right whiteShadow trophy-div hideOnUpdate">
+            <img src="/images/ui/clan-trophies.png" height="30px" class="clan-trophies-img"/>
+            <span>{$currentTrophies}</span>
+        </div>
+        <div class="flex">
+            <h1 class="whiteShadow">
+                Guerre n°{$war->getId()}<br>
+                <span class="small whiteShadow">{$war->getStateName()}</span>
+            </h1>
+        </div>
+        <div>
+                <span class="whiteShadow">
+                    Fin le <b>{$war->getEndTime()|date_format:"%d/%m/%y à %H:%M"}</b>
+                    {if $war->getState() == "warDay"}
+                        <br><a href="/war_decks">Voir les decks de guerres utilisés</a>
+                    {/if}
+                </span>
+        </div>
+    </div>
+    {/if}
+</div>
+<div class="container">
     {if $war->getState() == "warDay"}
         <h3 class="whiteShadow">Résultats des clans</h3>
         <div class="standings-badge badge-div">

@@ -116,12 +116,12 @@ tbody tr:first-child .rank span {
     border: 3px solid #DAA520;
 }
 
-tbody tr:nth-child(3) .rank span {
+tbody tr:nth-child(2) .rank span {
     background: #BBC5C0;
     border: 3px solid #A9A9A9;
 }
 
-tbody tr:nth-child(5) .rank span {
+tbody tr:nth-child(3) .rank span {
     background: #BE7A54;
     border: 3px solid #A0522D;
 }
