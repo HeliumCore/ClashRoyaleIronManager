@@ -187,6 +187,10 @@ class Player {
         return $this->id;
     }
 
+    public function setId($id) {
+        $this->id = $id;
+    }
+
     public function getTag() {
         return $this->sTag;
     }
@@ -195,155 +199,151 @@ class Player {
         return $this->name;
     }
 
-    public function getTrophies() {
-        return $this->trophies;
-    }
-
-    public function getMaxTrophies() {
-        return $this->maxTrophies;
-    }
-
-    public function getLevel() {
-        return $this->level;
-    }
-
-    public function getRole() {
-        return $this->role;
-    }
-
-    public function getRank() {
-        return $this->rank;
-    }
-
-    public function getArena() {
-        return $this->arena;
-    }
-
-    public function getDonations() {
-        return $this->donations;
-    }
-
-    public function getDonationsReceived() {
-        return $this->donationsReceived;
-    }
-
-    public function getWarPlayed() {
-        return $this->warPlayed;
-    }
-
-    public function getCollectionPlayed() {
-        return $this->collectionPlayed;
-    }
-
-    public function getCollectionMissed() {
-        return $this->collectionMissed;
-    }
-
-    public function getCollectionWon() {
-        return $this->collectionWon;
-    }
-
-    public function getCardsEarned() {
-        return $this->cardsEarned;
-    }
-
-    public function getBattlePlayed() {
-        return $this->battlePlayed;
-    }
-
-    public function getBattleMissed() {
-        return $this->battleMissed;
-    }
-
-    public function getBattleWon() {
-        return $this->battleWon;
-    }
-
-    public function getCurrentDeck() {
-        return $this->currentDeck;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setSTag($sTag) {
-        $this->sTag = $sTag;
-    }
-
     public function setName($name) {
         $this->name = $name;
+    }
+
+    public function getTrophies() {
+        return $this->trophies;
     }
 
     public function setTrophies($trophies) {
         $this->trophies = $trophies;
     }
 
+    public function getMaxTrophies() {
+        return $this->maxTrophies;
+    }
+
     public function setMaxTrophies($maxTrophies) {
         $this->maxTrophies = $maxTrophies;
+    }
+
+    public function getLevel() {
+        return $this->level;
     }
 
     public function setLevel($level) {
         $this->level = $level;
     }
 
+    public function getRole() {
+        return $this->role;
+    }
+
     public function setRole($role) {
         $this->role = $role;
+    }
+
+    public function getRank() {
+        return $this->rank;
     }
 
     public function setRank($rank) {
         $this->rank = $rank;
     }
 
+    public function getArena() {
+        return $this->arena;
+    }
+
     public function setArena($arena) {
         $this->arena = $arena;
+    }
+
+    public function getDonations() {
+        return $this->donations;
     }
 
     public function setDonations($donations) {
         $this->donations = $donations;
     }
 
+    public function getDonationsReceived() {
+        return $this->donationsReceived;
+    }
+
     public function setDonationsReceived($donationsReceived) {
         $this->donationsReceived = $donationsReceived;
+    }
+
+    public function getWarPlayed() {
+        return $this->warPlayed;
     }
 
     public function setWarPlayed($warPlayed) {
         $this->warPlayed = $warPlayed;
     }
 
+    public function getCollectionPlayed() {
+        return $this->collectionPlayed;
+    }
+
     public function setCollectionPlayed($collectionPlayed) {
         $this->collectionPlayed = $collectionPlayed;
+    }
+
+    public function getCollectionMissed() {
+        return $this->collectionMissed;
     }
 
     public function setCollectionMissed($collectionMissed) {
         $this->collectionMissed = $collectionMissed;
     }
 
+    public function getCollectionWon() {
+        return $this->collectionWon;
+    }
+
     public function setCollectionWon($collectionWon) {
         $this->collectionWon = $collectionWon;
+    }
+
+    public function getCardsEarned() {
+        return $this->cardsEarned;
     }
 
     public function setCardsEarned($cardsEarned) {
         $this->cardsEarned = $cardsEarned;
     }
 
+    public function getBattlePlayed() {
+        return $this->battlePlayed;
+    }
+
     public function setBattlePlayed($battlePlayed) {
         $this->battlePlayed = $battlePlayed;
+    }
+
+    public function getBattleMissed() {
+        return $this->battleMissed;
     }
 
     public function setBattleMissed($battleMissed) {
         $this->battleMissed = $battleMissed;
     }
 
+    public function getBattleWon() {
+        return $this->battleWon;
+    }
+
     public function setBattleWon($battleWon) {
         $this->battleWon = $battleWon;
     }
 
-    public function setANextChests($aNextChests) {
-        $this->aNextChests = $aNextChests;
+    public function getCurrentDeck() {
+        return $this->currentDeck;
     }
 
     public function setCurrentDeck($currentDeck) {
         $this->currentDeck = $currentDeck;
+    }
+
+    public function setSTag($sTag) {
+        $this->sTag = $sTag;
+    }
+
+    public function setANextChests($aNextChests) {
+        $this->aNextChests = $aNextChests;
     }
 }

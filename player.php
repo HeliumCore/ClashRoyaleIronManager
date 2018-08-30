@@ -29,9 +29,9 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 $player = new Player($playerTag);
 MVCEngine::addScript("main");
 MVCEngine::setTitle('Infos du joueur');
-MVCEngine::assign('player',         $player->getPlayerInfos());
-MVCEngine::assign('lastUpdated',    $player->getLastUpdated());
-MVCEngine::assign('allowUpdate',    true);
-MVCEngine::assign('isAdmin',    $isAdmin);
-MVCEngine::assign('isLogged',    $isLogged);
+MVCEngine::assign('player', $player->getPlayerInfos());
+MVCEngine::assign('lastUpdated', $player->getLastUpdated());
+MVCEngine::assign('allowUpdate', true);
+MVCEngine::assign('isAdmin', $isAdmin);
+MVCEngine::assign('isLogged', $isLogged);
 MVCEngine::render();

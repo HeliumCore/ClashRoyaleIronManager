@@ -17,10 +17,10 @@ if (isset($_SESSION['accountId']) && !empty($_SESSION['accountId'])) {
 $oClan = new Clan();
 MVCEngine::addScript("main");
 MVCEngine::setTitle('Clan');
-MVCEngine::assign('clan',           $oClan);
-MVCEngine::assign('clanPlayers',    $oClan->getPlayers());
-MVCEngine::assign('lastUpdated',    $oClan->getLastUpdated());
-MVCEngine::assign('allowUpdate',    true);
-MVCEngine::assign('isAdmin',    $isAdmin);
-MVCEngine::assign('isLogged',    $isLogged);
+MVCEngine::assign('clan', $oClan);
+MVCEngine::assign('clanPlayers', $oClan->getPlayers());
+MVCEngine::assign('lastUpdated', $oClan->getLastUpdated());
+MVCEngine::assign('allowUpdate', true);
+MVCEngine::assign('isAdmin', $isAdmin);
+MVCEngine::assign('isLogged', $isLogged);
 MVCEngine::render();

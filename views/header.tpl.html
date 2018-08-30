@@ -10,11 +10,12 @@
     <link rel="stylesheet" type="text/css" href="/css/css.css">
     <link rel="stylesheet" type="text/css" href="/css/mobile.css">
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    {foreach from=$scripts item=script}<script type="text/javascript" src="/js/{$script}.js"></script>
+    {foreach from=$scripts item=script}
+    <script type="text/javascript" src="/js/{$script}.js"></script>
     {/foreach}
 </head>
 <body>
@@ -60,7 +61,8 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="/account_manager">Compte<span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name']; ?> - Gestion</a></li>
+                        <li class="dropdown-li"><a href="/account_manager"><?php print $playerInfos['name']; ?> -
+                            Gestion</a></li>
                         <li class="dropdown-li"><a href="/index/logout">Se deconnecter</a></li>
                     </ul>
                 </li>

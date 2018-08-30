@@ -30,7 +30,7 @@ class Deck {
             $crIdsArray[3], $crIdsArray[4], $crIdsArray[5], $crIdsArray[6],
             $crIdsArray[7]
         );
-        
+
         $this->deckLink = $deckLink;
         $this->cards = $cards;
         $this->elixirCost = $cost;

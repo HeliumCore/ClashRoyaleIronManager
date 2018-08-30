@@ -23,40 +23,40 @@
             </thead>
             <tbody>
             {foreach from=$clanPlayers item=player}
-                <tr class="pointerHand playerTr">
-                    <td class="rank text-center"><span class="last-place">{$player['rank']}</span></td>
-                    <td class="whiteShadow">
-                        <a class="linkToPlayer" href="/player/{$player['tag']}">
-                            {utf8_encode($player['playerName'])}
-                        </a>
-                        <br>
-                        <span class="small">
+            <tr class="pointerHand playerTr">
+                <td class="rank text-center"><span class="last-place">{$player['rank']}</span></td>
+                <td class="whiteShadow">
+                    <a class="linkToPlayer" href="/player/{$player['tag']}">
+                        {utf8_encode($player['playerName'])}
+                    </a>
+                    <br>
+                    <span class="small">
                             {utf8_encode($player['playerRole'])}
                         </span>
-                    </td>
-                    <td class=" whiteShadow">
-                        {$player['trophies']} <img src="/images/ui/trophy.png" height="20px">
-                    </td>
-                    <td class="text-center">
-                        <!--  TODO fix missing arena-9 -->
-                        {if $player['arena_id'] > 5 && $player['arena_id'] != 9}
-                            <img src="/images/arenas/arena-{$player['arena_id']}.png" title="{$player['arena']}" height="50px">
-                        {else}
-                            <div>
-                                <img src="/images/arenas/arena-.png" title="" height="50px">
-                                <span class="whiteShadow arenaNumber">{$player['arena_id']}</span>
-                            </div>
-                        {/if}
-                    </td>
-                    <td class=" text-center whiteShadow clan-dons">
-                        Reçues <br>
-                        {$player['donations_received']}
-                    </td>
-                    <td class=" text-center whiteShadow clan-dons">
-                        Données <br>
-                        {$player['donations']}
-                    </td>
-                </tr>
+                </td>
+                <td class=" whiteShadow">
+                    {$player['trophies']} <img src="/images/ui/trophy.png" height="20px">
+                </td>
+                <td class="text-center">
+                    <!--  TODO fix missing arena-9 -->
+                    {if $player['arena_id'] > 5 && $player['arena_id'] != 9}
+                    <img src="/images/arenas/arena-{$player['arena_id']}.png" title="{$player['arena']}" height="50px">
+                    {else}
+                    <div>
+                        <img src="/images/arenas/arena-.png" title="" height="50px">
+                        <span class="whiteShadow arenaNumber">{$player['arena_id']}</span>
+                    </div>
+                    {/if}
+                </td>
+                <td class=" text-center whiteShadow clan-dons">
+                    Reçues <br>
+                    {$player['donations_received']}
+                </td>
+                <td class=" text-center whiteShadow clan-dons">
+                    Données <br>
+                    {$player['donations']}
+                </td>
+            </tr>
             {/foreach}
             </tbody>
         </table>
@@ -68,10 +68,10 @@
 </div>
 <div class="row text-center">
     {if $lastUpdated != null}
-        <span class="whiteShadow">
+    <span class="whiteShadow">
             Dernière mise à jour le : <b>{$lastUpdated|date_format:"%d/%m/%Y"}</b> à <b>{$lastUpdated|date_format:"%H:%M"}</b>
         </span>
     {else}
-        <span class="whiteShadow">Nécessite une mise à jour</span>
+    <span class="whiteShadow">Nécessite une mise à jour</span>
     {/if}
 </div>
