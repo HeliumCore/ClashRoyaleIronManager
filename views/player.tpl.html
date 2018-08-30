@@ -15,7 +15,7 @@
             <h1 class="whiteShadow">
                 {utf8_encode($player->getName())}
                 <br>
-                <span class="small whiteShadow">{$player->getRole()}</span>&nbsp;<span
+                <span class="small whiteShadow">{utf8_encode($player->getRole())}</span>&nbsp;<span
                     class="tiny">{$player->getTag()}</span>
             </h1>
         </div>

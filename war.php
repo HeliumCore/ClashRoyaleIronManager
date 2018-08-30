@@ -46,8 +46,7 @@ if ($war->getState() == "collectionDay") {
     $clanResult->setCardsEarned($totalCardsEarned);
     $clanResult->setBattlePlayed($totalBattlesPlayed);
     $clanResult->setBattleWon($totalBattlesWon);
-    $numberOfParticipants = sizeof($war->getResults() - $missingPlayers);
-
+    $numberOfParticipants = sizeof($war->getResults()) - $missingPlayers;
 } else if ($war->getState() == "warDay") {
     $war->setStateName("Jour de guerre");
     $war->setStandings($war->getCurrentWarStandings());
