@@ -25,7 +25,6 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php
-//                 TODO changer en smarty, une fois que tout le site est passé en smarty. Sinon ca va bug sur les page php classique
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
                 $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):

@@ -1,7 +1,6 @@
 <?php
 require('tools/bootstrap.php');
 require('models/clan.class.php');
-require("check_login.php");
 
 $isLogged = false;
 $isAdmin = false;

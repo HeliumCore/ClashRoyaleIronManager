@@ -17,4 +17,8 @@ require('libs/smarty-3.1.32/bootstrap.php');
 
 // Moteur MVC
 require('mvcengine.class.php');
+
+// On connecte l'utilisateur (remember me)
+require('check_login.php');
+
 MVCEngine::create();
