@@ -16,7 +16,7 @@ function update() {
             break;
 
         case 'player':
-            url = "/query/update_player.php?tag=".concat($('input:hidden[name=playerTagHidden]').val());
+            url = "/query/update_player.php?tag=".concat($('#playerTagHidden').val());
             break;
 
         case 'war':

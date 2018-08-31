@@ -79,7 +79,7 @@ class Player {
         $pattern = "
             SELECT
             p.id as playerId, p.tag, p.name as playerName, p.rank, p.trophies, p.max_trophies, role.name as playerRole, p.exp_level as level,
-            p.donations, p.donations_received as received, 
+            p.donations, p.donations_received, 
             arena.arena as arena, arena.name as arenaName, arena.trophy_limit, arena.arena_id, 
             pw1.total_cards_earned, pw1.total_collection_played, pw1.total_collection_won, pw1.total_battle_played, pw1.total_battle_won,
             GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys, ROUND(AVG(c.elixir), 1) as elixir_cost,
@@ -115,7 +115,7 @@ class Player {
             SELECT
             GROUP_CONCAT(DISTINCT c.cr_id) cr_ids, GROUP_CONCAT(DISTINCT c.card_key) card_keys, ROUND(AVG(c.elixir), 1) as elixir_cost,
             players.id as playerId, players.tag, players.name as playerName, players.rank, players.trophies, players.max_trophies, role.name as playerRole, players.exp_level as level,
-            arena.arena as arena, arena.name as arenaName, players.donations, players.donations_received as received,
+            arena.arena as arena, arena.name as arenaName, players.donations, players.donations_received,
             arena.trophy_limit, arena.arena_id
             FROM players
             INNER JOIN arena ON arena.arena_id = players.arena
@@ -139,6 +139,14 @@ class Player {
             $this->donations = $player['donations'];
             $this->donationsReceived = $player['donations_received'];
             $this->currentDeck = new Deck($player['cr_ids'], $player['card_keys'], $player['elixir_cost']);
+            $this->warPlayed = 0;
+            $this->collectionMissed = 0;
+            $this->battleMissed = 0;
+            $this->battlePlayed = 0;
+            $this->battleWon = 0;
+            $this->collectionPlayed = 0;
+            $this->collectionWon = 0;
+            $this->cardsEarned = 0;
         } else {
             $player = $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->fetch();
             $this->id = $player['playerId'];
