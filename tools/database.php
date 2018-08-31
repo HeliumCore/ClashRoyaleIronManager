@@ -992,7 +992,7 @@ function getAccountInfos($db, $playerdTag)
 function getPlayerInfoByAccountId($db, $accountId)
 {
     $pattern = "
-    SELECT p.id, p.tag
+    SELECT p.id, p.tag, p.name
     FROM players p
     JOIN account a ON p.id = a.player_id
     WHERE a.id = %d

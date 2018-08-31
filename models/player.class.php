@@ -1,6 +1,7 @@
 <?php
 require 'arena.class.php';
 require 'deck.class.php';
+require 'pause.class.php';
 
 class Player {
     private $id = null;
@@ -24,6 +25,7 @@ class Player {
     private $battleWon = null;
     private $aNextChests = null;
     private $currentDeck = null;
+    private $pauses = null;
 
     public function __construct($sTag) {
         $this->sTag = $sTag;
@@ -353,5 +355,38 @@ class Player {
 
     public function setANextChests($aNextChests) {
         $this->aNextChests = $aNextChests;
+    }
+
+    public function getPausesString() {
+        $stringList = array();
+        $dateMap = array();
+        foreach ($this->getPauses() as $i => $pause) {
+            $time = $pause->getPauseDate();
+            $previousDay = $time - 86400000;
+
+            if (in_array($previousDay, array_values($dateMap))) {
+                $key = array_keys($dateMap)[count($dateMap)-1];
+                $dateMap[$key] = $time;
+            } else {
+                $dateMap[$time] = $time;
+            }
+        }
+
+        foreach ($dateMap as $key=>$value) {
+            if ($key == $value) {
+                array_push($stringList, "Le " . date('d/m/Y', ($value / 1000)));
+            } else {
+                array_push($stringList, "Du " . date('d/m/Y', ($key / 1000)) . ' au ' . date('d/m/Y', ($value / 1000)));
+            }
+        }
+        return $stringList;
+    }
+
+    public function getPauses() {
+        return $this->pauses;
+    }
+
+    public function setPauses($pauses) {
+        $this->pauses = $pauses;
     }
 }

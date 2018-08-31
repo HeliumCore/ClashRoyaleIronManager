@@ -1,0 +1,26 @@
+<div class="container">
+    <h1 class="whiteShadow">Gestion du clan</h1><br>
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="whiteShadow">Absences</h3><br>
+            <?php if (!$pauses): ?>
+            {if not $pauses}
+                <span class="whiteShadow">Il n'y a aucune absence programée</span>
+            {else}
+                <div>
+                    {foreach from=$pauses item=pause}
+                        <div>
+                            <span class="whiteShadow">{$pause->getName()} :</span><br>
+                            <ul>
+                            {foreach from=$pause->getPausesString() item=p}
+                                <li class="whiteShadow">{$p}</li>
+                            {/foreach}
+                            </ul>
+                        </div>
+                        <br>
+                    {/foreach}
+                </div>
+            {/if}
+        </div>
+    </div>
+</div>
