@@ -7,11 +7,11 @@ require("check_login.php");
 
 // TODO voir le probleme de la typo selon la taille
 
-// TODO revoir le tableau de guerre (style /war)
-
 // TODO afficher un graph de progression trophée
 
 // TODO enregistrer les coffres en bases systematiquement pour pouvoir ressortir une liste en cas d'API DOWN
+
+// TODO ajouter la date de la derniere guerre jouées
 
 $playerTag = explode("/", substr($_SERVER['REQUEST_URI'], 1))[1];
 if (isset($_GET['tag'])) $playerTag = $_GET['tag'];
