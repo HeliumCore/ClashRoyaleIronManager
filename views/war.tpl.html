@@ -116,6 +116,7 @@
             </thead>
             <tbody>
             {foreach from=$war->getResults() item=playerResult}
+            {if $playerResult->getCollectionPlayed() > 0 && $war->getState() == "warDay"}
             <tr class="pointerHand playerTr">
                 <td class="whiteShadow text-center rank">
                     <div><span class="last-place">{$playerResult->getRank()}</span></div>
@@ -131,6 +132,7 @@
                 <td class="whiteShadow"><img src="/images/ui/deck.png" height="35px"/>&nbsp;{$playerResult->getCardsEarned()}
                 </td>
             </tr>
+            {/if}
             {/foreach}
             </tbody>
         </table>
