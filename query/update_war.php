@@ -68,9 +68,9 @@ foreach (getAllPlayersInClan($db) as $player) {
         // Si le joueur a déjà été enregistré pour cette guerre, on update
         if ($warState == "collectionDay") {
             if (
-                $getPlayerWarResult['cards_earned'] < $cardsEarned &&
-                $getPlayerWarResult['collection_played'] < $battlesPlayed &&
-                $getPlayerWarResult['collection_won'] < $wins
+                intval($getPlayerWarResult['cards_earned']) < $cardsEarned &&
+                intval($getPlayerWarResult['collection_played']) < $battlesPlayed &&
+                intval($getPlayerWarResult['collection_won']) <= $wins
             ) {
                 updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $playerWarId);
             }
