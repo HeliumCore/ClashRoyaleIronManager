@@ -187,7 +187,7 @@ tbody tr:nth-child(3) .rank span {
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
-.playerHeadIndex, .warHeadIndex {
+.playerHeadIndex, .warHeadIndex, .lighblueShadow {
     color: lightblue;
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
@@ -519,7 +519,6 @@ tbody tr:nth-child(3) .rank span {
     margin-top: 0;
     left: -5%;
     padding: 0 15px 0 45px;
-
 }
 
 .clan-cards-img {
@@ -530,4 +529,69 @@ tbody tr:nth-child(3) .rank span {
 .player-chests {
     left: 5%;
     top: 70px;
+}
+
+.player-results-badge {
+    height: 250px;
+}
+
+.collections-span {
+    position: relative;
+    left: 45%;
+}
+
+.battles-span {
+    position: relative;
+    left: 46%;
+}
+
+.player-collection-results {
+    height: 25px;
+}
+
+.player-played-div {
+    left: -60%;
+    top: -60%;
+    width: 75px;
+    padding: 0 15px 0 30px;
+}
+
+.player-played-img {
+    position: absolute;
+    left: -25%;
+}
+
+.player-wins-div {
+    left: -37%;
+    top: -60%;
+    width: 75px;
+    padding: 0 15px 0 25px;
+}
+
+.player-wins-img {
+    position: absolute;
+    left: -15%;
+}
+
+.player-cards-div {
+    left: -12%;
+    top: -60%;
+    width: 105px;
+    padding: 0 15px 0 28px;
+}
+
+.player-cards-img {
+    position: absolute;
+    left: -15%;
+    top: -4%;
+}
+
+.player-war-played-div {
+    left: -60%;
+    top: -16px;
+}
+
+.player-war-wins-div {
+    left: -28%;
+    top: -16px;
 }

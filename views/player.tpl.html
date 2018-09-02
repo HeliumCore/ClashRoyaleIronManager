@@ -89,34 +89,38 @@
     </div>
     <h3 class="whiteShadow">Guerres <span
             class="small whiteShadow">(&nbsp;{$player->getWarPlayed()} jouées&nbsp;)</span></h3>
-    <div class="table-responsive player-table-div">
-        <table class="table player-table">
-            <thead>
-            <tr class="rowIndex">
-                <th class="playerHeadIndex text-center" colspan="6">Collections</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="whiteShadow text-center" colspan="2">Jouées<br>{$player->getCollectionPlayed()}</td>
-                <td class="whiteShadow text-center" colspan="2">Gagnées<br>{$player->getCollectionWon()}</td>
-                <td class="whiteShadow text-center" colspan="2"><img src="/images/ui/deck.png" height="35px"/>{$player->getCardsEarned()}
-                </td>
-            </tr>
-            </tbody>
-            <thead>
-            <tr class="rowIndex">
-                <th class="playerHeadIndex text-center" colspan="6">Batailles</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="whiteShadow text-center" colspan="3">Jouées<br>{$player->getBattlePlayed()}</td>
-                <td class="whiteShadow text-center" colspan="3">Gagnées<br>{$player->getBattleWon()}</td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="badge-div hideOnUpdate player-results-badge">
+        <span class="lighblueShadow collections-span">Collections</span>
+        <hr>
+        <div class="player-collection-results">
+            <div class="pull-right whiteShadow player-cards-div trophy-div">
+                <img src="/images/ui/deck.png" height="30px" class="player-cards-img"/>
+                <span>{$player->getCardsEarned()}</span>
+            </div>
+            <div class="pull-right whiteShadow player-wins-div trophy-div">
+                <img src="/images/ui/war-win.png" height="30px" class="player-wins-img"/>
+                <span>{$player->getCollectionWon()}</span>
+            </div>
+            <div class="pull-right whiteShadow player-played-div trophy-div">
+                <img src="/images/ui/battle.png" height="30px" class="player-played-img"/>
+                <span>{$player->getCollectionPlayed()}</span>
+            </div>
+        </div>
+        <hr>
+        <span class="lighblueShadow battles-span">Batailles</span>
+        <hr>
+        <div class="player-war-results">
+            <div class="pull-right whiteShadow player-war-wins-div trophy-div">
+                <img src="/images/ui/war-win.png" height="30px" class="player-wins-img"/>
+                <span>{$player->getBattleWon()}</span>
+            </div>
+            <div class="pull-right whiteShadow player-war-played-div trophy-div">
+                <img src="/images/ui/battle.png" height="30px" class="player-played-img"/>
+                <span>{$player->getBattlePlayed()}</span>
+            </div>
+        </div>
     </div>
+    <br>
     <h3 class="whiteShadow">Absences</h3>
     <div class="table-responsive player-table-div">
         <table class="table player-table">

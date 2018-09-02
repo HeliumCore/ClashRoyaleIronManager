@@ -232,4 +232,81 @@
         left: 0;
         top: 0;
     }
+
+    .player-results-badge {
+        height: 250px;
+    }
+
+    .collections-span {
+        position: relative;
+        left: 37%;
+    }
+
+    .battles-span {
+        position: relative;
+        left: 39%;
+    }
+
+    .player-collection-results {
+        height: 50px;
+    }
+
+    .player-war-results {
+        height: 15px;
+    }
+
+    .player-war-results {
+        height: 15px;
+    }
+
+    .player-played-div {
+        left: -16%;
+        top: -20%;
+        width: 75px;
+        padding: 0 15px 0 30px;
+    }
+
+    .player-played-img {
+        position: absolute;
+        left: -23%;
+        top: -10%;
+    }
+
+    .player-wins-div {
+        left: 23%;
+        top: -20%;
+        width: 75px;
+        padding: 0 15px 0 30px;
+    }
+
+    .player-wins-img {
+        position: absolute;
+        left: -15%;
+        top: -15%;
+    }
+
+    .player-cards-div {
+        left: -33%;
+        top: 55%;
+        width: 90px;
+        padding: 0 15px 0 30px;
+    }
+
+    .player-cards-img {
+        position: absolute;
+        left: -15%;
+        top: -25%;
+    }
+
+    .player-war-played-div {
+        left: -44%;
+        width: 75px;
+        padding: 0 15px 0 30px;
+    }
+
+    .player-war-wins-div {
+        left: -5%;
+        width: 75px;
+        padding: 0 15px 0 30px;
+    }
 }
