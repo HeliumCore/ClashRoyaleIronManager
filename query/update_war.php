@@ -75,7 +75,12 @@ foreach (getAllPlayersInClan($db) as $player) {
                 updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $playerWarId);
             }
         } else if ($warState == "warDay") {
-            updateWarDay($db, $battlesPlayed, $wins, $playerWarId);
+            if (
+                intval($getPlayerWarResult['battle_played']) < $battlesPlayed &&
+                intval($getPlayerWarResult['battle_won']) <= $wins
+            ) {
+                updateWarDay($db, $battlesPlayed, $wins, $playerWarId);
+            }
         }
     } else {
         if ($warState == "collectionDay") {
