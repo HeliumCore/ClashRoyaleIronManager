@@ -116,7 +116,7 @@
             </thead>
             <tbody>
             {foreach from=$war->getResults() item=playerResult}
-            {if $playerResult->getCollectionPlayed() > 0 && $war->getState() == "warDay"}
+            {if ($playerResult->getCollectionPlayed() > 0 && $war->getState() == "warDay") || ($war->getState() == "collectionDay")}
             <tr class="pointerHand playerTr">
                 <td class="whiteShadow text-center rank">
                     <div><span class="last-place">{$playerResult->getRank()}</span></div>
