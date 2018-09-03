@@ -26,10 +26,12 @@ foreach (getClanFromApi($api)['members'] as $player) {
         updatePlayer($db, $player['name'], $player['rank'], $player['trophies'], $player['role'], $player['expLevel'],
             $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'], $player['donationsDelta'],
             $player['donationsPercent'], $player['tag']);
+        updatePlayerTrophy($db, $result['id'], $player['trophies']);
     } else {
         insertPlayer($db, $player['name'], $player['tag'], $player['rank'], $player['trophies'], $player['role'],
             $player['expLevel'], $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
             $player['donationsDelta'], $player['donationsPercent']);
+        insertPlayerTrophy($db, $player['tag'], $player['trophies']);
     }
     array_push($allPlayersTagsInClan, $player['tag']);
 }

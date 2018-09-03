@@ -47,6 +47,15 @@ VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d, %d, %f)
     execute_query($db, $query);
 }
 
+function insertPlayerTrophy($db, $playerTag, $trophies) {
+    $pattern = "
+        INSERT INTO player_trophies(player_id, trophies, date)
+        VALUES ((SELECT id FROM players WHERE tag = \"%s\"), %d, UNIX_TIMESTAMP())
+    ";
+
+    execute_query($db, sprintf($pattern, $playerTag, $trophies));
+}
+
 // ----------------- UPDATE -----------------
 function updatePlayer($db, $name, $rank, $trophies, $role, $expLevel, $arenaId, $donations, $donationsReceived,
                       $donationsDelta, $donationsPercent, $tag)
@@ -90,6 +99,28 @@ SET players.max_trophies = %d
 WHERE players.tag = \"%s\"
 ";
     execute_query($db, utf8_decode(sprintf($pattern, $maxTrophies, $tag)));
+}
+
+function updatePlayerTrophy($db, $playerId, $trophies) {
+    $query = "
+        SELECT trophies
+        FROM player_trophyies
+        WHERE player_id = %d
+        ORDER BY date DESC
+        LIMIT 1
+    ";
+
+    $currentTrophies = intval(fetch_query($db, sprintf($query, $playerId))['trophies']);
+
+    if ($trophies == $currentTrophies)
+        return;
+
+    $pattern = "
+        INSERT INTO player_trophies(player_id, trophies, date)
+        VALUES (%d, %d, UNIX_TIMESTAMP())
+    ";
+
+    execute_query($db, sprintf($pattern, $playerId, $trophies));
 }
 
 // -----------------   GET  -----------------
