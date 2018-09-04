@@ -309,4 +309,118 @@
         width: 75px;
         padding: 0 15px 0 30px;
     }
+
+    #warSearchInput {
+        float: none !important;
+        position: relative;
+        left: 21%;
+        top: 0;
+    }
+
+    .noSort:before, .noSort:after {
+        border: 4px solid transparent;
+        content: "";
+        display: block;
+        height: 0;
+        width: 0;
+        position: relative;
+    }
+
+    .noSort:before {
+        border-bottom-color: lightblue;
+        margin-top: 0;
+    }
+
+    .noSort:after {
+        border-top-color: lightblue;
+        margin-top: -12px;
+    }
+
+    .descSort:before, .descSort:after {
+        border: 4px solid transparent;
+        content: "";
+        display: block;
+        height: 0;
+        width: 0;
+        position: relative;
+    }
+
+    .descSort:before {
+        margin-top: 0;
+    }
+
+    .descSort:after {
+        border-top-color: lightblue;
+        margin-top: -12px;
+    }
+
+    .ascSort:before, .ascSort:after {
+        border: 4px solid transparent;
+        content: "";
+        display: block;
+        height: 0;
+        width: 0;
+        position: relative;
+    }
+
+    .ascSort:before {
+        border-bottom-color: lightblue;
+        margin-top: 0;
+    }
+
+    .ascSort:after {
+        margin-top: -12px;
+    }
+
+    .cantSort:before, .cantSort:after {
+        border: 4px solid transparent;
+        content: "";
+        display: block;
+        height: 0;
+        width: 0;
+        position: relative;
+    }
+
+    .cantSort:before {
+        margin-top: 0;
+    }
+
+    .cantSort:after {
+        margin-top: -10px;
+    }
+
+    .collectionRankIndex:before, .collectionRankIndex:after {
+        left: 100%;
+        top: 6px;
+    }
+
+    .collectionPlayerIndex:before, .collectionPlayerIndex:after {
+        left: 50%;
+        top: 6px;
+    }
+
+    .collectionCollectionIndex:before, .collectionCollectionIndex:after {
+        left: 73%;
+        top: 6px;
+    }
+
+    .warRankIndex:before, .warRankIndex:after {
+        left: 100%;
+        top: 6px;
+    }
+
+    .warPlayerIndex:before, .warPlayerIndex:after {
+        left: 48%;
+        top: 6px;
+    }
+
+    .warBattleIndex:before, .warBattleIndex:after {
+        left: 78%;
+        top: 6px;
+    }
+
+    .warCollectionIndex:before, .warCollectionIndex:after {
+        left: 70%;
+        top: 6px;
+    }
 }
