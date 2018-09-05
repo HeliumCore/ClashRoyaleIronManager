@@ -64,6 +64,7 @@ function getWarBattlesFromApi($api)
     return json_decode($query, true);
 }
 
+//TODO utiliser cette fonction lors du jour de guerre pour afficher un message
 function isApiRunning($api) {
     $apiResult = getClanFromApi($api);
     return ($apiResult['error'] != true && $apiResult != null);

@@ -140,6 +140,7 @@ $(document).ready(function () {
         return bBattle - aBattle;
     }
 
+    //TODO revoir les requetes de sort battle
     function sortByBattleAsc(a, b) {
         let battlePos = 0;
         for (let i = 0; i < a.children.length; i++) {

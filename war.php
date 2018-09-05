@@ -2,6 +2,8 @@
 require('tools/bootstrap.php');
 require('models/war.class.php');
 
+//TODO quand il y a un compte, mettre en haut du tableau la ligne concernant le joueur connecté
+
 $isLogged = false;
 $isAdmin = false;
 $playerName = "";

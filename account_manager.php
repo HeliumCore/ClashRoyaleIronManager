@@ -10,6 +10,9 @@ require('tools/bootstrap.php');
 
 //TODO refaire le design du calendrier
 
+//TODO trouver un moyen d'envoyer des push sur mobile
+// Settings de notif dans l'account manager (guerre, echanges, etc...)
+
 if (!isset($_SESSION['accountId']) || empty($_SESSION['accountId']))
     header('Location: /login');
 
