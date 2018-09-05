@@ -40,9 +40,9 @@ foreach (getAllPlayersInClan($db) as $playerDB) {
         $cardId = intval(getCardByCrId($db, $card['id'])['id']);
         $level = getCardLevelByPlayer($db, $cardId, $playerId);
         if ($level) {
-            updateCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+            updateCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
         } else {
-            insertCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+            insertCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
         }
     }
 

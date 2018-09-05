@@ -41,9 +41,9 @@ foreach ($player['cards'] as $card) {
     $cardId = intval(getCardByCrId($db, $card['id'])['id']);
     $level = getCardLevelByPlayer($db, $cardId, $playerId);
     if (is_array($level)) {
-        updateCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+        updateCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
     } else {
-        insertCardLevelByPlayer($db, $cardId, $playerId, $card['level']);
+        insertCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
     }
 }
 

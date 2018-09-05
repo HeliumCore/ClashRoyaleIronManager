@@ -439,14 +439,14 @@ VALUES(\"%s\", \"%s\", %d, \"%s\", \"%s\", %d, %d)
     execute_query($db, utf8_decode(sprintf($pattern, $key, $name, $elixir, $type, $rarity, $arena, $crId)));
 }
 
-function insertCardLevelByPlayer($db, $card, $playerId, $level)
+function insertCardLevelByPlayer($db, $card, $playerId, $level, $quantity)
 {
     $pattern = "
-    INSERT INTO card_level(card_id, player_id, level)
-    VALUES (%d, %d, %d)
+    INSERT INTO card_level(card_id, player_id, level, quantity)
+    VALUES (%d, %d, %d, %d)
     ";
 
-    execute_query($db, sprintf($pattern, $card, $playerId, $level));
+    execute_query($db, sprintf($pattern, $card, $playerId, $level, $quantity));
 }
 
 // ----------------- UPDATE -----------------
@@ -465,18 +465,54 @@ WHERE cards.card_key = \"%s\"
     execute_query($db, utf8_decode(sprintf($pattern, $name, $elixir, $type, $rarity, $arena, $crId, $key)));
 }
 
-function updateCardLevelByPlayer($db, $card, $playerId, $level)
+function updateCardLevelByPlayer($db, $card, $playerId, $level, $quantity)
 {
     $pattern = "
     UPDATE card_level
-    SET level = %d
+    SET level = %d,
+    quantity = %d
     WHERE card_id = %d
     AND player_id = %d
     ";
 
-    execute_query($db, sprintf($pattern, $level, $card, $playerId));
+    execute_query($db, sprintf($pattern, $level, $quantity, $card, $playerId));
 }
 
+function updateSeekCard($db, $card, $playerId) {
+    $pattern = "
+    UPDATE card_level
+    SET seek = 1,
+    keep = 1
+    WHERE card_id = %d
+    AND player_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $card, $playerId));
+}
+
+function updateKeepCard($db, $card, $playerId) {
+    $pattern = "
+    UPDATE card_level
+    SET seek = 0,
+    keep = 1
+    WHERE card_id = %d
+    AND player_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $card, $playerId));
+}
+
+function updateDonateCard($db, $card, $playerId) {
+    $pattern = "
+    UPDATE card_level
+    SET seek = 0,
+    keep = 0
+    WHERE card_id = %d
+    AND player_id = %d
+    ";
+
+    execute_query($db, sprintf($pattern, $card, $playerId));
+}
 // -----------------   GET  -----------------
 function getCardByKey($db, $key)
 {
@@ -491,7 +527,7 @@ WHERE cards.card_key = \"%s\"
 function getCardByCrId($db, $crId)
 {
     $pattern = "
-SELECT id, card_key
+SELECT id, card_key, rarity
 FROM cards
 WHERE cards.cr_id = %d
 ";
@@ -540,6 +576,25 @@ function getFavCards($db)
     return fetch_all_query($db, $query);
 }
 
+function getPossibleTrade($db, $playerId) {
+    $pattern = "
+    SELECT p.id, p.name, c.card_key, cl.seek, cl.keep, cl.quantity
+    FROM players p
+    JOIN card_level cl ON p.id = cl.player_id
+    JOIN cards c ON cl.card_id = c.id
+    WHERE p.id != %d
+    AND c.rarity = \"%s\"
+    AND cl.quantity = %d 
+    AND cl.keep = 0
+    ";
+    $rarities = [250=>'Common', 50=>'Rare', 10=>'Epic', 1=>'Legendary'];
+    //TODO revoir ca avec fabien S
+    foreach ($rarities as $key=>$rarity) {
+        $query = sprintf($pattern, $playerId, $rarity, $key);
+        var_dump($query);
+        fetch_all_query($db, $query);
+    }
+}
 // ==========================================
 
 

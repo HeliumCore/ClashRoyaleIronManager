@@ -11,3 +11,7 @@
 //TODO requete ajax pour chaque clic par carte, puis ajax pour recuperer les echanges possibles
 
 //TODO mettre un loader fadeIn/fadeOut pour afficher les resultats
+
+//TODO afficher un champ de TAG si pas connecté
+
+//TODO implementer yield for each card, ajax and display trade, one by one
