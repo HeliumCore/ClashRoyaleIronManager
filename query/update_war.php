@@ -6,51 +6,39 @@
  * Time: 10:08
  */
 
-include(__DIR__ . "/../tools/api_conf.php");
-include(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../tools/api.class.php");
+require(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../models/war.class.php");
+require(__DIR__ . "/../models/clan.class.php");
 
-if (!isApiRunning($api))
-    return;
-
-$data = getWarFromApi($api);
-$numberOfCurrentPlayers = getNumberOfCurrentPlayersInWar($db);
-if (getNumberOfPlayersInClan($db) > $numberOfCurrentPlayers && $numberOfCurrentPlayers != 0) {
-    $notEligible = getNotEligiblePlayers($db);
-}
-$warId = getCurrentWarId($db);
+ClashRoyaleApi::create();
+$war = new War();
+$clan = new Clan();
+$data = $war->getWarFromApi();
+$notEligible = $war->getNotEligiblePlayers();
 $warState = $data['state'];
 
 // Standings
-if ($warState == 'warDay') {
-    foreach ($data['standings'] as $clan) {
-        $getStanding = getStandings($db, $clan['tag'], $warId);
-
-        if (is_array($getStanding)) {
-            updateStanding($db, $clan['participants'], $clan['battlesPlayed'], $clan['wins'], $clan['crowns'],
-                $clan['warTrophies'], $getStanding['id']);
-        } else {
-            insertStanding($db, $clan['tag'], $clan['name'], $clan['participants'], $clan['battlesPlayed'],
-                $clan['wins'], $clan['crowns'], $clan['warTrophies'], $warId);
-        }
-    }
-} else if (($warState == 'collectionDay' && sizeof($data['participants']) <= 0) || $warState != 'collectionDay') {
+if ($warState == 'warDay')
+    $war->updateStandings($data['standings']);
+else if (($warState == 'collectionDay' && sizeof($data['participants']) <= 0) || $warState != 'collectionDay')
     return;
-}
-$counter = 0;
-foreach (getAllPlayersInClan($db) as $player) {
+
+foreach ($clan->getPlayers() as $player) {
     foreach ($notEligible as $notEligiblePlayer) {
-        if ($player['id'] == $notEligiblePlayer['id']) {
+        if ($player['id'] == $notEligiblePlayer['id'])
             continue 2;
-        }
     }
-    $counter++;
-    $playerId = intval($player['id']);
-    $getPlayerWarResult = getPlayerWar($db, $playerId, $warId);
+
+    $p = new Player($player['tag']);
+    $p->setPlayerId();
+
+    $getPlayerWarResult = $war->getPlayerWar($p->getId());
     $cardsEarned = null;
     $battlesPlayed = null;
     $wins = null;
     foreach ($data['participants'] as $participant) {
-        if ($player['tag'] == $participant['tag']) {
+        if ($player['tag'] == ltrim($participant['tag'], "#")) {
             if ($warState == "collectionDay") {
                 $cardsEarned = $participant['cardsEarned'];
             }
@@ -58,6 +46,7 @@ foreach (getAllPlayersInClan($db) as $player) {
             $wins = $participant['wins'];
         }
     }
+
     if ($warState == "collectionDay") {
         $cardsEarned = $cardsEarned != null ? $cardsEarned : 0;
     }
@@ -72,20 +61,20 @@ foreach (getAllPlayersInClan($db) as $player) {
                 intval($getPlayerWarResult['collection_played']) < $battlesPlayed &&
                 intval($getPlayerWarResult['collection_won']) <= $wins
             ) {
-                updateCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $playerWarId);
+                $war->updateCollectionDay($cardsEarned, $battlesPlayed, $wins, $playerWarId);
             }
         } else if ($warState == "warDay") {
             if (
                 intval($getPlayerWarResult['battle_played']) < $battlesPlayed &&
                 intval($getPlayerWarResult['battle_won']) <= $wins
             ) {
-                updateWarDay($db, $battlesPlayed, $wins, $playerWarId);
+                $war->updateWarDay($battlesPlayed, $wins, $playerWarId);
             }
         }
     } else {
         if ($warState == "collectionDay") {
-            insertCollectionDay($db, $cardsEarned, $battlesPlayed, $wins, $player['id'], $warId);
+            $war->insertCollectionDay($cardsEarned, $battlesPlayed, $wins, $player['id']);
         }
     }
 }
-setLastUpdated($db, "war");
+$war->setLastUpdated();

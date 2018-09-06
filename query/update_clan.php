@@ -6,13 +6,16 @@
  * Time: 20:01
  */
 
-include(__DIR__ . "/../tools/database.php");
-include(__DIR__ . "/../tools/api_conf.php");
+require(__DIR__ . "/../tools/api.class.php");
+require(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../models/clan.class.php");
+require(__DIR__ . "/../models/player.class.php");
 
-if (!isApiRunning($api))
-    return;
+ClashRoyaleApi::create();
 
-$allPlayers = getAllPlayersInClan($db);
+$clan = new Clan();
+$allPlayers = $clan->getPlayers();
+
 $allPlayersTags = [];
 $allPlayersTagsInClan = [];
 
@@ -20,24 +23,15 @@ foreach ($allPlayers as $p) {
     array_push($allPlayersTags, $p['tag']);
 }
 
-foreach (getClanFromApi($api)['members'] as $player) {
-    $result = getPlayerByTag($db, $player['tag']);
-    if (is_array($result)) {
-        updatePlayer($db, $player['name'], $player['rank'], $player['trophies'], $player['role'], $player['expLevel'],
-            $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'], $player['donationsDelta'],
-            $player['donationsPercent'], $player['tag']);
-        updatePlayerTrophy($db, $result['id'], $player['trophies']);
-    } else {
-        insertPlayer($db, $player['name'], $player['tag'], $player['rank'], $player['trophies'], $player['role'],
-            $player['expLevel'], $player['arena']['arenaID'], $player['donations'], $player['donationsReceived'],
-            $player['donationsDelta'], $player['donationsPercent']);
-        insertPlayerTrophy($db, $player['tag'], $player['trophies']);
-    }
-    array_push($allPlayersTagsInClan, $player['tag']);
+foreach ($clan->getMembersFromApi() as $apiPlayer) {
+    $player = new Player(ltrim($apiPlayer['tag'], '#'));
+    $player->updatePlayer($apiPlayer['name'], $apiPlayer['clanRank'], $apiPlayer['trophies'], $apiPlayer['role'], $apiPlayer['expLevel'],
+        $apiPlayer['arena']['name'], $apiPlayer['donations'], $apiPlayer['donationsReceived']);
+    array_push($allPlayersTagsInClan, $player->getTag());
 }
 
 foreach (array_diff($allPlayersTags, $allPlayersTagsInClan) as $tag) {
-    removePlayerFromClan($db, $tag);
+    $clan->removePlayerFromClan($tag);
 }
 
-setLastUpdated($db, "index");
+$clan->setLastUpdated();

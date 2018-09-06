@@ -6,20 +6,10 @@
  * Time: 15:49
  */
 
-include(__DIR__ . "/../tools/api_conf.php");
-include(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../tools/api.class.php");
+require(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../models/card.class.php");
 
-if (!isApiRunning($api))
-    return;
-
-$constants = getConstantsFromApi($api);
-
-foreach ($constants['cards'] as $card) {
-    if (is_array(getCardByKey($db, $card['key']))) {
-        updateCard($db, $card['key'], $card['name'], $card['elixir'], $card['type'], $card['rarity'], $card['arena'],
-            $card['id']);
-    } else {
-        insertCard($db, $card['key'], $card['name'], $card['elixir'], $card['type'], $card['rarity'], $card['arena'],
-            $card['id']);
-    }
-}
+ClashRoyaleApi::create();
+$card = new Card();
+$card->updateAllCards();

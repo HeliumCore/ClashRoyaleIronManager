@@ -9,45 +9,18 @@
 if (isset($_GET['tag']) && !empty($_GET['tag'])) $playerTag = $_GET['tag'];
 else return;
 
-include(__DIR__ . "/../tools/api_conf.php");
-include(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../tools/api.class.php");
+require(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../models/player.class.php");
 
-if (!isApiRunning($api))
-    return;
+ClashRoyaleApi::create();
+$player = new Player($playerTag);
+$player->setPlayerId();
+$apiInfos = $player->getPlayerFromApi();
 
-$player = getPlayerFromApi($api, $playerTag);
-updateMaxTrophies($db, $player['stats']['maxTrophies'], $playerTag);
-$deck = $player['currentDeck'];
-$currentDeck = getCurrentDeck($db, $deck);
-$playerId = intval(getPlayerByTag($db, $playerTag)['id']);
-
-disableAllDeck($db, $playerId);
-$deckId = getDeckIdFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
-    $currentDeck[5], $currentDeck[6], $currentDeck[7]);
-
-if (getPlayerDeck($db, $deckId, $playerId) != null) {
-    enableOldDeck($db, $deckId, $playerId);
-} else if ($deckId != null && $deckId > 0) {
-    createPlayerDeck($db, $deckId, $playerId);
-} else {
-    $deckId = createDeck($db);
-    for ($i = 0; $i <= 7; $i++) {
-        insertCardDeck($db, $currentDeck[$i], $deckId);
-    }
-    createPlayerDeck($db, $deckId, $playerId);
-}
-
-foreach ($player['cards'] as $card) {
-    $cardId = intval(getCardByCrId($db, $card['id'])['id']);
-    $level = getCardLevelByPlayer($db, $cardId, $playerId);
-    if (is_array($level)) {
-        updateCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
-    } else {
-        insertCardLevelByPlayer($db, $cardId, $playerId, $card['level'], $card['count']);
-    }
-}
-
-if (is_array(getLastUpdatedPlayer($db, $playerTag)))
-    setLastUpdatedPlayer($db, $playerTag);
-else
-    insertLastUpdatedPlayer($db, $playerTag);
+$player->updateMaxTrophies($apiInfos['bestTrophies']);
+$deck = $apiInfos['currentDeck'];
+$currentDeck = $player->getCardsIds($deck);
+$player->updateDeck($currentDeck);
+$player->updatePlayerCards($apiInfos['cards']);
+$player->setLastUpdated();

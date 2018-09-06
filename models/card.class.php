@@ -16,7 +16,7 @@ class Card {
     private $arena = null;
     private $type = null;
 
-    public function __construct($crId, $key) {
+    public function __construct($crId = null, $key = null) {
         $this->crId = $crId;
         $this->key = $key;
     }
@@ -27,5 +27,52 @@ class Card {
 
     public function getKey() {
         return $this->key;
+    }
+
+    public function updateAllCards() {
+        foreach ($this->getAllCardsFromApi() as $card) {
+            $key = str_replace(".", "", $card['name']);
+            $key = str_replace(" ", "-", $key);
+            $key = strtolower($key);
+            if (is_array($this->getCardByKey($key))) {
+                $this->updateCard($key, $card['name'], $card['id']);
+            } else {
+                $this->insertCard($key, $card['name'], $card['id']);
+            }
+        }
+    }
+
+    public function getAllCardsFromApi() {
+        $url = "cards";
+        return ClashRoyaleApi::getRequest($url)['items'];
+    }
+
+    public function getCardByKey($key) {
+        $pattern = "
+            SELECT id
+            FROM cards
+            WHERE cards.card_key = \"%s\"
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $key))->fetch();
+    }
+
+    public function updateCard($key, $name, $crId) {
+        $pattern = "
+            UPDATE cards
+            SET cards.name = \"%s\",
+            cr_id = %d
+            WHERE cards.card_key = \"%s\"
+        ";
+
+        $GLOBALS['db']->query(utf8_decode(sprintf($pattern, $name, $crId, $key)))->execute();
+    }
+
+    public function insertCard($key, $name, $crId) {
+        $pattern = "
+            INSERT INTO cards (card_key, cards.name, cr_id)
+            VALUES(\"%s\", \"%s\", %d)
+        ";
+
+        $GLOBALS['db']->query()->execute(utf8_decode(sprintf($pattern, $key, $name, $crId)));
     }
 }

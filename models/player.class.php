@@ -36,34 +36,8 @@ class Player {
      * @return array liste des prochains coffres
      */
     public function getNextChests() {
-        if ($this->aNextChests != null)
-            return $this->aNextChests;
-
-        $aChests = getPlayerChestsFromApi($GLOBALS['api'], $this->sTag);
-
-        $this->aNextChests = array();
-        $fAddChest = function ($sChestType, $iChestCount) {
-            array_push($this->aNextChests, array('type' => $sChestType, 'count' => $iChestCount));
-        };
-        foreach ($aChests['upcoming'] as $iChestIndex => $sChestType) {
-            $fAddChest($sChestType, $iChestIndex + 1);
-            if (count($this->aNextChests) == 3) {
-                break;
-            }
-        }
-        unset($aChests['upcoming']);
-        foreach ($aChests as $sChestType => $iChestCount) {
-            $fAddChest($sChestType, $iChestCount);
-        }
-
-        uasort($this->aNextChests, function ($aChestA, $aChestB) {
-            if ($aChestA['count'] == $aChestB['count']) {
-                return 0;
-            }
-            return ($aChestA['count'] < $aChestB['count']) ? -1 : 1;
-        });
-
-        return $this->aNextChests;
+        $url = "players/%23" . $this->sTag . "/upcomingchests";
+        return ClashRoyaleApi::getRequest($url)['items'];
     }
 
     /**
@@ -175,6 +149,16 @@ class Player {
         return $this;
     }
 
+    public function setLastUpdated() {
+        if ($this->getLastUpdated() != null) {
+            $this->setLastUpdatedPlayer();
+        } else {
+            $this->insertLastUpdatedPlayer();
+        }
+    }
+
+//    $GLOBALS['db']->query()->execute();
+
     /**
      * Date de dernière mise à jour du joueur
      */
@@ -193,12 +177,278 @@ class Player {
         return null;
     }
 
+    public function setLastUpdatedPlayer() {
+        $pattern = "
+            UPDATE last_updated
+            SET updated = NOW()
+            WHERE page_name = 'player'
+            AND tag = \"%s\"
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->execute();
+    }
+
+    public function insertLastUpdatedPlayer() {
+        $pattern = "
+            INSERT INTO last_updated (page_name, updated, tag)
+            VALUES ('player', NOW(), \"%s\")
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->execute();
+    }
+
+    public function updatePlayer($name, $rank, $trophies, $role, $expLevel, $arena, $donations, $donationsReceived) {
+        $roleId = $this->getRoleIdByMachineName($role);
+        $arenaId = $this->getArenaIdByMachineName($arena);
+        $this->setPlayerId();
+        if ($this->getId() != null && $this->getId() > 0) {
+            $pattern = "
+            UPDATE players
+            SET players.name = \"%s\",
+            players.rank = %d,
+            players.trophies = %d,
+            players.role_id = %d,
+            players.exp_level = %d,
+            players.arena = %d,
+            players.donations = %d,
+            players.donations_received = %d,
+            players.in_clan = 1
+            WHERE players.tag = \"%s\"
+        ";
+            $query = utf8_decode(sprintf($pattern, $name, $rank, $trophies, $roleId, $expLevel, $arenaId, $donations, $donationsReceived, $this->sTag));
+        } else {
+            $pattern = "
+            INSERT INTO players (players.name, tag, rank, trophies, role_id, exp_level, in_clan, arena, donations,
+            donations_received)
+            VALUES (\"%s\", \"%s\", %d, %d, %d, %d, %d, %d, %d, %d)
+        ";
+            $query = utf8_decode(sprintf($pattern, $name, $this->sTag, $rank, $trophies, $roleId,
+                $expLevel, 1, $arenaId, $donations, $donationsReceived));
+        }
+        $GLOBALS['db']->query($query)->execute();
+        //TODO revoir l'update pour la courbe des trophées
+    }
+
+    public function getRoleIdByMachineName($machineName) {
+        $pattern = "
+            SELECT id
+            FROM role
+            WHERE machine_name
+            LIKE \"%s\"
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $machineName))->fetch()['id'];
+    }
+
+    public function getArenaIdByMachineName($machineName) {
+        $pattern = "
+            SELECT arena_id
+            FROM arena
+            WHERE arena LIKE \"%s\"
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $machineName))->fetch()['arena_id'];
+    }
+
+    public function setPlayerId() {
+        $pattern = "
+        SELECT p.id
+        FROM players p
+        WHERE p.tag = \"%s\"
+        ";
+
+        $this->id = $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->fetch()['id'];
+    }
+
     public function getId() {
         return $this->id;
     }
 
     public function setId($id) {
         $this->id = $id;
+    }
+
+    /**
+     * Récupère les infos de l'API sur le joueur
+     */
+    public function getPlayerFromApi() {
+        $url = "players/%23" . $this->sTag;
+        return ClashRoyaleApi::getRequest($url);
+    }
+
+    /**
+     * Permet d'update en base les trophées max d'un joueur
+     * @param $trophies int trophées max
+     */
+    public function updateMaxTrophies($trophies) {
+        $pattern = "
+            UPDATE players
+            SET players.max_trophies = %d
+            WHERE players.tag = \"%s\"
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $trophies, $this->sTag))->execute();
+    }
+
+    /**
+     * Permet de retourner les ID de cartes du deck en cours d'un joueur
+     * @param $deck array de CR_ID
+     * @return array de card_id
+     */
+    public function getCardsIds($deck) {
+        $pattern = "
+            SELECT cards.id
+            FROM cards
+            WHERE name IN (%s)
+        ";
+
+        $cardIds = "";
+        foreach ($deck as $card) {
+            $cardIds .= "'" . $card['name'] . "'";
+            $cardIds .= ",";
+        }
+        $currentDeck = array();
+        $query = sprintf($pattern, rtrim($cardIds, ","));
+        foreach ($GLOBALS['db']->query($query)->fetchAll() as $cardId) {
+            array_push($currentDeck, $cardId['id']);
+        }
+        return $currentDeck;
+    }
+
+    public function updatePlayerCards($cards) {
+        foreach ($cards as $card) {
+            $cardId = $this->getCardByCrId($card['id']);
+
+            $level = $this->getCardLevelByPlayer($cardId);
+            if (is_array($level)) {
+                $this->updateCardLevelByPlayer($cardId, $card['level'], $card['count']);
+            } else {
+                $this->insertCardLevelByPlayer($cardId, $card['level'], $card['count']);
+            }
+        }
+    }
+
+    public function getCardByCrId($crId) {
+        $pattern = "
+            SELECT id, card_key, rarity
+            FROM cards
+            WHERE cards.cr_id = %d
+        ";
+
+        return intval($GLOBALS['db']->query(sprintf($pattern, $crId))->fetch()['id']);
+    }
+
+    public function getCardLevelByPlayer($card) {
+        $pattern = "
+            SELECT level
+            FROM card_level
+            WHERE card_id = %d
+            AND player_id = %d
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $card, $this->id))->fetch();
+    }
+
+    public function updateCardLevelByPlayer($card, $level, $quantity) {
+        $pattern = "
+            UPDATE card_level
+            SET level = %d,
+            quantity = %d
+            WHERE card_id = %d
+            AND player_id = %d
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $level, $quantity, $card, $this->id))->execute();
+    }
+
+    public function insertCardLevelByPlayer($card, $level, $quantity) {
+        $pattern = "
+    INSERT INTO card_level(card_id, player_id, level, quantity)
+    VALUES (%d, %d, %d, %d)
+    ";
+        $GLOBALS['db']->query(sprintf($pattern, $card, $this->id, $level, $quantity))->execute();
+    }
+
+    public function updateDeck($currentDeck) {
+        $this->disableAllDeck();
+        $deckId = $this->getDeckIdFromCards($currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3],
+            $currentDeck[4], $currentDeck[5], $currentDeck[6], $currentDeck[7]);
+
+        if ($this->getPlayerDeck($deckId) != null) {
+            $this->enableOldDeck($deckId);
+        } else if ($deckId != null && $deckId > 0) {
+            $this->createPlayerDeck($deckId);
+        } else {
+            $deckId = $this->createDeck();
+            for ($i = 0; $i <= 7; $i++) {
+                $this->insertCardDeck($currentDeck[$i], $deckId);
+            }
+            $this->createPlayerDeck($deckId);
+        }
+
+    }
+
+    public function disableAllDeck() {
+        $pattern = "
+            UPDATE player_deck pd
+            SET pd.current = 0
+            WHERE pd.player_id = %d
+        ";
+
+        $GLOBALS['db']->query(sprintf($pattern, $this->id))->execute();
+    }
+
+    public function getDeckIdFromCards($card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8) {
+        $pattern = "
+            SELECT deck_id
+            FROM card_deck
+            WHERE card_id IN (%d, %d, %d, %d, %d, %d, %d, %d)
+            GROUP BY deck_id
+            HAVING COUNT(card_id) = 8
+        ";
+
+        return intval($GLOBALS['db']->query(sprintf($pattern, $card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8))->fetch()['deck_id']);
+    }
+
+    public function getPlayerDeck($deckId) {
+        $pattern = "
+            SELECT pd.id, pd.current
+            FROM player_deck pd
+            WHERE pd.deck_id = %d
+            AND pd.player_id = %d
+        ";
+
+        return $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id))->fetch();
+    }
+
+    public function enableOldDeck($deckId) {
+        $pattern = "
+                UPDATE player_deck pd
+                SET pd.current = 1
+                WHERE pd.player_id = %d
+                AND pd.deck_id = %d
+            ";
+
+        $GLOBALS['db']->query(sprintf($pattern, $this->id, $deckId))->execute();
+    }
+
+    public function createPlayerDeck($deckId) {
+        $pattern = "
+            INSERT INTO player_deck (deck_id, player_id)
+            VALUES (%d, %d)
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id))->execute();
+    }
+
+    public function createDeck() {
+        $query = "
+            INSERT INTO decks (id)
+            VALUES ('')
+        ";
+
+        $GLOBALS['db']->query($query)->execute();
+        return $GLOBALS['db']->lastInsertId();
+    }
+
+    public function insertCardDeck($card, $deck) {
+        $pattern = "
+    INSERT INTO card_deck(card_id, deck_id)
+    VALUES (%d, %d)
+    ";
+        $GLOBALS['db']->query(sprintf($pattern, $card, $deck))->execute();
     }
 
     public function getTag() {
@@ -365,14 +615,14 @@ class Player {
             $previousDay = $time - 86400000;
 
             if (in_array($previousDay, array_values($dateMap))) {
-                $key = array_keys($dateMap)[count($dateMap)-1];
+                $key = array_keys($dateMap)[count($dateMap) - 1];
                 $dateMap[$key] = $time;
             } else {
                 $dateMap[$time] = $time;
             }
         }
 
-        foreach ($dateMap as $key=>$value) {
+        foreach ($dateMap as $key => $value) {
             if ($key == $value) {
                 array_push($stringList, "Le " . date('d/m/Y', ($value / 1000)));
             } else {

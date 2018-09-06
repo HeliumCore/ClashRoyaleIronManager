@@ -1,6 +1,7 @@
 <?php
 
 class Clan {
+    private $tag = "9RGPL8PC";
 
     /**
      * Récupère la liste des joueurs du clan
@@ -9,6 +10,7 @@ class Clan {
     public function getPlayers() {
         return $GLOBALS['db']->query("
             SELECT
+                players.id,
                 players.tag,
                 players.name as playerName,
                 players.rank,
@@ -41,5 +43,28 @@ class Clan {
             return strtotime($result['updated']);
         }
         return null;
+    }
+
+    public function getMembersFromApi() {
+        $url = "clans/%23" . $this->tag . "/members";
+        return ClashRoyaleApi::getRequest($url)['items'];
+    }
+
+    public function removePlayerFromClan($tag) {
+        $pattern = "
+            UPDATE players
+            SET in_clan = 0
+            WHERE tag = \"%s\"
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $tag))->execute();
+    }
+
+    public function setLastUpdated() {
+        $query = "
+            UPDATE last_updated
+            SET updated = NOW()
+            WHERE page_name = \"index\"
+        ";
+        $GLOBALS['db']->query($query)->execute();
     }
 }
