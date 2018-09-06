@@ -286,6 +286,20 @@ class War {
         $GLOBALS['db']->query($query)->execute();
     }
 
+    public function updateStandings($standings) {
+        foreach ($standings as $standing) {
+            $getStanding = $this->getStanding($standing['tag']);
+
+            if (is_array($getStanding)) {
+                $this->updateStanding($standing['participants'], $standing['battlesPlayed'], $standing['wins'], $standing['crowns'],
+                    $standing['warTrophies'], $getStanding['id']);
+            } else {
+                $this->insertStanding($standing['tag'], $standing['name'], $standing['participants'], $standing['battlesPlayed'],
+                    $standing['wins'], $standing['crowns'], $standing['warTrophies']);
+            }
+        }
+    }
+
     public function getStanding($tag) {
         $pattern = "
             SELECT id
@@ -320,20 +334,5 @@ class War {
 
         $GLOBALS['db']->query(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $this->id))->execute();
 
-    }
-
-
-    public function updateStandings($standings) {
-        foreach ($standings as $standing) {
-            $getStanding = $this->getStanding($standing['tag']);
-
-            if (is_array($getStanding)) {
-                $this->updateStanding($standing['participants'], $standing['battlesPlayed'], $standing['wins'], $standing['crowns'],
-                    $standing['warTrophies'], $getStanding['id']);
-            } else {
-                $this->insertStanding($standing['tag'], $standing['name'], $standing['participants'], $standing['battlesPlayed'],
-                    $standing['wins'], $standing['crowns'], $standing['warTrophies']);
-            }
-        }
     }
 }

@@ -26,7 +26,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <?php
                 $path = explode("/", substr($_SERVER['REQUEST_URI'], 1))[0];
-                $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
+                //TODO remettre ce commentaire des que les requetes sont bonnes
+//                $allowedUpdate = array("clan", "player", "war", "war_stats", "war_decks");
+                $allowedUpdate = array("clan", "player");
                 if (in_array($path, $allowedUpdate) || in_array($t = explode("?", $path)[0], $allowedUpdate)):
                     ?>
                     <li>

@@ -14,6 +14,7 @@ require(__DIR__ . "/../models/clan.class.php");
 ClashRoyaleApi::create();
 $war = new War();
 $clan = new Clan();
+$war->getCurrentWarId();
 $data = $war->getWarFromApi();
 $notEligible = $war->getNotEligiblePlayers();
 $warState = $data['state'];
