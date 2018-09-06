@@ -6,7 +6,7 @@
  * Time: 13:36
  */
 
-include(__DIR__ . "/../../tools/api_conf.php");
+include(__DIR__ . "/../../tools/api.php");
 
 if (isset($_GET['tag']) && !empty($_GET['tag']))
     $playerTag = $_GET['tag'];
@@ -15,44 +15,46 @@ else {
     return;
 }
 
-$chests = getPlayerChestsFromApi($api, $playerTag);
-$upcomingChests[] = $chests["upcoming"];
-$fatChests = array(
-    $chests["superMagical"] => "superMagical", $chests["magical"] => "magical", $chests["legendary"] => "legendary",
-    $chests["epic"] => "epic", $chests["giant"] => "giant"
-);
-ksort($fatChests);
-
+$chests = getPlayerChestsFromNewApi($playerTag)['items'];
 $counter = 1;
 $needed = 3;
-foreach ($upcomingChests[0] as $nextChest):
-    $isFatChest = $nextChest != 'silver' && $nextChest != 'gold';
+$chestsArray = array("Silver Chest" => "silver", "Golden Chest" => "gold", "Magical Chest" => "magical",
+    "Giant Chest" => "giant", "Epic Chest" => "epic", "Super Magical Chest" => "superMagical", "Legendary Chest" => "legendary");
 
+$needed = 3;
+for ($i = 0; $i < $needed; $i++) {
+    $isFatChest = $chests[$i]['name'] != 'Silver Chest' && $chests[$i]['name'] != 'Golden Chest';
     if ($isFatChest)
         $needed++;
 
-    if ($counter <= $needed) { ?>
-        <div class="col-xs-3">
-            <div class="img-responsive">
-                <img src="/images/chests/<?php print $nextChest; ?>-chest.png" alt="failed to load img"
-                     class="img-responsive chests"/>
-                <span class="chestNumber whiteShadow">+<?php print $counter; ?></span>
-            </div>
+    ?>
+    <div class="col-xs-3">
+        <div class="img-responsive">
+            <img src="/images/chests/<?php print $chestsArray[$chests[$i]['name']]; ?>-chest.png"
+                 alt="failed to load img"
+                 class="img-responsive chests"/>
+            <span class="chestNumber whiteShadow">+<?php print ($i + 1); ?></span>
         </div>
-        <?php
-    }
-    $counter++;
-endforeach;
-foreach ($fatChests as $key => $chest) {
-    if ($key > 3) { ?>
-        <div class="col-xs-3">
-            <div class="img-responsive">
-                <img src="/images/chests/<?php print $chest; ?>-chest.png" alt="failed to load img"
-                     class="img-responsive chests"/>
-                <span class="chestNumber whiteShadow">+<?php print $chests[$chest]; ?></span>
-            </div>
-        </div>
-        <?php
-    }
+    </div>
+    <?php
+
 }
-?>
+
+$chests = array_reverse($chests);
+$fatChests = array();
+for ($i = 0; $i < (8 - $needed); $i++) {
+    array_push($fatChests, $chests[$i]);
+}
+$fatChests = array_reverse($fatChests);
+foreach ($fatChests as $fatChest) {
+    ?>
+    <div class="col-xs-3">
+        <div class="img-responsive">
+            <img src="/images/chests/<?php print $chestsArray[$fatChest['name']]; ?>-chest.png"
+                 alt="failed to load img"
+                 class="img-responsive chests"/>
+            <span class="chestNumber whiteShadow">+<?php print $fatChest['index']; ?></span>
+        </div>
+    </div>
+    <?php
+}
