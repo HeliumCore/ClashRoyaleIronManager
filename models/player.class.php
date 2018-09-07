@@ -157,8 +157,6 @@ class Player {
         }
     }
 
-//    $GLOBALS['db']->query()->execute();
-
     /**
      * Date de dernière mise à jour du joueur
      */
@@ -184,7 +182,7 @@ class Player {
             WHERE page_name = 'player'
             AND tag = \"%s\"
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $this->sTag));
     }
 
     public function insertLastUpdatedPlayer() {
@@ -192,7 +190,7 @@ class Player {
             INSERT INTO last_updated (page_name, updated, tag)
             VALUES ('player', NOW(), \"%s\")
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $this->sTag))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $this->sTag));
     }
 
     public function updatePlayer($name, $rank, $trophies, $role, $expLevel, $arena, $donations, $donationsReceived) {
@@ -223,7 +221,7 @@ class Player {
             $query = utf8_decode(sprintf($pattern, $name, $this->sTag, $rank, $trophies, $roleId,
                 $expLevel, 1, $arenaId, $donations, $donationsReceived));
         }
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
         //TODO revoir l'update pour la courbe des trophées
     }
 
@@ -287,7 +285,7 @@ class Player {
             SET players.max_trophies = %d
             WHERE players.tag = \"%s\"
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $trophies, $this->sTag))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $trophies, $this->sTag));
     }
 
     /**
@@ -310,7 +308,7 @@ class Player {
         $currentDeck = array();
         $query = sprintf($pattern, rtrim($cardIds, ","));
         foreach ($GLOBALS['db']->query($query)->fetchAll() as $cardId) {
-            array_push($currentDeck, $cardId['id']);
+            array_push($currentDeck, intval($cardId['id']));
         }
         return $currentDeck;
     }
@@ -356,7 +354,7 @@ class Player {
             WHERE card_id = %d
             AND player_id = %d
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $level, $quantity, $card, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $level, $quantity, $card, $this->id));
     }
 
     public function insertCardLevelByPlayer($card, $level, $quantity) {
@@ -364,7 +362,7 @@ class Player {
     INSERT INTO card_level(card_id, player_id, level, quantity)
     VALUES (%d, %d, %d, %d)
     ";
-        $GLOBALS['db']->query(sprintf($pattern, $card, $this->id, $level, $quantity))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $card, $this->id, $level, $quantity));
     }
 
     public function updateDeck($currentDeck) {
@@ -393,7 +391,7 @@ class Player {
             WHERE pd.player_id = %d
         ";
 
-        $GLOBALS['db']->query(sprintf($pattern, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $this->id));
     }
 
     public function getDeckIdFromCards($card1, $card2, $card3, $card4, $card5, $card6, $card7, $card8) {
@@ -427,7 +425,7 @@ class Player {
                 AND pd.deck_id = %d
             ";
 
-        $GLOBALS['db']->query(sprintf($pattern, $this->id, $deckId))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $this->id, $deckId));
     }
 
     public function createPlayerDeck($deckId) {
@@ -435,7 +433,7 @@ class Player {
             INSERT INTO player_deck (deck_id, player_id)
             VALUES (%d, %d)
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id));
     }
 
     public function createDeck() {
@@ -444,7 +442,7 @@ class Player {
             VALUES ('')
         ";
 
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
         return $GLOBALS['db']->lastInsertId();
     }
 
@@ -453,7 +451,7 @@ class Player {
     INSERT INTO card_deck(card_id, deck_id)
     VALUES (%d, %d)
     ";
-        $GLOBALS['db']->query(sprintf($pattern, $card, $deck))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $card, $deck));
     }
 
     public function getTag() {

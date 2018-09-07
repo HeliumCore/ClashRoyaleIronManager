@@ -185,7 +185,7 @@ foreach ($allWarStats as $player) {
     }
 }
 
-$lastUpdated = getLastUpdated($db, "war_stats");
+//$lastUpdated = getLastUpdated($db, "war_stats");
 ?>
 
 <!DOCTYPE html>

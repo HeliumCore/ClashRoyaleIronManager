@@ -20,7 +20,6 @@ $war->getWarPlayers();
 $war->setId($war->getLastWarNumber());
 
 // API
-
 $apiWar = $war->getWarFromApi();
 $war->setState($apiWar['state']);
 if ($war->getState() == "collectionDay") {

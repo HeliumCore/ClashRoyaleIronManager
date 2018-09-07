@@ -13,6 +13,9 @@ class Deck {
     private $cards = null;
     private $elixirCost = null;
     private $deckLink = null;
+    private $played = null;
+    private $wins = null;
+    private $crowns = null;
 
     public function __construct($crIds, $keys, $cost) {
         $crIdsArray = explode(",", $crIds);
@@ -36,6 +39,30 @@ class Deck {
         $this->elixirCost = $cost;
     }
 
+    public function getPlayed() {
+        return $this->played;
+    }
+
+    public function setPlayed($played) {
+        $this->played = $played;
+    }
+
+    public function getWins() {
+        return $this->wins;
+    }
+
+    public function setWins($wins) {
+        $this->wins = $wins;
+    }
+
+    public function getCrowns() {
+        return $this->crowns;
+    }
+
+    public function setCrowns($crowns) {
+        $this->crowns = $crowns;
+    }
+
     public function getCards() {
         return $this->cards;
     }
@@ -46,5 +73,10 @@ class Deck {
 
     public function getDeckLink() {
         return $this->deckLink;
+    }
+
+    public function getWinRatio() {
+        $ratio = round(($this->wins / $this->played) * 100);
+        return $ratio." %";
     }
 }

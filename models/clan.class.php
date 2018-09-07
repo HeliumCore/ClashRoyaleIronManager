@@ -56,7 +56,7 @@ class Clan {
             SET in_clan = 0
             WHERE tag = \"%s\"
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $tag))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $tag));
     }
 
     public function setLastUpdated() {
@@ -65,6 +65,6 @@ class Clan {
             SET updated = NOW()
             WHERE page_name = \"index\"
         ";
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
     }
 }

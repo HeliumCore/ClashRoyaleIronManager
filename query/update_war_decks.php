@@ -43,7 +43,6 @@ foreach ($warBattles as $battle) {
     $crowns = $team['crowns'];
     $win = $crowns > $battle['opponent'][0]['crowns'];
     $deck = $team['cards'];
-
     $p = new Player(ltrim($team['tag'], '#'));
     $currentDeck = $p->getCardsIds($deck);
     $deckId = $p->getDeckIdFromCards($currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],

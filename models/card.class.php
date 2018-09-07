@@ -72,7 +72,7 @@ class Card {
             WHERE cards.card_key = \"%s\"
         ";
 
-        $GLOBALS['db']->query(utf8_decode(sprintf($pattern, $name, $crId, $key)))->execute();
+        $GLOBALS['db']->query(utf8_decode(sprintf($pattern, $name, $crId, $key)));
     }
 
     public function insertCard($key, $name, $crId) {

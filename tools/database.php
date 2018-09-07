@@ -105,42 +105,7 @@ function getPlayerTagByAccountId($db, $accountId)
 
 
 // -----------------   GET  -----------------
-function getAllWarDecksWithPagination($db, $current, $page)
-{
-    $pattern = "
-    SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns,
-    subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids,
-    (
-        SELECT CEIL(COUNT(d.id) / 10)
-        FROM decks d
-        RIGHT JOIN war_decks wd ON d.id = wd.deck_id
-        JOIN war w ON wd.war_id = w.id
-        %s
-    ) as number_of_pages
-    FROM war_decks wd
-    LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
-    LEFT JOIN decks d ON d.id = wd.deck_id
-    LEFT JOIN war w ON w.id = wd.war_id
-    LEFT JOIN
-        (
-            SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, ROUND(AVG(c.elixir), 1) as elixir_cost
-            FROM card_deck cd
-            LEFT JOIN cards c ON c.id = cd.card_id
-            GROUP BY cd.deck_id
-        ) subQuery ON subQuery.deck_id = d.id
-    %s
-    GROUP BY wd.deck_id
-    ORDER BY played DESC, wins DESC, crowns DESC
-    LIMIT %d, 10
-    ";
-    $offset = intval(($page - 1) * 10);
-    $condition = "";
-    if ($current) {
-        $condition = "WHERE w.past_war = 0";
-    }
 
-    return fetch_all_query($db, sprintf($pattern, $condition, $condition, $offset));
-}
 
 function getPlayerDeck($db, $deckId, $playerId)
 {
@@ -231,21 +196,6 @@ function getCardsLevelsByPlayerId($db, $playerId)
     return fetch_all_query($db, sprintf($pattern, $playerId));
 }
 
-function getFavCards($db)
-{
-    $query = "
-    SELECT COUNT(c.id) as occurence, c.card_key
-    FROM card_deck cd
-    JOIN `cards` c ON c.id = cd.card_id
-    GROUP BY c.cr_id
-    ORDER BY occurence DESC
-    LIMIT 9
-    ";
-
-
-    return fetch_all_query($db, $query);
-}
-
 function getPossibleTrade($db, $playerId) {
     $pattern = "
     SELECT p.id, p.name, c.card_key, cl.seek, cl.keep, cl.quantity
@@ -261,7 +211,6 @@ function getPossibleTrade($db, $playerId) {
     //TODO revoir ca avec fabien S
     foreach ($rarities as $key=>$rarity) {
         $query = sprintf($pattern, $playerId, $rarity, $key);
-        var_dump($query);
         fetch_all_query($db, $query);
     }
 }
@@ -489,15 +438,6 @@ function setLastUpdated($db, $pageName)
 
 
 // -----------------   GET  -----------------
-function getLastUpdated($db, $pageName)
-{
-    $pattern = "
-    SELECT updated
-    FROM last_updated
-    WHERE page_name = \"%s\"
-    ";
-    return fetch_query($db, utf8_decode(sprintf($pattern, $pageName)));
-}
 
 function getLastUpdatedPlayer($db, $playerTag)
 {

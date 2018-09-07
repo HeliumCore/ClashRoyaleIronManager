@@ -1,0 +1,234 @@
+<!--suppress XmlDuplicatedId -->
+<div class="container">
+    <h1 class="whiteShadow">Decks de guerre</h1><br>
+    <ul class="nav nav-tabs">
+        {if $war->getState() == "warDay" && $currentTab == "current"}
+        <li role="presentation" class="active"><a href="#current" data-toggle="tab" class="tab-link">Guerre en cours</a>
+        </li>
+        {elseif $war->getState() == "warDay"}
+        <li role="presentation"><a href="#current" data-toggle="tab" class="tab-link">Guerre en cours</a></li>
+        {/if}
+
+        {if $war->getState() == "warDay" && $currentTab == "allWar"}
+        <li role="presentation" class="active"><a href="#allWar" data-toggle="tab" class="tab-link">Toutes les
+            guerres</a></li>
+        {else}
+        <li role="presentation"><a href="#allWar" data-toggle="tab" class="tab-link">Toutes les guerres</a></li>
+        {/if}
+
+        {if $currentTab == "favCards"}
+        <li role="presentation" class="active"><a href="#favCards" data-toggle="tab" class="tab-link">Cartes
+            favorites</a></li>
+        {else}
+        <li role="presentation"><a href="#favCards" data-toggle="tab" class="tab-link">Cartes favorites</a></li>
+        {/if}
+    </ul>
+    <br>
+    <div class="tab-content">
+        {if $war->getState() == "warDay"}
+        {if $currentTab == "current"}
+        <div class="tab-pane active" id="current">
+            {else}
+            <div class="tab-pane" id="current">
+                {/if}
+                {assign var="counter" value=0}
+                {assign var="pos" value=0}
+                {foreach from=$warDecks item=deck}
+                {if $counter == 0}
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            {foreach from=$deck->getCards() item=card}
+                            <div class="col-xs-3">
+                                <div class="img-responsive">
+                                    <img src="/images/cards/{$card->getKey()}.png"
+                                         alt="failed to load img"
+                                         class="img-responsive"/>
+                                </div>
+                            </div>
+                            {/foreach}
+                        </div>
+                        <div class="second-row">
+                            <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                                <span class="whiteShadow">Joués : {$deck->getPlayed()}<br></span>
+                                <span class="whiteShadow">Victoires : {$deck->getPlayed()} - {$deck->getWinRatio()}<br></span>
+                                <span class="whiteShadow">Couronnes : {$deck->getCrowns()}<br></span>
+                                <span class="whiteShadow">Coût : {$deck->getElixirCost()}</span><br><br>
+                                <div class="text-center pointerHand">
+                                    <a href="{$deck->getDeckLink()}" class="text-center">
+                                        <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                        <span id="spanDeckLink"
+                                              class="whiteShadow text-center">Copier le deck</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {if $pos == $warDecksSize}
+                </div>
+                {/if}
+                {assign var="counter" value=1}
+                {else}
+                <div class="col-md-5 col-md-offset-2">
+                    <div class="row">
+                        {foreach from=$deck->getCards() item=card}
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="/images/cards/{$card->getKey()}.png"
+                                     alt="failed to load img"
+                                     class="img-responsive"/>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <div class="second-row">
+                        <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                            <span class="whiteShadow">Joués : {$deck->getPlayed()}<br></span>
+                            <span class="whiteShadow">Victoires : {$deck->getPlayed()} - {$deck->getWinRatio()}<br></span>
+                            <span class="whiteShadow">Couronnes : {$deck->getCrowns()}<br></span>
+                            <span class="whiteShadow">Coût : {$deck->getElixirCost()}</span><br><br>
+                            <div class="text-center pointerHand">
+                                <a href="{$deck->getDeckLink()}" class="text-center">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <span id="spanDeckLink"
+                                          class="whiteShadow text-center">Copier le deck</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            {assign var="counter" value=0}
+            {/if}
+            {assign var="pos" value=$pos+1}
+            {/foreach}
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <ul class="pagination pagination-lg">
+                        {for $i=1 to ($warDeckPages-1)}
+                        {if $i == $currentPageNumber}
+                        <li class="active"><a href="/war_decks?tab=current&page={$i}">{$i}</a></li>
+                        {else}
+                        <li><a href="/war_decks?tab=current&page={$i}">{$i}</a></li>
+                        {/if}
+                        {/for}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {/if}
+        <div class="tab-pane {if $war->getState() != 'warDay' or $currentTab == 'allWar'} active {/if}" id="allWar">
+            {assign var="counter" value=0}
+            {assign var="pos" value=0}
+            {foreach from=$allDecks item=deck}
+            {if $counter == 0}
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="row">
+                        {foreach from=$deck->getCards() item=card}
+                        <div class="col-xs-3">
+                            <div class="img-responsive">
+                                <img src="/images/cards/{$card->getKey()}.png"
+                                     alt="failed to load img"
+                                     class="img-responsive"/>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <div class="second-row">
+                        <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                            <span class="whiteShadow">Joués : {$deck->getPlayed()}<br></span>
+                            <span class="whiteShadow">Victoires : {$deck->getPlayed()} - {$deck->getWinRatio()}<br></span>
+                            <span class="whiteShadow">Couronnes : {$deck->getCrowns()}<br></span>
+                            <span class="whiteShadow">Coût : {$deck->getElixirCost()}</span><br><br>
+                            <div class="text-center pointerHand">
+                                <a href="{$deck->getDeckLink()}" class="text-center">
+                                    <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                    <span id="spanDeckLink"
+                                          class="whiteShadow text-center">Copier le deck</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {if $pos == $allDecksSize}
+            </div>
+            {/if}
+            {assign var="counter" value=1}
+            {else}
+            <div class="col-md-5 col-md-offset-2">
+                <div class="row">
+                    {foreach from=$deck->getCards() item=card}
+                    <div class="col-xs-3">
+                        <div class="img-responsive">
+                            <img src="/images/cards/{$card->getKey()}.png"
+                                 alt="failed to load img"
+                                 class="img-responsive"/>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+                <div class="second-row">
+                    <div id="resultsDiv" class="pointerHand text-center js-result-div">
+                        <span class="whiteShadow">Joués : {$deck->getPlayed()}<br></span>
+                        <span class="whiteShadow">Victoires : {$deck->getPlayed()} - {$deck->getWinRatio()}<br></span>
+                        <span class="whiteShadow">Couronnes : {$deck->getCrowns()}<br></span>
+                        <span class="whiteShadow">Coût : {$deck->getElixirCost()}</span><br><br>
+                        <div class="text-center pointerHand">
+                            <a href="{$deck->getDeckLink()}" class="text-center">
+                                <img src="/images/ui/copy-deck.png" class="deckLink" alt="Copier le lien">
+                                <span id="spanDeckLink"
+                                      class="whiteShadow text-center">Copier le deck</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        {assign var="counter" value=0}
+        {/if}
+        {assign var="pos" value=$pos+1}
+        {/foreach}
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="pagination pagination-lg">
+                    {for $i=1 to ($allDeckPages-1)}
+                    {if $i == $allWarsPageNumber}
+                    <li class="active"><a href="/war_decks?tab=allWar&page={$i}">{$i}</a></li>
+                    {else}
+                    <li><a href="/war_decks?tab=allWar&page={$i}">{$i}</a></li>
+                    {/if}
+                    {/for}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane {if $currentTab == 'favCards'} active {/if}" id="favCards">
+        {assign var="counter" value=0}
+
+        {foreach from=$favCards item=$card}
+        {if $counter == 0}
+        <div class="row">
+            {/if}
+
+            <div class="col-lg-4">
+                <div class="row">
+                    <img src="/images/cards/<?php print $card['card_key']; ?>.png" alt="cardImage"
+                         class="img-responsive center-block" style="display: block !important;"/>
+                </div>
+                <div class="row">
+                    <span class="whiteShadow text-center center-block">Présente dans {$card['occurence']} decks</span><br>
+                </div>
+            </div>
+            {if $counter == 2}
+        </div>
+        {assign var="counter" value=0}
+        {else}
+        {assign var="counter" value=$counter+1}
+        {/if}
+        {/foreach}
+    </div>
+</div>
+</div>

@@ -17,6 +17,8 @@ class War {
     private $state = null;
     private $stateName = null;
     private $maxBattle = null;
+    private $warDecksPage = null;
+    private $allDecksPage = null;
 
     /**
      * Permet de récupérer les resultats de la guerre
@@ -144,10 +146,10 @@ class War {
 
         if (!is_array($war)) {
             if (!is_array($currentWar)) {
-                $GLOBALS['db']->query(sprintf($insertWarPattern, $created, $season))->execute();
+                $GLOBALS['db']->query(sprintf($insertWarPattern, $created, $season));
                 return $GLOBALS['db']->lastInsertId();
             } else {
-                $GLOBALS['db']->query(sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])))->execute();
+                $GLOBALS['db']->query(sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])));
                 return $this->getWarID($this->getWar($created), $currentWar, $created, $season);
             }
         } else {
@@ -228,7 +230,7 @@ class War {
             INSERT INTO war
             VALUES ('', 0, 0, 0)
         ";
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
         return $GLOBALS['db']->lastInsertId();
     }
 
@@ -253,20 +255,12 @@ class War {
         return $GLOBALS['db']->query($query)->fetch()['created'];
     }
 
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
     public function insertCollectionDay($cardsEarned, $battlesPlayed, $wins, $playerId) {
         $pattern = "
             INSERT INTO player_war (cards_earned, collection_played, collection_won, player_id, war_id)
             VALUES (%d, %d, %d, %d, %d)
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $this->id));
     }
 
     public function updateCollectionDay($cardsEarned, $battlesPlayed, $wins, $id) {
@@ -275,7 +269,7 @@ class War {
             SET cards_earned = %d, collection_played = %d, collection_won = %d
             WHERE id = %d
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $id));
     }
 
     public function updateWarDay($battlesPlayed, $wins, $id) {
@@ -284,7 +278,7 @@ class War {
             SET battle_played = %d, battle_won = %d
             WHERE id = %d
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $battlesPlayed, $wins, $id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $battlesPlayed, $wins, $id));
     }
 
     public function updateWarLog($cardsEarned, $battlesPlayed, $wins, $playerId, $warId) {
@@ -308,10 +302,10 @@ class War {
         ";
 
         $warResult = $GLOBALS['db']->query(sprintf($getPattern, $playerId, $warId))->fetch();
-        if (sizeof($warResult) > 0) {
-            $GLOBALS['db']->query(sprintf($updatePattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId))->execute();
+        if ($warResult == false) {
+            $GLOBALS['db']->query(sprintf($insertPattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
         } else {
-            $GLOBALS['db']->query(sprintf($insertPattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId))->execute();
+            $GLOBALS['db']->query(sprintf($updatePattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
         }
     }
 
@@ -369,7 +363,7 @@ class War {
             SET updated = NOW()
             WHERE page_name = \"war\"
         ";
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
     }
 
     public function setLastUpdatedWarLog() {
@@ -378,7 +372,7 @@ class War {
             SET updated = NOW()
             WHERE page_name = \"war_stats\"
         ";
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
     }
 
     public function setLastUpdatedWarDecks() {
@@ -387,7 +381,7 @@ class War {
             SET updated = NOW()
             WHERE page_name = \"war_decks\"
         ";
-        $GLOBALS['db']->query($query)->execute();
+        $GLOBALS['db']->query($query);
     }
 
     public function updateStandings($standings) {
@@ -424,7 +418,7 @@ class War {
             war_trophies = %d
             WHERE id = %d
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $id));
     }
 
     public function insertStanding($tag, $name, $participants, $battlesPlayed, $wins, $crowns, $warTrophies) {
@@ -436,7 +430,7 @@ class War {
         if (strpos(trim($clanName), '???') !== false)
             $clanName = "Arabe/Chinois";
 
-        $GLOBALS['db']->query(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $this->id));
 
     }
 
@@ -448,6 +442,14 @@ class War {
             AND deck_id = %d
         ";
         return $GLOBALS['db']->query(sprintf($pattern, $this->getId(), $deckId))->fetch() != null;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
     }
 
     public function getDeckResultsByTime($combatTime) {
@@ -464,7 +466,7 @@ class War {
             INSERT INTO deck_results (deck_id, win, crowns, time)
             VALUES (%d, %d, %d, %d)
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $deckId, $win, $crowns, $combatTime))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $win, $crowns, $combatTime));
     }
 
     public function insertDeckWar($deckId) {
@@ -472,6 +474,93 @@ class War {
             INSERT INTO war_decks(deck_id, war_id)
             VALUES (%d, %d)
         ";
-        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id))->execute();
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id));
+    }
+
+    public function getLastUpdatedWarDecks() {
+        $query = "
+            SELECT updated
+            FROM last_updated
+            WHERE page_name = \"war_decks\"
+        ";
+        return $GLOBALS['db']->query($query)->fetch();
+    }
+
+    public function getAllWarDecksWithPagination($current, $page) {
+        $pattern = "
+            SELECT dr.deck_id, COUNT(dr.id) as played, SUM(win) as wins, SUM(crowns) as total_crowns,
+            subQuery.elixir_cost, subQuery.card_keys, subQuery.cr_ids,
+            (
+                SELECT CEIL(COUNT(d.id) / 10)
+                FROM decks d
+                RIGHT JOIN war_decks wd ON d.id = wd.deck_id
+                JOIN war w ON wd.war_id = w.id
+                %s
+            ) as number_of_pages
+            FROM war_decks wd
+            LEFT JOIN deck_results dr ON dr.deck_id = wd.deck_id
+            LEFT JOIN decks d ON d.id = wd.deck_id
+            LEFT JOIN war w ON w.id = wd.war_id
+            LEFT JOIN
+                (
+                    SELECT cd.deck_id, GROUP_CONCAT(c.card_key) as card_keys, GROUP_CONCAT(c.cr_id) as cr_ids, ROUND(AVG(c.elixir), 1) as elixir_cost
+                    FROM card_deck cd
+                    LEFT JOIN cards c ON c.id = cd.card_id
+                    GROUP BY cd.deck_id
+                ) subQuery ON subQuery.deck_id = d.id
+            %s
+            GROUP BY wd.deck_id
+            ORDER BY played DESC, wins DESC, crowns DESC
+            LIMIT %d, 10
+        ";
+        $offset = intval(($page - 1) * 10);
+        $condition = "";
+        if ($current) {
+            $condition = "WHERE w.past_war = 0";
+        }
+
+        $warDecks = array();
+        foreach ($GLOBALS['db']->query(sprintf($pattern, $condition, $condition, $offset))->fetchAll() as $deck) {
+            if ($this->warDecksPage == null && $current) {
+                $this->warDecksPage = intval($deck['number_of_pages']);
+            } else if ($this->allDecksPage == null && !$current) {
+                $this->allDecksPage = intval($deck['number_of_pages']);
+            }
+            $d = new Deck($deck['cr_ids'], $deck['card_keys'], $deck['elixir_cost']);
+            $d->setWins($deck['wins']);
+            $d->setCrowns($deck['total_crowns']);
+            $d->setPlayed($deck['played']);
+            array_push($warDecks, $d);
+        }
+        return $warDecks;
+    }
+
+    public function getWarDecksPage() {
+        return $this->warDecksPage;
+    }
+
+    public function setWarDecksPage($warDecksPage) {
+        $this->warDecksPage = $warDecksPage;
+    }
+
+    public function getAllDecksPage() {
+        return $this->allDecksPage;
+    }
+
+    public function setAllDecksPage($allDecksPage) {
+        $this->allDecksPage = $allDecksPage;
+    }
+
+    public function getFavCards() {
+        $query = "
+            SELECT COUNT(c.id) as occurence, c.card_key
+            FROM card_deck cd
+            JOIN `cards` c ON c.id = cd.card_id
+            GROUP BY c.cr_id
+            ORDER BY occurence DESC
+            LIMIT 9
+        ";
+
+        return $GLOBALS['db']->query($query)->fetchAll();
     }
 }

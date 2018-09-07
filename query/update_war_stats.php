@@ -43,7 +43,7 @@ foreach ($warLog['items'] as $apiWar) {
         $battlesPlayed = null;
         $wins = null;
         foreach ($apiWar['participants'] as $participant) {
-            if ($player['tag'] == $participant['tag']) {
+            if ($player['tag'] == ltrim($participant['tag'], "#")) {
                 $cardsEarned = $participant['cardsEarned'];
                 $battlesPlayed = $participant['battlesPlayed'];
                 $wins = $participant['wins'];
