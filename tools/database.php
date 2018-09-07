@@ -6,7 +6,7 @@
  * Time: 14:53
  */
 
-if(!defined('CONFIGURED'))
+if (!defined('CONFIGURED'))
     require_once('conf.php');
 
 $db = new PDO('mysql:host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
@@ -29,12 +29,10 @@ function execute_query($db, $query)
     return $transaction;
 }
 
-// ==========================================
-
-
 // ================= PLAYER =================
 
-function insertPlayerTrophy($db, $playerTag, $trophies) {
+function insertPlayerTrophy($db, $playerTag, $trophies)
+{
     $pattern = "
         INSERT INTO player_trophies(player_id, trophies, date)
         VALUES ((SELECT id FROM players WHERE tag = \"%s\"), %d, UNIX_TIMESTAMP())
@@ -64,25 +62,6 @@ WHERE players.tag = \"%s\"
     return fetch_query($db, sprintf($pattern, utf8_decode($tag)));
 }
 
-function getAllPlayersForIndex($db)
-{
-    $query = "
-SELECT players.tag, players.name as playerName, players.rank, players.trophies, role.name as playerRole,
-arena.arena as arena, arena.arena_id as arena_id, players.donations, players.donations_received
-FROM players
-INNER JOIN role ON role.id = players.role_id
-INNER JOIN arena ON arena.arena_id = players.arena
-WHERE players.in_clan = 1
-ORDER BY players.rank ASC
-";
-    return fetch_all_query($db, $query);
-}
-
-function getNumberOfPlayersInClan($db)
-{
-    return sizeof(getAllPlayersInClan($db));
-}
-
 function getPlayerTagByAccountId($db, $accountId)
 {
     $pattern = "
@@ -96,55 +75,8 @@ function getPlayerTagByAccountId($db, $accountId)
 
 // ==========================================
 
-
-// ================== DECKS =================
-// ----------------- INSERT -----------------
-
-
-// ----------------- UPDATE -----------------
-
-
-// -----------------   GET  -----------------
-
-
-function getPlayerDeck($db, $deckId, $playerId)
+function updateSeekCard($db, $card, $playerId)
 {
-    $pattern = "
-    SELECT pd.id, pd.current
-    FROM player_deck pd
-    WHERE pd.deck_id = %d
-    AND pd.player_id = %d
-    ";
-
-    return fetch_query($db, sprintf($pattern, $deckId, $playerId));
-}
-
-function getCurrentDeck($db, $deck)
-{
-    $pattern = "
-SELECT cards.id
-FROM cards
-WHERE cr_id = %d
-";
-    $currentDeck = [];
-    foreach ($deck as $card) {
-        $cardId = fetch_query($db, sprintf($pattern, $card['id']))['id'];
-        array_push($currentDeck, $cardId);
-    }
-    return $currentDeck;
-}
-
-// ==========================================
-
-
-// ================== CARDS =================
-// ----------------- INSERT -----------------
-
-
-// ----------------- UPDATE -----------------
-
-
-function updateSeekCard($db, $card, $playerId) {
     $pattern = "
     UPDATE card_level
     SET seek = 1,
@@ -156,7 +88,8 @@ function updateSeekCard($db, $card, $playerId) {
     execute_query($db, sprintf($pattern, $card, $playerId));
 }
 
-function updateKeepCard($db, $card, $playerId) {
+function updateKeepCard($db, $card, $playerId)
+{
     $pattern = "
     UPDATE card_level
     SET seek = 0,
@@ -168,7 +101,8 @@ function updateKeepCard($db, $card, $playerId) {
     execute_query($db, sprintf($pattern, $card, $playerId));
 }
 
-function updateDonateCard($db, $card, $playerId) {
+function updateDonateCard($db, $card, $playerId)
+{
     $pattern = "
     UPDATE card_level
     SET seek = 0,
@@ -179,6 +113,7 @@ function updateDonateCard($db, $card, $playerId) {
 
     execute_query($db, sprintf($pattern, $card, $playerId));
 }
+
 // -----------------   GET  -----------------
 
 function getCardsLevelsByPlayerId($db, $playerId)
@@ -196,7 +131,8 @@ function getCardsLevelsByPlayerId($db, $playerId)
     return fetch_all_query($db, sprintf($pattern, $playerId));
 }
 
-function getPossibleTrade($db, $playerId) {
+function getPossibleTrade($db, $playerId)
+{
     $pattern = "
     SELECT p.id, p.name, c.card_key, cl.seek, cl.keep, cl.quantity
     FROM players p
@@ -207,105 +143,15 @@ function getPossibleTrade($db, $playerId) {
     AND cl.quantity = %d 
     AND cl.keep = 0
     ";
-    $rarities = [250=>'Common', 50=>'Rare', 10=>'Epic', 1=>'Legendary'];
+    $rarities = [250 => 'Common', 50 => 'Rare', 10 => 'Epic', 1 => 'Legendary'];
     //TODO revoir ca avec fabien S
-    foreach ($rarities as $key=>$rarity) {
+    foreach ($rarities as $key => $rarity) {
         $query = sprintf($pattern, $playerId, $rarity, $key);
         fetch_all_query($db, $query);
     }
 }
+
 // ==========================================
-
-
-// =================== WAR ==================
-// ----------------- INSERT -----------------
-function insertPlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
-{
-    $pattern = "
-INSERT INTO player_war (cards_earned, battle_played, battle_won, player_id, war_id)
-VALUE (%d, %d, %d, %d, %d)
-";
-
-    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
-}
-
-
-// ----------------- UPDATE -----------------
-function updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
-{
-
-}
-
-
-
-// -----------------   GET  -----------------
-function getPlayerWar($db, $playerId, $warId)
-{
-    $pattern = "
-SELECT player_war.id as player_war_id, cards_earned, collection_played, collection_won, battle_played, battle_won
-FROM player_war
-WHERE player_id = %d
-AND war_id = %d
-";
-
-    return fetch_query($db, sprintf($pattern, $playerId, $warId));
-}
-
-function getNumberOfCurrentPlayersInWar($db)
-{
-    $query = "
-SELECT COUNT(player_war.id) as numberOfCurrentPlayers
-FROM player_war
-JOIN war ON player_war.war_id = war.id
-WHERE war.past_war = 0
-";
-
-    return intval(fetch_query($db, $query)['numberOfCurrentPlayers']);
-}
-
-function getStandings($db, $tag, $warId)
-{
-    $pattern = "
-SELECT id
-FROM standings
-WHERE tag = \"%s\"
-AND war_id = %d
-";
-    return fetch_query($db, utf8_decode(sprintf($pattern, $tag, $warId)));
-}
-
-function getWarPlayers($db, $order = null)
-{
-    $pattern = "
-SELECT players.rank, players.tag, players.name, role.name as role_name, players.trophies, player_war.battle_played,
-player_war.battle_won, player_war.collection_played, player_war.collection_won, player_war.cards_earned as cards
-FROM player_war
-INNER JOIN war ON war.id = player_war.war_id
-INNER JOIN players ON players.id = player_war.player_id
-INNER JOIN role ON role.id = players.role_id
-WHERE war.past_war = 0
-%s
-";
-    if ($order == null)
-        $query = sprintf($pattern, "ORDER BY players.rank ASC");
-    else {
-        $customOrderPattern = "ORDER BY %s DESC, players.rank ASC";
-        $orderPattern = sprintf($customOrderPattern, $order);
-        $query = sprintf($pattern, $orderPattern);
-    }
-    return fetch_all_query($db, $query);
-}
-
-function getAllStandings($db)
-{
-    $query = "
-SELECT standings.name, participants, battles_played, battles_won, crowns, war_trophies
-FROM standings
-JOIN war ON standings.war_id = war.id AND war.past_war = 0
-ORDER BY battles_won DESC, crowns DESC
-";
-    return fetch_all_query($db, $query);
-}
 
 function getAllWarStats($db)
 {
@@ -404,51 +250,6 @@ AND war.season = %d
     return intval(fetch_query($db, sprintf($pattern, $playerId, $season))['number_of_war']);
 }
 
-
-
-function getWarNumber($db)
-{
-    $query = "
-    SELECT COUNT(w.id) as warNumber
-    FROM war w
-    WHERE w.id > 24
-    ";
-
-    return fetch_query($db, $query)['warNumber'];
-}
-
-// ==========================================
-
-
-// ================= UPDATED ================
-// ----------------- INSERT -----------------
-
-
-// ----------------- UPDATE -----------------
-function setLastUpdated($db, $pageName)
-{
-    $pattern = "
-    UPDATE last_updated
-    SET updated = NOW()
-    WHERE page_name = \"%s\"
-    ";
-    execute_query($db, utf8_decode(sprintf($pattern, $pageName)));
-}
-
-
-
-// -----------------   GET  -----------------
-
-function getLastUpdatedPlayer($db, $playerTag)
-{
-    $pattern = "
-    SELECT id, updated
-    FROM last_updated
-    WHERE tag = \"%s\"
-    ";
-    return fetch_query($db, utf8_decode(sprintf($pattern, $playerTag)));
-}
-
 // ==========================================
 
 // ================= ACCOUNTS ===============
@@ -507,9 +308,6 @@ function getPlayerInfoByAccountId($db, $accountId)
     ";
     return fetch_query($db, sprintf($pattern, $accountId));
 }
-
-// ==========================================
-
 
 // ================= PAUSES =================
 // ----------------- INSERT -----------------
