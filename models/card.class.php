@@ -30,16 +30,24 @@ class Card {
     }
 
     public function updateAllCards() {
-        foreach ($this->getAllCardsFromApi() as $card) {
-            $key = str_replace(".", "", $card['name']);
-            $key = str_replace(" ", "-", $key);
-            $key = strtolower($key);
+        $cards = $this->getAllCardsFromApi();
+        if ($cards == false)
+            return;
+
+        foreach ($cards as $card) {
+            $key = $this->formatCardKey($card['name']);
             if (is_array($this->getCardByKey($key))) {
                 $this->updateCard($key, $card['name'], $card['id']);
             } else {
                 $this->insertCard($key, $card['name'], $card['id']);
             }
         }
+    }
+
+    public function formatCardKey($cardName) {
+        $key = str_replace(".", "", $cardName);
+        $key = str_replace(" ", "-", $key);
+        return strtolower($key);
     }
 
     public function getAllCardsFromApi() {

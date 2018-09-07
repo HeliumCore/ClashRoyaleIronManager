@@ -19,6 +19,9 @@ foreach ($clan->getPlayers() as $playerDB) {
     $player = new Player($playerDB['tag']);
     $player->setPlayerId();
     $apiInfos = $player->getPlayerFromApi();
+    if ($apiInfos == false)
+        return;
+
     $player->updateMaxTrophies($apiInfos['bestTrophies']);
     $deck = $apiInfos['currentDeck'];
     $currentDeck = $player->getCardsIds($deck);

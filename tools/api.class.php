@@ -30,7 +30,11 @@ class ClashRoyaleApi {
         curl_setopt(self::$curl, CURLOPT_URL, rtrim(self::$base, "/") . "/" . ltrim($path, "/"));
         $result = curl_exec(self::$curl);
         curl_close(self::$curl);
-        return json_decode($result, true);
+        $json = json_decode($result, true);
+        if (isset($json['reason']) && $json['reason'] == "inMaintenance")
+            return false;
+
+        return $json;
     }
 
     /**

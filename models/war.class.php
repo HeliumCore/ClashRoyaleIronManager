@@ -113,9 +113,56 @@ class War {
         return $standingList;
     }
 
+    public function getWarLogFromApi() {
+        $url = "clans/%239RGPL8PC/warlog";
+        return ClashRoyaleApi::getRequest($url);
+    }
+
     public function getWarFromApi() {
         $url = "clans/%239RGPL8PC/currentwar";
         return ClashRoyaleApi::getRequest($url);
+    }
+
+    public function getLastWarFromApi() {
+        $url = "clans/%239RGPL8PC/warlog?limit=1";
+        return ClashRoyaleApi::getRequest($url)['items'][0];
+    }
+
+    public function getWarId($war, $currentWar, $created, $season = null) {
+        $insertWarPattern = "
+            INSERT INTO war
+            VALUES ('', %d, 0, %d)
+        ";
+
+        $updateCurrentWarPattern = "
+            UPDATE war
+            SET created = %d,
+            past_war = 1,
+            season = %d
+            WHERE id = %d
+        ";
+
+        if (!is_array($war)) {
+            if (!is_array($currentWar)) {
+                $GLOBALS['db']->query(sprintf($insertWarPattern, $created, $season))->execute();
+                return $GLOBALS['db']->lastInsertId();
+            } else {
+                $GLOBALS['db']->query(sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])))->execute();
+                return $this->getWarID($this->getWar($created), $currentWar, $created, $season);
+            }
+        } else {
+            return intval($war['id']);
+        }
+    }
+
+    public function getWarFromCreated($created) {
+        $pattern = "
+            SELECT id
+            FROM war
+            WHERE created = %d
+        ";
+
+        return $GLOBALS['db']->query(sprintf($pattern, $created))->fetch();
     }
 
     public function getNumberOfCurrentPlayersInWar() {
@@ -195,6 +242,17 @@ class War {
         return $GLOBALS['db']->query(sprintf($pattern, $playerId, $this->id))->fetch();
     }
 
+    public function getLastWarEndDate() {
+        $query = "
+            SELECT id, created
+            FROM war
+            WHERE past_war = 1
+            ORDER BY id DESC
+            LIMIT 1
+        ";
+        return $GLOBALS['db']->query($query)->fetch()['created'];
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -227,6 +285,34 @@ class War {
             WHERE id = %d
         ";
         $GLOBALS['db']->query(sprintf($pattern, $battlesPlayed, $wins, $id))->execute();
+    }
+
+    public function updateWarLog($cardsEarned, $battlesPlayed, $wins, $playerId, $warId) {
+        $updatePattern = "
+            UPDATE player_war
+            SET cards_earned = %d, battle_played = %d, battle_won = %d
+            WHERE player_id = %d
+            AND war_id = %d
+        ";
+
+        $insertPattern = "
+            INSERT INTO player_war (cards_earned, battle_played, battle_won, player_id, war_id)
+            VALUE (%d, %d, %d, %d, %d)
+        ";
+
+        $getPattern = "
+            SELECT player_war.id as player_war_id, cards_earned, collection_played, collection_won, battle_played, battle_won
+            FROM player_war
+            WHERE player_id = %d
+            AND war_id = %d
+        ";
+
+        $warResult = $GLOBALS['db']->query(sprintf($getPattern, $playerId, $warId))->fetch();
+        if (sizeof($warResult) > 0) {
+            $GLOBALS['db']->query(sprintf($updatePattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId))->execute();
+        } else {
+            $GLOBALS['db']->query(sprintf($insertPattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId))->execute();
+        }
     }
 
     public function getResults() {
@@ -286,16 +372,34 @@ class War {
         $GLOBALS['db']->query($query)->execute();
     }
 
+    public function setLastUpdatedWarLog() {
+        $query = "
+            UPDATE last_updated
+            SET updated = NOW()
+            WHERE page_name = \"war_stats\"
+        ";
+        $GLOBALS['db']->query($query)->execute();
+    }
+
+    public function setLastUpdatedWarDecks() {
+        $query = "
+            UPDATE last_updated
+            SET updated = NOW()
+            WHERE page_name = \"war_decks\"
+        ";
+        $GLOBALS['db']->query($query)->execute();
+    }
+
     public function updateStandings($standings) {
         foreach ($standings as $standing) {
-            $getStanding = $this->getStanding($standing['tag']);
+            $getStanding = $this->getStanding(ltrim($standing['tag'], "#"));
 
             if (is_array($getStanding)) {
                 $this->updateStanding($standing['participants'], $standing['battlesPlayed'], $standing['wins'], $standing['crowns'],
-                    $standing['warTrophies'], $getStanding['id']);
+                    $standing['clanScore'], $getStanding['id']);
             } else {
-                $this->insertStanding($standing['tag'], $standing['name'], $standing['participants'], $standing['battlesPlayed'],
-                    $standing['wins'], $standing['crowns'], $standing['warTrophies']);
+                $this->insertStanding(ltrim($standing['tag'], "#"), $standing['name'], $standing['participants'], $standing['battlesPlayed'],
+                    $standing['wins'], $standing['crowns'], $standing['clanScore']);
             }
         }
     }
@@ -334,5 +438,40 @@ class War {
 
         $GLOBALS['db']->query(sprintf($pattern, $tag, $clanName, $participants, $battlesPlayed, $wins, $crowns, $warTrophies, $this->id))->execute();
 
+    }
+
+    public function isDeckUsedInCurrentWar($deckId) {
+        $pattern = "
+            SELECT id
+            FROM war_decks
+            WHERE war_id = %d
+            AND deck_id = %d
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $this->getId(), $deckId))->fetch() != null;
+    }
+
+    public function getDeckResultsByTime($combatTime) {
+        $pattern = "
+            SELECT dr.id, dr.win, dr.crowns, dr.time
+            FROM deck_results dr
+            WHERE dr.time = %d
+        ";
+        return $GLOBALS['db']->query(sprintf($pattern, $combatTime))->fetch();
+    }
+
+    public function insertDeckResults($deckId, $win, $crowns, $combatTime) {
+        $pattern = "
+            INSERT INTO deck_results (deck_id, win, crowns, time)
+            VALUES (%d, %d, %d, %d)
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $win, $crowns, $combatTime))->execute();
+    }
+
+    public function insertDeckWar($deckId) {
+        $pattern = "
+            INSERT INTO war_decks(deck_id, war_id)
+            VALUES (%d, %d)
+        ";
+        $GLOBALS['db']->query(sprintf($pattern, $deckId, $this->id))->execute();
     }
 }

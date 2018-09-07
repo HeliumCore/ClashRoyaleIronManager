@@ -20,7 +20,8 @@ $war->getWarPlayers();
 $war->setId($war->getLastWarNumber());
 
 // API
-$apiWar = getWarFromApi($api);
+
+$apiWar = $war->getWarFromApi();
 $war->setState($apiWar['state']);
 if ($war->getState() == "collectionDay") {
     $war->setStateName("Jour de collection");
@@ -54,7 +55,7 @@ if ($war->getState() == "collectionDay") {
     $war->setStandings($war->getCurrentWarStandings());
     $war->setEndTime($apiWar['warEndTime']);
 }
-$currentTrophies = $apiWar['clan']['warTrophies'];
+$currentTrophies = $apiWar['clan']['clanScore'];
 
 MVCEngine::addScript("main");
 MVCEngine::setTitle('Guerre en cours');

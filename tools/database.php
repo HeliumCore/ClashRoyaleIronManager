@@ -101,24 +101,6 @@ function getPlayerTagByAccountId($db, $accountId)
 // ----------------- INSERT -----------------
 
 
-function insertDeckWar($db, $deck, $war)
-{
-    $pattern = "
-    INSERT INTO war_decks(deck_id, war_id)
-    VALUES (%d, %d)
-    ";
-    execute_query($db, sprintf($pattern, $deck, $war));
-}
-
-function insertDeckResults($db, $deckId, $win, $crowns, $combatTime)
-{
-    $pattern = "
-    INSERT INTO deck_results (deck_id, win, crowns, time)
-    VALUES (%d, %d, %d, %d)
-    ";
-    execute_query($db, sprintf($pattern, $deckId, $win, $crowns, $combatTime));
-}
-
 // ----------------- UPDATE -----------------
 
 
@@ -185,27 +167,6 @@ WHERE cr_id = %d
         array_push($currentDeck, $cardId);
     }
     return $currentDeck;
-}
-
-function getDeckResultsByTime($db, $combatTime)
-{
-    $pattern = "
-    SELECT dr.id, dr.win, dr.crowns, dr.time
-    FROM deck_results dr
-    WHERE dr.time = %d
-    ";
-    return fetch_query($db, sprintf($pattern, $combatTime));
-}
-
-function isDeckUsedInCurrentWar($db, $warId, $deckId)
-{
-    $pattern = "
-    SELECT id
-    FROM war_decks
-    WHERE war_id = %d
-    AND deck_id = %d
-    ";
-    return fetch_query($db, sprintf($pattern, $warId, $deckId)) != null;
 }
 
 // ==========================================
@@ -323,14 +284,7 @@ VALUE (%d, %d, %d, %d, %d)
 // ----------------- UPDATE -----------------
 function updatePlayerWar($db, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId)
 {
-    $pattern = "
-UPDATE player_war
-SET cards_earned = %d, battle_played = %d, battle_won = %d
-WHERE player_id = %d
-AND war_id = %d
-";
 
-    execute_query($db, sprintf($pattern, $cardsEarned, $battlesPlayed, $wins, $playerId, $warId));
 }
 
 
@@ -347,57 +301,6 @@ AND war_id = %d
 
     return fetch_query($db, sprintf($pattern, $playerId, $warId));
 }
-
-function getWarId($db, $war, $currentWar, $created, $season = null)
-{
-    $insertWarPattern = "
-INSERT INTO war
-VALUES ('', %d, 0, %d)
-";
-
-    $updateCurrentWarPattern = "
-UPDATE war
-SET created = %d,
-past_war = 1,
-season = %d
-WHERE id = %d
-";
-    if (!is_array($war)) {
-        if (!is_array($currentWar)) {
-            execute_query($db, sprintf($insertWarPattern, $created, $season));
-            return $db->lastInsertId();
-        } else {
-            execute_query($db, sprintf($updateCurrentWarPattern, $created, $season, intval($currentWar['id'])));
-            return getWarID($db, getWar($db, $created), $currentWar, $created, $season);
-        }
-    } else {
-        return intval($war['id']);
-    }
-}
-
-function getWar($db, $created)
-{
-    $pattern = "
-SELECT id
-FROM war
-WHERE created = %d
-";
-    return fetch_query($db, sprintf($pattern, $created));
-}
-
-function getLastWarEndDate($db)
-{
-    $query = "
-SELECT id, created
-FROM war
-WHERE past_war = 1
-ORDER BY id DESC
-LIMIT 1
-";
-    return fetch_query($db, $query);
-}
-
-
 
 function getNumberOfCurrentPlayersInWar($db)
 {

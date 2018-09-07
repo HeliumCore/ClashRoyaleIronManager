@@ -19,6 +19,9 @@ ClashRoyaleApi::create();
 $player = new Player($playerTag);
 $chests = $player->getNextChests();
 
+if ($chests == false)
+    return;
+
 $counter = 1;
 $needed = 3;
 $chestsArray = array("Silver Chest" => "silver", "Golden Chest" => "gold", "Magical Chest" => "magical",

@@ -16,12 +16,15 @@ $war = new War();
 $clan = new Clan();
 $war->getCurrentWarId();
 $data = $war->getWarFromApi();
+if ($data == false)
+    return;
+
 $notEligible = $war->getNotEligiblePlayers();
 $warState = $data['state'];
 
 // Standings
 if ($warState == 'warDay')
-    $war->updateStandings($data['standings']);
+    $war->updateStandings($data['clans']);
 else if (($warState == 'collectionDay' && sizeof($data['participants']) <= 0) || $warState != 'collectionDay')
     return;
 

@@ -6,70 +6,75 @@
  * Time: 00:36
  */
 
-include(__DIR__ . "/../tools/api_conf.php");
-include(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../tools/api.class.php");
+require(__DIR__ . "/../tools/database.php");
+require(__DIR__ . "/../models/war.class.php");
+require(__DIR__ . "/../models/clan.class.php");
 
-if (!isApiRunning($api))
-    return;
+$clan = new Clan();
+$members = $clan->getPlayers();
+$warBattles = array();
+foreach ($members as $member) {
+    $player = new Player($member['tag']);
+    $playerBattles = $player->getPlayerBattlesFromApi();
+    foreach ($playerBattles as $battle) {
+        if ($battle['type'] == "clanWarWarDay") {
+            array_push($warBattles, $battle);
+        }
+    }
+}
 
-$currentWar = getWarFromApi($api);
-$lastWar = getLastWarEndDate($db);
-$currentEnd = $currentWar['warEndTime'];
-$lastEnd = intval($lastWar['created']);
-$warId = getCurrentWar($db)['id'];
+$war = new War();
+$currentWar = $war->getWarFromApi();
+$currentEnd = getTimeStampFromIso($currentWar['warEndTime']);
+$lastEnd = intval($war->getLastWarEndDate());
+$war->getCurrentWarId();
+$warId = $war->getId();
 
-foreach (getWarBattlesFromApi($api) as $battle) {
-    if ($battle['type'] != 'clanWarWarDay')
-        continue;
-
-    $combatTime = $battle['utcTime'];
+foreach ($warBattles as $battle) {
+    $combatTime = getTimeStampFromIso($battle['battleTime']);
     if ($combatTime < $lastEnd || $combatTime > $currentEnd)
         continue;
 
     $team = $battle['team'][0];
-    if ($team['clan']['tag'] != "9RGPL8PC")
+    if ($team['clan']['tag'] != "#9RGPL8PC")
         continue;
 
-    $winResult = $battle['winner'];
-    $deckLine = $team['deckLink'];
-    $deck = $team['deck'];
-    saveCards($deck);
-    $tag = $team['tag'];
-    $playerId = intval(getPlayerByTag($db, $tag)['id']);
-    $win = $winResult <= 0 ? 0 : 1;
-    $crowns = $battle['teamCrowns'];
+    $crowns = $team['crowns'];
+    $win = $crowns > $battle['opponent'][0]['crowns'];
+    $deck = $team['cards'];
 
-    $currentDeck = getCurrentDeck($db, $deck);
-    $deckId = getDeckIdFromCards($db, $currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
+    $p = new Player(ltrim($team['tag'], '#'));
+    $currentDeck = $p->getCardsIds($deck);
+    $deckId = $p->getDeckIdFromCards($currentDeck[0], $currentDeck[1], $currentDeck[2], $currentDeck[3], $currentDeck[4],
         $currentDeck[5], $currentDeck[6], $currentDeck[7]);
 
     if ($deckId != null && $deckId > 0) {
-        if (isDeckUsedInCurrentWar($db, $warId, $deckId)) {
-            if (getDeckResultsByTime($db, $combatTime) == false) {
-                insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
+        if ($war->isDeckUsedInCurrentWar($deckId)) {
+            if ($war->getDeckResultsByTime($combatTime) == false) {
+                $war->insertDeckResults($deckId, $win, $crowns, $combatTime);
             }
         } else {
-            insertDeckWar($db, $deckId, $warId);
-            insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
+            $war->insertDeckWar($deckId);
+            $war->insertDeckResults($deckId, $win, $crowns, $combatTime);
         }
     } else {
-        $deckId = createDeck($db);
+        $deckId = $p->createDeck();
         for ($i = 0; $i <= 7; $i++) {
-            insertCardDeck($db, $currentDeck[$i], $deckId);
+            $p->insertCardDeck($currentDeck[$i], $deckId);
         }
-        insertDeckWar($db, $deckId, $warId);
-        insertDeckResults($db, $deckId, $win, $crowns, $combatTime);
+        $war->insertDeckWar($deckId);
+        $war->insertDeckResults($deckId, $win, $crowns, $combatTime);
     }
 }
-setLastUpdated($db, "war_decks");
+$war->setLastUpdatedWarDecks();
 
-function saveCards($deck)
-{
-    foreach ($deck as $card) {
-        $name = __DIR__ . "/../images/new_cards/" . $card['key'] . ".png";
-        if (!file_exists($name)) {
-            $url = $card['icon'];
-            file_put_contents($name, file_get_contents($url));
-        }
-    }
+function getTimeStampFromIso($d) {
+    $dateString = substr($d, 0, 4) . "-" .
+        substr($d, 4, 2) . "-" .
+        substr($d, 6, 5) . ":" .
+        substr($d, 11, 2) . ":" .
+        substr($d, 13);
+    $date = new DateTime($dateString);
+    return intval($date->getTimestamp());
 }

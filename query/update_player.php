@@ -18,6 +18,9 @@ $player = new Player($playerTag);
 $player->setPlayerId();
 $apiInfos = $player->getPlayerFromApi();
 
+if ($apiInfos == false)
+    return;
+
 $player->updateMaxTrophies($apiInfos['bestTrophies']);
 $deck = $apiInfos['currentDeck'];
 $currentDeck = $player->getCardsIds($deck);

@@ -15,6 +15,9 @@ ClashRoyaleApi::create();
 
 $clan = new Clan();
 $allPlayers = $clan->getPlayers();
+$members = $clan->getMembersFromApi();
+if ($members == false)
+    return;
 
 $allPlayersTags = [];
 $allPlayersTagsInClan = [];
@@ -23,7 +26,7 @@ foreach ($allPlayers as $p) {
     array_push($allPlayersTags, $p['tag']);
 }
 
-foreach ($clan->getMembersFromApi() as $apiPlayer) {
+foreach ($members as $apiPlayer) {
     $player = new Player(ltrim($apiPlayer['tag'], '#'));
     $player->updatePlayer($apiPlayer['name'], $apiPlayer['clanRank'], $apiPlayer['trophies'], $apiPlayer['role'], $apiPlayer['expLevel'],
         $apiPlayer['arena']['name'], $apiPlayer['donations'], $apiPlayer['donationsReceived']);

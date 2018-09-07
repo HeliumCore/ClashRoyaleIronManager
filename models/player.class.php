@@ -272,6 +272,11 @@ class Player {
         return ClashRoyaleApi::getRequest($url);
     }
 
+    public function getPlayerBattlesFromApi() {
+        $url = "players/%23" . $this->sTag . "/battlelog";
+        return ClashRoyaleApi::getRequest($url);
+    }
+
     /**
      * Permet d'update en base les trophées max d'un joueur
      * @param $trophies int trophées max
