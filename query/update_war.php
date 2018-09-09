@@ -29,10 +29,11 @@ else if (($warState == 'collectionDay' && sizeof($data['participants']) <= 0) ||
     return;
 
 foreach ($clan->getPlayers() as $player) {
-    foreach ($notEligible as $notEligiblePlayer) {
-        if ($player['id'] == $notEligiblePlayer['id'])
-            continue 2;
-    }
+    // TODO revoir la requete des joueurs non eligible
+//    foreach ($notEligible as $notEligiblePlayer) {
+//        if ($player['id'] == $notEligiblePlayer['id'])
+//            continue 2;
+//    }
 
     $p = new Player($player['tag']);
     $p->setPlayerId();
